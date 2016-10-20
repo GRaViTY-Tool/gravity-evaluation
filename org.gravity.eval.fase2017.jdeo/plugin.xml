@@ -19,7 +19,7 @@
                label="Evaluate"
                class="org.gravity.evalution.jdeodeco.popup.actions.EvaluationClass"
                menubarPath="org.gravity.evalution.jdeodeco.menu1/group1"
-               enablesFor="1"
+               enablesFor="+"
                id="org.gravity.evalution.jdeodeco.newAction">
          </action>
       </objectContribution>
