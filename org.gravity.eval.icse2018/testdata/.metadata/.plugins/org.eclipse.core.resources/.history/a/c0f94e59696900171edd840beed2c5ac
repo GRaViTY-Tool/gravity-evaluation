@@ -1,0 +1,45 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.ncsu.csc.itrust.action.ViewMyMessagesAction;
+import edu.ncsu.csc.itrust.beans.MessageBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
+import junit.framework.TestCase;
+
+/**
+ * ViewMyMessagesActionTest
+ */
+public class ViewMyMessagesActionTest extends TestCase {
+
+	private ViewMyMessagesAction action;
+	private ViewMyMessagesAction action2;
+	private ViewMyMessagesAction evilAction;
+	private DAOFactory factory;
+	private DAOFactory evilFactory;
+	private long mId = 2L;
+	private long hcpId = 9000000000L;
+	
+	/**
+	 * testGetAllMyMessagesNameAscending
+	 * @throws DBException
+	 * @throws SQLException
+	 */
+	public void testGetAllMyMessagesNameAscending() throws DBException, SQLException {		
+		
+		List<MessageBean> mbList = action2.getAllMyMessagesNameAscending();
+		List<MessageBean> mbList2 = action.getAllMyMessagesNameAscending();
+		
+		assertEquals(14, mbList.size());
+		assertEquals(1, mbList2.size());
+		
+		try {
+			assertTrue(action2.getName(mbList.get(0).getFrom()).compareTo(action2.getName(mbList.get(13).getFrom())) >= 0);
+		} catch (ITrustException e) {
+			//TODO
+		}
+	}
+}

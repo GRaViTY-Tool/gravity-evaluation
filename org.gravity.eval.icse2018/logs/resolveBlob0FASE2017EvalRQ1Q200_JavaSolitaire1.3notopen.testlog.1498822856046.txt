@@ -1,0 +1,1125 @@
+LOG: 1498822860760 Hulk Anti-Pattern Detection
+LOG: 1498822860760 Init Model
+LOG: !SESSIONLOG:  LOG: 2017-06-30 13:40:46.312LOG:  LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: -LOG: 
+LOG: eclipse.buildId=unknownLOG: 
+LOG: java.version=1.8.0_131LOG: 
+LOG: java.vendor=Oracle CorporationLOG: 
+LOG: BootLoader constants: OS=linuxLOG: , ARCH=x86_64LOG: , WS=gtkLOG: , NL=en_USLOG: 
+LOG: Framework arguments: LOG:  -versionLOG:  3LOG:  -portLOG:  37763LOG:  -testLoaderClassLOG:  org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoaderLOG:  -loaderpluginnameLOG:  org.eclipse.jdt.junit4.runtimeLOG:  -classNamesLOG:  org.gravity.eval.fase.RQ1_2LOG:  -applicationLOG:  org.eclipse.pde.junit.runtime.coretestapplicationLOG:  -testpluginnameLOG:  org.gravity.eval.fase2017LOG: 
+LOG: Command-line arguments: LOG:  -osLOG:  linuxLOG:  -wsLOG:  gtkLOG:  -archLOG:  x86_64LOG:  -consoleLogLOG:  -versionLOG:  3LOG:  -portLOG:  37763LOG:  -testLoaderClassLOG:  org.eclipse.jdt.internal.junit4.runner.JUnit4TestLoaderLOG:  -loaderpluginnameLOG:  org.eclipse.jdt.junit4.runtimeLOG:  -classNamesLOG:  org.gravity.eval.fase.RQ1_2LOG:  -applicationLOG:  org.eclipse.pde.junit.runtime.coretestapplicationLOG:  -dataLOG:  /home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/testdataLOG:  -devLOG:  file:/home/speldszus/workspace/gravity_linux/.metadata/.plugins/org.eclipse.pde.core/pde-junit/dev.propertiesLOG:  -osLOG:  linuxLOG:  -wsLOG:  gtkLOG:  -archLOG:  x86_64LOG:  -consoleLogLOG:  -testpluginnameLOG:  org.gravity.eval.fase2017LOG: 
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:41:00.932LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498822864616 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498822864617 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498822869595 MoDisco discover project - done 4978ms
+LOG: 1498822869611 MoDisco preprocessing
+LOG: 1498822869699 MoDisco preprocessing - done 88ms
+LOG: 1498822869701 eMoflon TGG fwd trafo
+LOG: 1498822880659 eMoflon TGG fwd trafo - done 10958ms
+LOG: 1498822880660 GRaViTY convert project - done 16044ms
+LOG: 1498822880660 Init Hulk
+LOG: 1498822880769 Init Hulk - done 109ms
+LOG: 1498822880769 Init Model - done 20009ms
+LOG: 1498822880769 Hulk Detect AP
+LOG: 1498822880770 Hulk Anti-Pattern Detection
+LOG: 1498822880775 Hulk Number of outgoing invocations
+LOG: 1498822880781 Hulk Number of outgoing invocations - done 6ms
+LOG: 1498822880782 Hulk Incomming Invocation custom
+LOG: 1498822880784 Hulk Incomming Invocation custom - done 2ms
+LOG: 1498822880784 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498822880787 Hulk Relation between Incoming and Outgoing Invocations - done 3ms
+LOG: 1498822880787 Hulk Controller Class Smell
+LOG: 1498822880796 Hulk Controller Class Smell - done 9ms
+LOG: 1498822880796 Hulk Number of distinct fields accessed by each method
+LOG: 1498822880799 Hulk Number of distinct fields accessed by each method - done 3ms
+LOG: 1498822880799 Hulk Number of Methods
+LOG: 1498822880801 Hulk Number of Methods - done 2ms
+LOG: 1498822880801 Hulk Number of fields
+LOG: 1498822880804 Hulk Number of fields - done 3ms
+LOG: 1498822880804 Hulk Calculate LCOM5 on PG
+LOG: 1498822880807 Hulk Calculate LCOM5 on PG - done 3ms
+LOG: 1498822880807 Hulk Low Cohesion Smell
+LOG: 1498822880812 Hulk Low Cohesion Smell - done 5ms
+LOG: 1498822880812 Hulk Number of Members
+LOG: 1498822880814 Hulk Number of Members - done 2ms
+LOG: 1498822880814 Hulk Large Class Smell
+LOG: 1498822880819 Hulk Large Class Smell - done 5ms
+LOG: 1498822880819 Hulk Large Class or Low Cohesion Smell
+LOG: 1498822880821 Hulk Large Class or Low Cohesion Smell - done 2ms
+LOG: 1498822880821 Hulk God Class [Anti-Pattern]
+LOG: 1498822880824 Hulk God Class [Anti-Pattern] - done 3ms
+LOG: 1498822880824 Hulk Number of Getters
+LOG: 1498822880826 Hulk Number of Getters - done 2ms
+LOG: 1498822880827 Hulk Number of setter Methods
+LOG: 1498822880829 Hulk Number of setter Methods - done 2ms
+LOG: 1498822880829 Hulk Relation between Methods and Getters/Setters
+LOG: 1498822880832 Hulk Relation between Methods and Getters/Setters - done 3ms
+LOG: 1498822880832 Hulk Getter/Setter Smell
+LOG: 1498822880835 Hulk Getter/Setter Smell - done 3ms
+LOG: 1498822880835 Hulk Data Class Smell
+LOG: 1498822880844 Hulk Data Class Smell - done 9ms
+LOG: 1498822880844 Hulk Data Class Accessor Smell
+LOG: 1498822880854 Hulk Data Class Accessor Smell - done 10ms
+LOG: 1498822880854 Hulk The Blob [Anti-Pattern]
+LOG: 1498822880857 Hulk The Blob [Anti-Pattern] - done 3ms
+LOG: 1498822880857 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498822880878 Hulk Calculate the Method accesses from Blob to DataClass - done 21ms
+LOG: 1498822880878 Hulk Connected Members
+LOG: 1498822880880 Hulk Connected Members - done 2ms
+LOG: 1498822880880 Hulk Member Cluster Accesses
+LOG: 1498822880882 Hulk Member Cluster Accesses - done 2ms
+LOG: 1498822880882 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498822880955 Hulk Alternative Resolve Blob [Anti-Pattern] - done 73ms
+LOG: 1498822880955 Hulk Anti-Pattern Detection - done 185ms
+LOG: 1498822885694 Hulk Detect AP - done
+LOG: 1498822902101 Hulk Anti-Pattern Detection
+LOG: 1498822902101 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:41:42.257LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498822906117 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498822906117 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498822910352 MoDisco discover project - done 4235ms
+LOG: 1498822910352 MoDisco preprocessing
+LOG: 1498822910381 MoDisco preprocessing - done 29ms
+LOG: 1498822910381 eMoflon TGG fwd trafo
+LOG: 1498822913742 eMoflon TGG fwd trafo - done 3361ms
+LOG: 1498822913742 GRaViTY convert project - done 7625ms
+LOG: 1498822913742 Init Hulk
+LOG: 1498822913747 Init Hulk - done 5ms
+LOG: 1498822913747 Init Model - done 11646ms
+LOG: 1498822913747 Hulk Detect AP
+LOG: 1498822913747 Hulk Anti-Pattern Detection
+LOG: 1498822913748 Hulk Number of outgoing invocations
+LOG: 1498822913749 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498822913749 Hulk Incomming Invocation custom
+LOG: 1498822913750 Hulk Incomming Invocation custom - done 1ms
+LOG: 1498822913750 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498822913751 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498822913751 Hulk Controller Class Smell
+LOG: 1498822913759 Hulk Controller Class Smell - done 8ms
+LOG: 1498822913759 Hulk Number of distinct fields accessed by each method
+LOG: 1498822913760 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498822913760 Hulk Number of Methods
+LOG: 1498822913761 Hulk Number of Methods - done 1ms
+LOG: 1498822913761 Hulk Number of fields
+LOG: 1498822913761 Hulk Number of fields - done 0ms
+LOG: 1498822913761 Hulk Calculate LCOM5 on PG
+LOG: 1498822913762 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498822913762 Hulk Low Cohesion Smell
+LOG: 1498822913764 Hulk Low Cohesion Smell - done 2ms
+LOG: 1498822913764 Hulk Number of Members
+LOG: 1498822913764 Hulk Number of Members - done 0ms
+LOG: 1498822913764 Hulk Large Class Smell
+LOG: 1498822913766 Hulk Large Class Smell - done 2ms
+LOG: 1498822913766 Hulk Large Class or Low Cohesion Smell
+LOG: 1498822913766 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498822913767 Hulk God Class [Anti-Pattern]
+LOG: 1498822913767 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498822913767 Hulk Number of Getters
+LOG: 1498822913768 Hulk Number of Getters - done 1ms
+LOG: 1498822913768 Hulk Number of setter Methods
+LOG: 1498822913768 Hulk Number of setter Methods - done 0ms
+LOG: 1498822913768 Hulk Relation between Methods and Getters/Setters
+LOG: 1498822913769 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498822913769 Hulk Getter/Setter Smell
+LOG: 1498822913770 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498822913770 Hulk Data Class Smell
+LOG: 1498822913787 Hulk Data Class Smell - done 17ms
+LOG: 1498822913789 Hulk Data Class Accessor Smell
+LOG: 1498822913791 Hulk Data Class Accessor Smell - done 2ms
+LOG: 1498822913791 Hulk The Blob [Anti-Pattern]
+LOG: 1498822913791 Hulk The Blob [Anti-Pattern] - done 0ms
+LOG: 1498822913792 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498822913815 Hulk Calculate the Method accesses from Blob to DataClass - done 23ms
+LOG: 1498822913816 Hulk Connected Members
+LOG: 1498822913816 Hulk Connected Members - done 0ms
+LOG: 1498822913816 Hulk Member Cluster Accesses
+LOG: 1498822913817 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498822913817 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498822913869 Hulk Alternative Resolve Blob [Anti-Pattern] - done 52ms
+LOG: 1498822913870 Hulk Anti-Pattern Detection - done 123ms
+LOG: 1498823046503 Hulk Detect AP - done
+LOG: 1498823121275 Hulk Anti-Pattern Detection
+LOG: 1498823121275 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:45:21.438LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823123415 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823123415 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823123802 MoDisco discover project - done 387ms
+LOG: 1498823123802 MoDisco preprocessing
+LOG: 1498823123825 MoDisco preprocessing - done 23ms
+LOG: 1498823123825 eMoflon TGG fwd trafo
+LOG: 1498823126421 eMoflon TGG fwd trafo - done 2596ms
+LOG: 1498823126421 GRaViTY convert project - done 3006ms
+LOG: 1498823126421 Init Hulk
+LOG: 1498823126426 Init Hulk - done 5ms
+LOG: 1498823126426 Init Model - done 5151ms
+LOG: 1498823126426 Hulk Detect AP
+LOG: 1498823126426 Hulk Anti-Pattern Detection
+LOG: 1498823126426 Hulk Number of outgoing invocations
+LOG: 1498823126428 Hulk Number of outgoing invocations - done 2ms
+LOG: 1498823126430 Hulk Incomming Invocation custom
+LOG: 1498823126431 Hulk Incomming Invocation custom - done 1ms
+LOG: 1498823126431 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823126432 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498823126432 Hulk Controller Class Smell
+LOG: 1498823126433 Hulk Controller Class Smell - done 1ms
+LOG: 1498823126433 Hulk Number of distinct fields accessed by each method
+LOG: 1498823126435 Hulk Number of distinct fields accessed by each method - done 2ms
+LOG: 1498823126435 Hulk Number of Methods
+LOG: 1498823126435 Hulk Number of Methods - done 0ms
+LOG: 1498823126435 Hulk Number of fields
+LOG: 1498823126436 Hulk Number of fields - done 1ms
+LOG: 1498823126436 Hulk Calculate LCOM5 on PG
+LOG: 1498823126437 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498823126437 Hulk Low Cohesion Smell
+LOG: 1498823126439 Hulk Low Cohesion Smell - done 2ms
+LOG: 1498823126439 Hulk Number of Members
+LOG: 1498823126439 Hulk Number of Members - done 0ms
+LOG: 1498823126439 Hulk Large Class Smell
+LOG: 1498823126441 Hulk Large Class Smell - done 2ms
+LOG: 1498823126441 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823126441 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498823126441 Hulk God Class [Anti-Pattern]
+LOG: 1498823126442 Hulk God Class [Anti-Pattern] - done 1ms
+LOG: 1498823126442 Hulk Number of Getters
+LOG: 1498823126442 Hulk Number of Getters - done 0ms
+LOG: 1498823126443 Hulk Number of setter Methods
+LOG: 1498823126443 Hulk Number of setter Methods - done 0ms
+LOG: 1498823126443 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823126444 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498823126444 Hulk Getter/Setter Smell
+LOG: 1498823126445 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498823126445 Hulk Data Class Smell
+LOG: 1498823126449 Hulk Data Class Smell - done 4ms
+LOG: 1498823126450 Hulk Data Class Accessor Smell
+LOG: 1498823126451 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498823126452 Hulk The Blob [Anti-Pattern]
+LOG: 1498823126452 Hulk The Blob [Anti-Pattern] - done 0ms
+LOG: 1498823126452 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823126464 Hulk Calculate the Method accesses from Blob to DataClass - done 12ms
+LOG: 1498823126464 Hulk Connected Members
+LOG: 1498823126464 Hulk Connected Members - done 0ms
+LOG: 1498823126464 Hulk Member Cluster Accesses
+LOG: 1498823126465 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498823126465 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823126492 Hulk Alternative Resolve Blob [Anti-Pattern] - done 27ms
+LOG: 1498823126492 Hulk Anti-Pattern Detection - done 66ms
+LOG: 1498823129554 Hulk Detect AP - done
+LOG: 1498823134799 Hulk Anti-Pattern Detection
+LOG: 1498823134799 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:45:34.900LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823136729 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823136729 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823137167 MoDisco discover project - done 438ms
+LOG: 1498823137167 MoDisco preprocessing
+LOG: 1498823137188 MoDisco preprocessing - done 21ms
+LOG: 1498823137188 eMoflon TGG fwd trafo
+LOG: 1498823139400 eMoflon TGG fwd trafo - done 2212ms
+LOG: 1498823139400 GRaViTY convert project - done 2671ms
+LOG: 1498823139400 Init Hulk
+LOG: 1498823139403 Init Hulk - done 3ms
+LOG: 1498823139403 Init Model - done 4604ms
+LOG: 1498823139403 Hulk Detect AP
+LOG: 1498823139404 Hulk Anti-Pattern Detection
+LOG: 1498823139404 Hulk Number of outgoing invocations
+LOG: 1498823139405 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498823139405 Hulk Incomming Invocation custom
+LOG: 1498823139405 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498823139405 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823139405 Hulk Relation between Incoming and Outgoing Invocations - done 0ms
+LOG: 1498823139405 Hulk Controller Class Smell
+LOG: 1498823139406 Hulk Controller Class Smell - done 1ms
+LOG: 1498823139406 Hulk Number of distinct fields accessed by each method
+LOG: 1498823139407 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498823139407 Hulk Number of Methods
+LOG: 1498823139407 Hulk Number of Methods - done 0ms
+LOG: 1498823139407 Hulk Number of fields
+LOG: 1498823139407 Hulk Number of fields - done 0ms
+LOG: 1498823139407 Hulk Calculate LCOM5 on PG
+LOG: 1498823139408 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498823139408 Hulk Low Cohesion Smell
+LOG: 1498823139409 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498823139409 Hulk Number of Members
+LOG: 1498823139409 Hulk Number of Members - done 0ms
+LOG: 1498823139409 Hulk Large Class Smell
+LOG: 1498823139410 Hulk Large Class Smell - done 1ms
+LOG: 1498823139410 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823139411 Hulk Large Class or Low Cohesion Smell - done 1ms
+LOG: 1498823139411 Hulk God Class [Anti-Pattern]
+LOG: 1498823139412 Hulk God Class [Anti-Pattern] - done 1ms
+LOG: 1498823139412 Hulk Number of Getters
+LOG: 1498823139414 Hulk Number of Getters - done 2ms
+LOG: 1498823139414 Hulk Number of setter Methods
+LOG: 1498823139415 Hulk Number of setter Methods - done 1ms
+LOG: 1498823139415 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823139416 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498823139416 Hulk Getter/Setter Smell
+LOG: 1498823139416 Hulk Getter/Setter Smell - done 0ms
+LOG: 1498823139417 Hulk Data Class Smell
+LOG: 1498823139420 Hulk Data Class Smell - done 3ms
+LOG: 1498823139420 Hulk Data Class Accessor Smell
+LOG: 1498823139421 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498823139421 Hulk The Blob [Anti-Pattern]
+LOG: 1498823139422 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498823139422 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823139434 Hulk Calculate the Method accesses from Blob to DataClass - done 12ms
+LOG: 1498823139434 Hulk Connected Members
+LOG: 1498823139434 Hulk Connected Members - done 0ms
+LOG: 1498823139434 Hulk Member Cluster Accesses
+LOG: 1498823139434 Hulk Member Cluster Accesses - done 0ms
+LOG: 1498823139434 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823139453 Hulk Alternative Resolve Blob [Anti-Pattern] - done 19ms
+LOG: 1498823139453 Hulk Anti-Pattern Detection - done 49ms
+LOG: 1498823151999 Hulk Detect AP - done
+LOG: 1498823198409 Hulk Anti-Pattern Detection
+LOG: 1498823198409 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:46:38.561LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823200462 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823200464 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823200843 MoDisco discover project - done 379ms
+LOG: 1498823200843 MoDisco preprocessing
+LOG: 1498823200872 MoDisco preprocessing - done 29ms
+LOG: 1498823200872 eMoflon TGG fwd trafo
+LOG: 1498823202472 eMoflon TGG fwd trafo - done 1600ms
+LOG: 1498823202472 GRaViTY convert project - done 2010ms
+LOG: 1498823202472 Init Hulk
+LOG: 1498823202475 Init Hulk - done 3ms
+LOG: 1498823202475 Init Model - done 4066ms
+LOG: 1498823202476 Hulk Detect AP
+LOG: 1498823202476 Hulk Anti-Pattern Detection
+LOG: 1498823202476 Hulk Number of outgoing invocations
+LOG: 1498823202477 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498823202477 Hulk Incomming Invocation custom
+LOG: 1498823202477 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498823202477 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823202478 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498823202478 Hulk Controller Class Smell
+LOG: 1498823202480 Hulk Controller Class Smell - done 2ms
+LOG: 1498823202480 Hulk Number of distinct fields accessed by each method
+LOG: 1498823202481 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498823202481 Hulk Number of Methods
+LOG: 1498823202482 Hulk Number of Methods - done 1ms
+LOG: 1498823202482 Hulk Number of fields
+LOG: 1498823202482 Hulk Number of fields - done 0ms
+LOG: 1498823202482 Hulk Calculate LCOM5 on PG
+LOG: 1498823202483 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498823202483 Hulk Low Cohesion Smell
+LOG: 1498823202485 Hulk Low Cohesion Smell - done 2ms
+LOG: 1498823202485 Hulk Number of Members
+LOG: 1498823202485 Hulk Number of Members - done 0ms
+LOG: 1498823202485 Hulk Large Class Smell
+LOG: 1498823202487 Hulk Large Class Smell - done 2ms
+LOG: 1498823202487 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823202487 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498823202487 Hulk God Class [Anti-Pattern]
+LOG: 1498823202488 Hulk God Class [Anti-Pattern] - done 1ms
+LOG: 1498823202488 Hulk Number of Getters
+LOG: 1498823202489 Hulk Number of Getters - done 1ms
+LOG: 1498823202489 Hulk Number of setter Methods
+LOG: 1498823202489 Hulk Number of setter Methods - done 0ms
+LOG: 1498823202490 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823202490 Hulk Relation between Methods and Getters/Setters - done 0ms
+LOG: 1498823202490 Hulk Getter/Setter Smell
+LOG: 1498823202491 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498823202491 Hulk Data Class Smell
+LOG: 1498823202495 Hulk Data Class Smell - done 4ms
+LOG: 1498823202495 Hulk Data Class Accessor Smell
+LOG: 1498823202497 Hulk Data Class Accessor Smell - done 2ms
+LOG: 1498823202497 Hulk The Blob [Anti-Pattern]
+LOG: 1498823202498 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498823202498 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823202508 Hulk Calculate the Method accesses from Blob to DataClass - done 10ms
+LOG: 1498823202509 Hulk Connected Members
+LOG: 1498823202509 Hulk Connected Members - done 0ms
+LOG: 1498823202509 Hulk Member Cluster Accesses
+LOG: 1498823202509 Hulk Member Cluster Accesses - done 0ms
+LOG: 1498823202509 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823202531 Hulk Alternative Resolve Blob [Anti-Pattern] - done 22ms
+LOG: 1498823202531 Hulk Anti-Pattern Detection - done 55ms
+LOG: 1498823203868 Hulk Detect AP - done
+LOG: 1498823253718 Hulk Anti-Pattern Detection
+LOG: 1498823253718 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:47:33.868LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823255550 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823255550 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823255839 MoDisco discover project - done 289ms
+LOG: 1498823255839 MoDisco preprocessing
+LOG: 1498823255855 MoDisco preprocessing - done 16ms
+LOG: 1498823255855 eMoflon TGG fwd trafo
+LOG: 1498823257990 eMoflon TGG fwd trafo - done 2135ms
+LOG: 1498823257990 GRaViTY convert project - done 2440ms
+LOG: 1498823257990 Init Hulk
+LOG: 1498823257994 Init Hulk - done 4ms
+LOG: 1498823257994 Init Model - done 4276ms
+LOG: 1498823257994 Hulk Detect AP
+LOG: 1498823257994 Hulk Anti-Pattern Detection
+LOG: 1498823257994 Hulk Number of outgoing invocations
+LOG: 1498823257995 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498823257995 Hulk Incomming Invocation custom
+LOG: 1498823257996 Hulk Incomming Invocation custom - done 1ms
+LOG: 1498823257996 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823257996 Hulk Relation between Incoming and Outgoing Invocations - done 0ms
+LOG: 1498823257996 Hulk Controller Class Smell
+LOG: 1498823257999 Hulk Controller Class Smell - done 3ms
+LOG: 1498823257999 Hulk Number of distinct fields accessed by each method
+LOG: 1498823258000 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498823258000 Hulk Number of Methods
+LOG: 1498823258000 Hulk Number of Methods - done 0ms
+LOG: 1498823258000 Hulk Number of fields
+LOG: 1498823258001 Hulk Number of fields - done 1ms
+LOG: 1498823258001 Hulk Calculate LCOM5 on PG
+LOG: 1498823258002 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498823258002 Hulk Low Cohesion Smell
+LOG: 1498823258003 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498823258003 Hulk Number of Members
+LOG: 1498823258003 Hulk Number of Members - done 0ms
+LOG: 1498823258003 Hulk Large Class Smell
+LOG: 1498823258005 Hulk Large Class Smell - done 2ms
+LOG: 1498823258005 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823258005 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498823258005 Hulk God Class [Anti-Pattern]
+LOG: 1498823258005 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498823258005 Hulk Number of Getters
+LOG: 1498823258006 Hulk Number of Getters - done 1ms
+LOG: 1498823258006 Hulk Number of setter Methods
+LOG: 1498823258007 Hulk Number of setter Methods - done 1ms
+LOG: 1498823258007 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823258008 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498823258008 Hulk Getter/Setter Smell
+LOG: 1498823258011 Hulk Getter/Setter Smell - done 3ms
+LOG: 1498823258011 Hulk Data Class Smell
+LOG: 1498823258013 Hulk Data Class Smell - done 2ms
+LOG: 1498823258013 Hulk Data Class Accessor Smell
+LOG: 1498823258015 Hulk Data Class Accessor Smell - done 2ms
+LOG: 1498823258015 Hulk The Blob [Anti-Pattern]
+LOG: 1498823258016 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498823258016 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823258026 Hulk Calculate the Method accesses from Blob to DataClass - done 10ms
+LOG: 1498823258026 Hulk Connected Members
+LOG: 1498823258026 Hulk Connected Members - done 0ms
+LOG: 1498823258026 Hulk Member Cluster Accesses
+LOG: 1498823258027 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498823258027 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823258050 Hulk Alternative Resolve Blob [Anti-Pattern] - done 23ms
+LOG: 1498823258050 Hulk Anti-Pattern Detection - done 56ms
+LOG: 1498823260021 Hulk Detect AP - done
+LOG: src (not open) [in 00_JavaSolitaire1.3]
+LOG: /usr/lib/jvm/java-8-openjdk-amd64/jre/lib/resources.jar
+  <default> (not open)
+  com.sun.xml.internal.ws.policy.sourcemodel.attach (not open)
+  javax.swing.plaf.basic (not open)
+  com.sun.xml.internal.messaging.saaj.client (not open)
+  javax.swing.plaf.metal (not open)
+  com.sun.org.apache.xalan (not open)
+  com.sun.xml.internal.stream (not open)
+  com.sun.xml.internal.ws.util.resources (not open)
+  com.sun.xml.internal.messaging (not open)
+  com.sun.xml.internal.bind.v2.runtime.unmarshaller (not open)
+  com.sun.org.apache.xerces.internal.impl (not open)
+  javax.xml.bind (not open)
+  com.sun.corba.se.impl.orbutil.resources (not open)
+  javax.swing.plaf.basic.icons (not open)
+  com.sun.xml.internal.ws.resources (not open)
+  com.sun.org.apache.xml.internal.security (not open)
+  java (not open)
+  com.sun.xml.internal.ws.api (not open)
+  sun.net.idn (not open)
+  com.sun.java.swing.plaf.gtk (not open)
+  com.sun.org.apache.xml.internal.security.resource (not open)
+  com.sun.java.util.jar.pack (not open)
+  com.sun.xml.internal.bind.marshaller (not open)
+  com.sun.xml.internal.messaging.saaj (not open)
+  com.sun.java.swing.plaf.gtk.resources.metacity (not open)
+  com.sun.xml.internal.messaging.saaj.soap.impl (not open)
+  com.sun.xml.internal.bind.api (not open)
+  com.sun.xml.internal.ws.api.streaming (not open)
+  com.sun (not open)
+  com.sun.xml.internal.ws.util (not open)
+  com.sun.java.util (not open)
+  com.sun.xml.internal.bind.v2.model (not open)
+  com.sun.org.apache.xerces.internal (not open)
+  com.sun.xml.internal.ws.spi (not open)
+  sun.net (not open)
+  com.sun.xml.internal.messaging.saaj.util (not open)
+  javax.swing.text (not open)
+  com (not open)
+  com.sun.corba.se (not open)
+  javax.swing.text.rtf (not open)
+  com.sun.xml.internal.messaging.saaj.soap.ver1_1 (not open)
+  com.sun.org.apache.xerces (not open)
+  javax.sql.rowset (not open)
+  com.sun.org.apache.xerces.internal.impl.xpath.regex (not open)
+  com.sun.jndi.ldap (not open)
+  sun.rmi.registry.resources (not open)
+  com.sun.org.apache.xml.internal.serializer (not open)
+  com.sun.xml.internal.messaging.saaj.soap.ver1_2 (not open)
+  com.sun.xml.internal.fastinfoset.resources (not open)
+  javax.swing.plaf.metal.sounds (not open)
+  com.sun.corba.se.impl.logging (not open)
+  com.sun.jndi.cosnaming (not open)
+  sun.rmi.registry (not open)
+  com.sun.xml.internal.messaging.saaj.soap.name (not open)
+  com.sun.xml.internal.bind.v2.runtime (not open)
+  com.sun.corba.se.impl (not open)
+  com.sun.org.apache.xerces.internal.impl.msg (not open)
+  com.sun.xml.internal.ws.policy.sourcemodel (not open)
+  java.lang (not open)
+  com.sun.org (not open)
+  com.sun.corba (not open)
+  javax.xml.bind.util (not open)
+  javax.swing.plaf.metal.icons.ocean (not open)
+  com.sun.org.apache.xerces.internal.impl.xpath (not open)
+  com.sun.java.swing.plaf.motif.icons (not open)
+  com.sun.xml.internal.bind.v2 (not open)
+  javax.xml.bind.helpers (not open)
+  com.sun.xml.internal.stream.buffer (not open)
+  com.sun.xml.internal.messaging.saaj.client.p2p (not open)
+  com.sun.xml.internal.messaging.saaj.soap (not open)
+  com.sun.xml.internal.bind.v2.runtime.property (not open)
+  com.sun.java.swing.plaf.gtk.resources.metacity.SwingFallbackTheme (not open)
+  com.sun.java.util.jar (not open)
+  com.sun.java.swing.plaf.motif (not open)
+  com.sun.imageio (not open)
+  com.sun.xml.internal.ws (not open)
+  com.sun.xml.internal (not open)
+  com.sun.xml.internal.ws.developer (not open)
+  com.sun.org.apache (not open)
+  com.sun.org.apache.xml.internal (not open)
+  com.sun.xml.internal.ws.policy.privateutil (not open)
+  javax.sql (not open)
+  sun.text (not open)
+  sun (not open)
+  javax.swing.text.rtf.charsets (not open)
+  com.sun.xml.internal.bind (not open)
+  javax.swing (not open)
+  com.sun.org.apache.xml (not open)
+  com.sun.imageio.plugins.common (not open)
+  com.sun.java.swing.plaf.gtk.icons (not open)
+  com.sun.xml.internal.ws.util.xml (not open)
+  com.sun.java.swing (not open)
+  sun.text.resources (not open)
+  com.sun.jndi (not open)
+  com.sun.xml (not open)
+  javax.swing.plaf.metal.icons (not open)
+  com.sun.xml.internal.fastinfoset (not open)
+  sun.print (not open)
+  com.sun.java.swing.plaf (not open)
+  com.sun.java (not open)
+  com.sun.xml.internal.bind.v2.model.impl (not open)
+  com.sun.rowset (not open)
+  javax (not open)
+  com.sun.xml.internal.bind.v2.schemagen (not open)
+  com.sun.java.swing.plaf.windows.icons (not open)
+  com.sun.xml.internal.ws.policy (not open)
+  com.sun.xml.internal.bind.unmarshaller (not open)
+  sun.print.resources (not open)
+  com.sun.imageio.plugins (not open)
+  com.sun.xml.internal.bind.v2.runtime.reflect (not open)
+  com.sun.xml.internal.bind.v2.model.annotation (not open)
+  sun.rmi.server.resources (not open)
+  com.sun.xml.internal.ws.commons (not open)
+  javax.swing.plaf (not open)
+  com.sun.corba.se.impl.orbutil (not open)
+  javax.swing.text.html.parser (not open)
+  javax.swing.text.html (not open)
+  javax.xml (not open)
+  com.sun.java.swing.plaf.windows (not open)
+  com.sun.xml.internal.ws.assembler (not open)
+  com.sun.xml.internal.ws.commons.xmlutil (not open)
+  com.sun.java.swing.plaf.gtk.resources (not open)
+  sun.rmi (not open)
+  com.sun.org.apache.xalan.internal (not open)
+  com.sun.org.apache.xalan.internal.res (not open)
+  sun.rmi.server (not open)
+LOG: 1498823391678 Hulk Anti-Pattern Detection
+LOG: 1498823391678 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:49:51.780LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823393511 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823393511 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823393888 MoDisco discover project - done 377ms
+LOG: 1498823393891 MoDisco preprocessing
+LOG: 1498823393916 MoDisco preprocessing - done 25ms
+LOG: 1498823393916 eMoflon TGG fwd trafo
+LOG: 1498823395355 eMoflon TGG fwd trafo - done 1439ms
+LOG: 1498823395356 GRaViTY convert project - done 1845ms
+LOG: 1498823395356 Init Hulk
+LOG: 1498823395359 Init Hulk - done 3ms
+LOG: 1498823395359 Init Model - done 3681ms
+LOG: 1498823395359 Hulk Detect AP
+LOG: 1498823395359 Hulk Anti-Pattern Detection
+LOG: 1498823395359 Hulk Number of outgoing invocations
+LOG: 1498823395360 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498823395360 Hulk Incomming Invocation custom
+LOG: 1498823395360 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498823395361 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823395361 Hulk Relation between Incoming and Outgoing Invocations - done 0ms
+LOG: 1498823395361 Hulk Controller Class Smell
+LOG: 1498823395362 Hulk Controller Class Smell - done 1ms
+LOG: 1498823395362 Hulk Number of distinct fields accessed by each method
+LOG: 1498823395363 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498823395363 Hulk Number of Methods
+LOG: 1498823395363 Hulk Number of Methods - done 0ms
+LOG: 1498823395363 Hulk Number of fields
+LOG: 1498823395364 Hulk Number of fields - done 1ms
+LOG: 1498823395364 Hulk Calculate LCOM5 on PG
+LOG: 1498823395364 Hulk Calculate LCOM5 on PG - done 0ms
+LOG: 1498823395364 Hulk Low Cohesion Smell
+LOG: 1498823395365 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498823395365 Hulk Number of Members
+LOG: 1498823395365 Hulk Number of Members - done 0ms
+LOG: 1498823395365 Hulk Large Class Smell
+LOG: 1498823395366 Hulk Large Class Smell - done 1ms
+LOG: 1498823395366 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823395366 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498823395366 Hulk God Class [Anti-Pattern]
+LOG: 1498823395366 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498823395366 Hulk Number of Getters
+LOG: 1498823395367 Hulk Number of Getters - done 1ms
+LOG: 1498823395367 Hulk Number of setter Methods
+LOG: 1498823395367 Hulk Number of setter Methods - done 0ms
+LOG: 1498823395367 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823395368 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498823395368 Hulk Getter/Setter Smell
+LOG: 1498823395368 Hulk Getter/Setter Smell - done 0ms
+LOG: 1498823395368 Hulk Data Class Smell
+LOG: 1498823395370 Hulk Data Class Smell - done 2ms
+LOG: 1498823395370 Hulk Data Class Accessor Smell
+LOG: 1498823395371 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498823395371 Hulk The Blob [Anti-Pattern]
+LOG: 1498823395372 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498823395372 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823395379 Hulk Calculate the Method accesses from Blob to DataClass - done 7ms
+LOG: 1498823395379 Hulk Connected Members
+LOG: 1498823395379 Hulk Connected Members - done 0ms
+LOG: 1498823395379 Hulk Member Cluster Accesses
+LOG: 1498823395380 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498823395380 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823395396 Hulk Alternative Resolve Blob [Anti-Pattern] - done 16ms
+LOG: 1498823395396 Hulk Anti-Pattern Detection - done 37ms
+LOG: 1498823396957 Hulk Detect AP - done
+LOG: 1498823759858 Hulk Anti-Pattern Detection
+LOG: 1498823759858 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 13:56:00.011LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498823762013 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823762013 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498823762324 MoDisco discover project - done 311ms
+LOG: 1498823762324 MoDisco preprocessing
+LOG: 1498823762343 MoDisco preprocessing - done 19ms
+LOG: 1498823762343 eMoflon TGG fwd trafo
+LOG: 1498823763957 eMoflon TGG fwd trafo - done 1614ms
+LOG: 1498823763957 GRaViTY convert project - done 1944ms
+LOG: 1498823763957 Init Hulk
+LOG: 1498823763960 Init Hulk - done 3ms
+LOG: 1498823763960 Init Model - done 4102ms
+LOG: 1498823763961 Hulk Detect AP
+LOG: 1498823763961 Hulk Anti-Pattern Detection
+LOG: 1498823763961 Hulk Number of outgoing invocations
+LOG: 1498823763962 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498823763962 Hulk Incomming Invocation custom
+LOG: 1498823763962 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498823763962 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498823763963 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498823763963 Hulk Controller Class Smell
+LOG: 1498823763963 Hulk Controller Class Smell - done 0ms
+LOG: 1498823763963 Hulk Number of distinct fields accessed by each method
+LOG: 1498823763964 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498823763964 Hulk Number of Methods
+LOG: 1498823763964 Hulk Number of Methods - done 0ms
+LOG: 1498823763964 Hulk Number of fields
+LOG: 1498823763964 Hulk Number of fields - done 0ms
+LOG: 1498823763964 Hulk Calculate LCOM5 on PG
+LOG: 1498823763965 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498823763965 Hulk Low Cohesion Smell
+LOG: 1498823763966 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498823763966 Hulk Number of Members
+LOG: 1498823763966 Hulk Number of Members - done 0ms
+LOG: 1498823763966 Hulk Large Class Smell
+LOG: 1498823763967 Hulk Large Class Smell - done 1ms
+LOG: 1498823763967 Hulk Large Class or Low Cohesion Smell
+LOG: 1498823763967 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498823763967 Hulk God Class [Anti-Pattern]
+LOG: 1498823763967 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498823763967 Hulk Number of Getters
+LOG: 1498823763968 Hulk Number of Getters - done 1ms
+LOG: 1498823763968 Hulk Number of setter Methods
+LOG: 1498823763968 Hulk Number of setter Methods - done 0ms
+LOG: 1498823763968 Hulk Relation between Methods and Getters/Setters
+LOG: 1498823763969 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498823763969 Hulk Getter/Setter Smell
+LOG: 1498823763970 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498823763970 Hulk Data Class Smell
+LOG: 1498823763973 Hulk Data Class Smell - done 3ms
+LOG: 1498823763973 Hulk Data Class Accessor Smell
+LOG: 1498823763974 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498823763974 Hulk The Blob [Anti-Pattern]
+LOG: 1498823763975 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498823763975 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498823763984 Hulk Calculate the Method accesses from Blob to DataClass - done 9ms
+LOG: 1498823763984 Hulk Connected Members
+LOG: 1498823763984 Hulk Connected Members - done 0ms
+LOG: 1498823763984 Hulk Member Cluster Accesses
+LOG: 1498823763985 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498823763985 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498823763998 Hulk Alternative Resolve Blob [Anti-Pattern] - done 13ms
+LOG: 1498823763998 Hulk Anti-Pattern Detection - done 37ms
+LOG: 1498823765877 Hulk Detect AP - done
+LOG: PngImage.java
+LOG: FrameAbout.java
+LOG: Util.java
+LOG: 1498824024821 Hulk Anti-Pattern Detection
+LOG: 1498824024821 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 14:00:24.936LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498824026849 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498824026849 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498824027209 MoDisco discover project - done 360ms
+LOG: 1498824027209 MoDisco preprocessing
+LOG: 1498824027227 MoDisco preprocessing - done 18ms
+LOG: 1498824027227 eMoflon TGG fwd trafo
+LOG: 1498824028951 eMoflon TGG fwd trafo - done 1724ms
+LOG: 1498824028951 GRaViTY convert project - done 2102ms
+LOG: 1498824028952 Init Hulk
+LOG: 1498824028962 Init Hulk - done 10ms
+LOG: 1498824028962 Init Model - done 4141ms
+LOG: 1498824028962 Hulk Detect AP
+LOG: 1498824028962 Hulk Anti-Pattern Detection
+LOG: 1498824028963 Hulk Number of outgoing invocations
+LOG: 1498824028964 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498824028964 Hulk Incomming Invocation custom
+LOG: 1498824028965 Hulk Incomming Invocation custom - done 1ms
+LOG: 1498824028965 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498824028966 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498824028966 Hulk Controller Class Smell
+LOG: 1498824028967 Hulk Controller Class Smell - done 1ms
+LOG: 1498824028967 Hulk Number of distinct fields accessed by each method
+LOG: 1498824028968 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498824028968 Hulk Number of Methods
+LOG: 1498824028969 Hulk Number of Methods - done 1ms
+LOG: 1498824028969 Hulk Number of fields
+LOG: 1498824028969 Hulk Number of fields - done 0ms
+LOG: 1498824028969 Hulk Calculate LCOM5 on PG
+LOG: 1498824028970 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498824028970 Hulk Low Cohesion Smell
+LOG: 1498824028971 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498824028971 Hulk Number of Members
+LOG: 1498824028972 Hulk Number of Members - done 1ms
+LOG: 1498824028972 Hulk Large Class Smell
+LOG: 1498824028975 Hulk Large Class Smell - done 3ms
+LOG: 1498824028975 Hulk Large Class or Low Cohesion Smell
+LOG: 1498824028978 Hulk Large Class or Low Cohesion Smell - done 3ms
+LOG: 1498824028978 Hulk God Class [Anti-Pattern]
+LOG: 1498824028978 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498824028978 Hulk Number of Getters
+LOG: 1498824028979 Hulk Number of Getters - done 1ms
+LOG: 1498824028979 Hulk Number of setter Methods
+LOG: 1498824028980 Hulk Number of setter Methods - done 1ms
+LOG: 1498824028980 Hulk Relation between Methods and Getters/Setters
+LOG: 1498824028980 Hulk Relation between Methods and Getters/Setters - done 0ms
+LOG: 1498824028981 Hulk Getter/Setter Smell
+LOG: 1498824028985 Hulk Getter/Setter Smell - done 4ms
+LOG: 1498824028985 Hulk Data Class Smell
+LOG: 1498824028987 Hulk Data Class Smell - done 2ms
+LOG: 1498824028987 Hulk Data Class Accessor Smell
+LOG: 1498824028988 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498824028988 Hulk The Blob [Anti-Pattern]
+LOG: 1498824028989 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498824028989 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498824028996 Hulk Calculate the Method accesses from Blob to DataClass - done 7ms
+LOG: 1498824028996 Hulk Connected Members
+LOG: 1498824028996 Hulk Connected Members - done 0ms
+LOG: 1498824028996 Hulk Member Cluster Accesses
+LOG: 1498824028996 Hulk Member Cluster Accesses - done 0ms
+LOG: 1498824028996 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498824029012 Hulk Alternative Resolve Blob [Anti-Pattern] - done 16ms
+LOG: 1498824029012 Hulk Anti-Pattern Detection - done 50ms
+LOG: 1498824032285 Hulk Detect AP - done
+LOG: 1498824575126 Hulk Anti-Pattern Detection
+LOG: 1498824575126 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 14:09:35.278LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498824577022 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498824577022 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498824577334 MoDisco discover project - done 312ms
+LOG: 1498824577334 MoDisco preprocessing
+LOG: 1498824577355 MoDisco preprocessing - done 21ms
+LOG: 1498824577355 eMoflon TGG fwd trafo
+LOG: 1498824579049 eMoflon TGG fwd trafo - done 1694ms
+LOG: 1498824579049 GRaViTY convert project - done 2027ms
+LOG: 1498824579049 Init Hulk
+LOG: 1498824579051 Init Hulk - done 2ms
+LOG: 1498824579051 Init Model - done 3925ms
+LOG: 1498824579052 Hulk Detect AP
+LOG: 1498824579052 Hulk Anti-Pattern Detection
+LOG: 1498824579052 Hulk Number of outgoing invocations
+LOG: 1498824579053 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498824579053 Hulk Incomming Invocation custom
+LOG: 1498824579053 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498824579053 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498824579053 Hulk Relation between Incoming and Outgoing Invocations - done 0ms
+LOG: 1498824579053 Hulk Controller Class Smell
+LOG: 1498824579054 Hulk Controller Class Smell - done 1ms
+LOG: 1498824579054 Hulk Number of distinct fields accessed by each method
+LOG: 1498824579055 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498824579055 Hulk Number of Methods
+LOG: 1498824579055 Hulk Number of Methods - done 0ms
+LOG: 1498824579055 Hulk Number of fields
+LOG: 1498824579055 Hulk Number of fields - done 0ms
+LOG: 1498824579055 Hulk Calculate LCOM5 on PG
+LOG: 1498824579056 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498824579056 Hulk Low Cohesion Smell
+LOG: 1498824579057 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498824579057 Hulk Number of Members
+LOG: 1498824579057 Hulk Number of Members - done 0ms
+LOG: 1498824579057 Hulk Large Class Smell
+LOG: 1498824579058 Hulk Large Class Smell - done 1ms
+LOG: 1498824579058 Hulk Large Class or Low Cohesion Smell
+LOG: 1498824579058 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498824579058 Hulk God Class [Anti-Pattern]
+LOG: 1498824579058 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498824579058 Hulk Number of Getters
+LOG: 1498824579059 Hulk Number of Getters - done 1ms
+LOG: 1498824579059 Hulk Number of setter Methods
+LOG: 1498824579059 Hulk Number of setter Methods - done 0ms
+LOG: 1498824579059 Hulk Relation between Methods and Getters/Setters
+LOG: 1498824579060 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498824579060 Hulk Getter/Setter Smell
+LOG: 1498824579061 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498824579061 Hulk Data Class Smell
+LOG: 1498824579064 Hulk Data Class Smell - done 3ms
+LOG: 1498824579064 Hulk Data Class Accessor Smell
+LOG: 1498824579066 Hulk Data Class Accessor Smell - done 2ms
+LOG: 1498824579066 Hulk The Blob [Anti-Pattern]
+LOG: 1498824579066 Hulk The Blob [Anti-Pattern] - done 0ms
+LOG: 1498824579066 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498824579075 Hulk Calculate the Method accesses from Blob to DataClass - done 9ms
+LOG: 1498824579075 Hulk Connected Members
+LOG: 1498824579075 Hulk Connected Members - done 0ms
+LOG: 1498824579075 Hulk Member Cluster Accesses
+LOG: 1498824579076 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498824579076 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498824579091 Hulk Alternative Resolve Blob [Anti-Pattern] - done 15ms
+LOG: 1498824579091 Hulk Anti-Pattern Detection - done 39ms
+LOG: 1498824579092 Hulk Detect AP - done
+LOG: 1498836883675 Hulk Anti-Pattern Detection
+LOG: 1498836883675 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 17:34:43.776LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498836886267 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498836886267 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498836886778 MoDisco discover project - done 511ms
+LOG: 1498836886778 MoDisco preprocessing
+LOG: 1498836886798 MoDisco preprocessing - done 20ms
+LOG: 1498836886798 eMoflon TGG fwd trafo
+LOG: 1498836888152 eMoflon TGG fwd trafo - done 1354ms
+LOG: 1498836888152 GRaViTY convert project - done 1885ms
+LOG: 1498836888152 Init Hulk
+LOG: 1498836888155 Init Hulk - done 3ms
+LOG: 1498836888155 Init Model - done 4480ms
+LOG: 1498836888155 Hulk Detect AP
+LOG: 1498836888156 Hulk Anti-Pattern Detection
+LOG: 1498836888156 Hulk Number of outgoing invocations
+LOG: 1498836888157 Hulk Number of outgoing invocations - done 1ms
+LOG: 1498836888157 Hulk Incomming Invocation custom
+LOG: 1498836888157 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498836888157 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498836888158 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498836888158 Hulk Controller Class Smell
+LOG: 1498836888158 Hulk Controller Class Smell - done 0ms
+LOG: 1498836888159 Hulk Number of distinct fields accessed by each method
+LOG: 1498836888159 Hulk Number of distinct fields accessed by each method - done 0ms
+LOG: 1498836888159 Hulk Number of Methods
+LOG: 1498836888159 Hulk Number of Methods - done 0ms
+LOG: 1498836888159 Hulk Number of fields
+LOG: 1498836888160 Hulk Number of fields - done 1ms
+LOG: 1498836888160 Hulk Calculate LCOM5 on PG
+LOG: 1498836888160 Hulk Calculate LCOM5 on PG - done 0ms
+LOG: 1498836888160 Hulk Low Cohesion Smell
+LOG: 1498836888161 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498836888161 Hulk Number of Members
+LOG: 1498836888161 Hulk Number of Members - done 0ms
+LOG: 1498836888161 Hulk Large Class Smell
+LOG: 1498836888162 Hulk Large Class Smell - done 1ms
+LOG: 1498836888162 Hulk Large Class or Low Cohesion Smell
+LOG: 1498836888162 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498836888162 Hulk God Class [Anti-Pattern]
+LOG: 1498836888162 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498836888162 Hulk Number of Getters
+LOG: 1498836888163 Hulk Number of Getters - done 1ms
+LOG: 1498836888163 Hulk Number of setter Methods
+LOG: 1498836888163 Hulk Number of setter Methods - done 0ms
+LOG: 1498836888163 Hulk Relation between Methods and Getters/Setters
+LOG: 1498836888164 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498836888164 Hulk Getter/Setter Smell
+LOG: 1498836888164 Hulk Getter/Setter Smell - done 0ms
+LOG: 1498836888164 Hulk Data Class Smell
+LOG: 1498836888166 Hulk Data Class Smell - done 2ms
+LOG: 1498836888166 Hulk Data Class Accessor Smell
+LOG: 1498836888167 Hulk Data Class Accessor Smell - done 1ms
+LOG: 1498836888167 Hulk The Blob [Anti-Pattern]
+LOG: 1498836888167 Hulk The Blob [Anti-Pattern] - done 0ms
+LOG: 1498836888167 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498836888173 Hulk Calculate the Method accesses from Blob to DataClass - done 6ms
+LOG: 1498836888173 Hulk Connected Members
+LOG: 1498836888173 Hulk Connected Members - done 0ms
+LOG: 1498836888173 Hulk Member Cluster Accesses
+LOG: 1498836888173 Hulk Member Cluster Accesses - done 0ms
+LOG: 1498836888173 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498836888186 Hulk Alternative Resolve Blob [Anti-Pattern] - done 13ms
+LOG: 1498836888186 Hulk Anti-Pattern Detection - done 30ms
+LOG: 1498836888186 Hulk Detect AP - done
+LOG: 1498841848421 Hulk Anti-Pattern Detection
+LOG: 1498841848421 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-06-30 18:57:28.579LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1498841854187 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498841854188 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1498841854549 MoDisco discover project - done 361ms
+LOG: 1498841854549 MoDisco preprocessing
+LOG: 1498841854569 MoDisco preprocessing - done 20ms
+LOG: 1498841854569 eMoflon TGG fwd trafo
+LOG: 1498841856194 eMoflon TGG fwd trafo - done 1625ms
+LOG: 1498841856194 GRaViTY convert project - done 2007ms
+LOG: 1498841856194 Init Hulk
+LOG: 1498841856208 Init Hulk - done 14ms
+LOG: 1498841856208 Init Model - done 7787ms
+LOG: 1498841856209 Hulk Detect AP
+LOG: 1498841856209 Hulk Anti-Pattern Detection
+LOG: 1498841856209 Hulk Number of outgoing invocations
+LOG: 1498841856211 Hulk Number of outgoing invocations - done 2ms
+LOG: 1498841856211 Hulk Incomming Invocation custom
+LOG: 1498841856211 Hulk Incomming Invocation custom - done 0ms
+LOG: 1498841856211 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1498841856212 Hulk Relation between Incoming and Outgoing Invocations - done 1ms
+LOG: 1498841856212 Hulk Controller Class Smell
+LOG: 1498841856213 Hulk Controller Class Smell - done 1ms
+LOG: 1498841856213 Hulk Number of distinct fields accessed by each method
+LOG: 1498841856214 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1498841856214 Hulk Number of Methods
+LOG: 1498841856215 Hulk Number of Methods - done 1ms
+LOG: 1498841856215 Hulk Number of fields
+LOG: 1498841856215 Hulk Number of fields - done 0ms
+LOG: 1498841856215 Hulk Calculate LCOM5 on PG
+LOG: 1498841856216 Hulk Calculate LCOM5 on PG - done 1ms
+LOG: 1498841856216 Hulk Low Cohesion Smell
+LOG: 1498841856217 Hulk Low Cohesion Smell - done 1ms
+LOG: 1498841856217 Hulk Number of Members
+LOG: 1498841856217 Hulk Number of Members - done 0ms
+LOG: 1498841856217 Hulk Large Class Smell
+LOG: 1498841856219 Hulk Large Class Smell - done 2ms
+LOG: 1498841856219 Hulk Large Class or Low Cohesion Smell
+LOG: 1498841856219 Hulk Large Class or Low Cohesion Smell - done 0ms
+LOG: 1498841856219 Hulk God Class [Anti-Pattern]
+LOG: 1498841856219 Hulk God Class [Anti-Pattern] - done 0ms
+LOG: 1498841856219 Hulk Number of Getters
+LOG: 1498841856220 Hulk Number of Getters - done 1ms
+LOG: 1498841856220 Hulk Number of setter Methods
+LOG: 1498841856220 Hulk Number of setter Methods - done 0ms
+LOG: 1498841856220 Hulk Relation between Methods and Getters/Setters
+LOG: 1498841856221 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1498841856221 Hulk Getter/Setter Smell
+LOG: 1498841856222 Hulk Getter/Setter Smell - done 1ms
+LOG: 1498841856222 Hulk Data Class Smell
+LOG: 1498841856225 Hulk Data Class Smell - done 3ms
+LOG: 1498841856225 Hulk Data Class Accessor Smell
+LOG: 1498841856227 Hulk Data Class Accessor Smell - done 2ms
+LOG: 1498841856227 Hulk The Blob [Anti-Pattern]
+LOG: 1498841856228 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1498841856228 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1498841856238 Hulk Calculate the Method accesses from Blob to DataClass - done 10ms
+LOG: 1498841856238 Hulk Connected Members
+LOG: 1498841856238 Hulk Connected Members - done 0ms
+LOG: 1498841856238 Hulk Member Cluster Accesses
+LOG: 1498841856239 Hulk Member Cluster Accesses - done 1ms
+LOG: 1498841856239 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1498841856256 Hulk Alternative Resolve Blob [Anti-Pattern] - done 17ms
+LOG: 1498841856256 Hulk Anti-Pattern Detection - done 47ms
+LOG: 1498841856256 Hulk Detect AP - done
+LOG: void getNewCards() [in Solitaire [in Solitaire.java [in com.fbergeron.solitaire [in src [in 00_JavaSolitaire1.3]]]]]
+LOG: void getNewCards() [in Solitaire [in Solitaire.java [in com.fbergeron.solitaire [in src [in 00_JavaSolitaire1.3]]]]]
+LOG: void play(Stack, Stack, Stack) [in Solitaire [in Solitaire.java [in com.fbergeron.solitaire [in src [in 00_JavaSolitaire1.3]]]]]

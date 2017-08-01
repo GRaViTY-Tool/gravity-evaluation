@@ -1,0 +1,49 @@
+/**
+ * 
+ */
+package edu.ncsu.csc.itrust.unit.action;
+
+import edu.ncsu.csc.itrust.action.ViewReceivingReferralsAction;
+import edu.ncsu.csc.itrust.beans.ReferralBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+import junit.framework.TestCase;
+
+/**
+ * ViewReceivingReferralsActionTest
+ */
+public class ViewReceivingReferralsActionTest extends TestCase {
+
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDataGenerator gen = new TestDataGenerator();
+	private ViewReceivingReferralsAction action;
+	
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		action = new ViewReceivingReferralsAction(factory, 9000000003L);
+		gen.clearAllTables();
+		gen.standardData();
+	}
+	
+	
+	/**
+	 * Test method for {@link edu.ncsu.csc.itrust.action.ViewReceivingReferralsAction#getReferralsForReceivingHCPUnread()}.
+	 * @throws DBException 
+	 */
+	public void testGetReferralsForReceivingHCPUnread() throws DBException {
+		int number = action.getReferralsForReceivingHCPUnread();
+		assertEquals(7, number);
+		
+		ReferralBean b = action.getReferralByID(1);
+		b.setViewedByHCP(true);
+		action.updateReferral(b);
+		
+		number = action.getReferralsForReceivingHCPUnread();
+		assertEquals(6, number);
+	}
+
+}

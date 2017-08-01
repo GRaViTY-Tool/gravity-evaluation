@@ -1,0 +1,384 @@
+/*
+ * BufferIORequest.java - I/O request
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.jedit.io;
+
+import java.io.*;
+import java.util.zip.*;
+
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.*;
+//}}}
+
+/**
+ * A buffer I/O request.
+ * @author Slava Pestov
+ * @version $Id: BufferIORequest.java,v 1.23 2002/04/08 13:13:56 spestov Exp $
+ */
+public class BufferIORequest extends WorkRequest
+{
+	//{{{ Constants
+	/**
+	 * Size of I/O buffers.
+	 */
+	public static final int IOBUFSIZE = 32768;
+
+	/**
+	 * Number of lines per progress increment.
+	 */
+	public static final int PROGRESS_INTERVAL = 300;
+
+	public static final String LOAD_DATA = "BufferIORequest__loadData";
+	public static final String END_OFFSETS = "BufferIORequest__endOffsets";
+	public static final String NEW_PATH = "BufferIORequest__newPath";
+
+	/**
+	 * Buffer boolean property set when an error occurs.
+	 */
+	public static final String ERROR_OCCURRED = "BufferIORequest__error";
+
+	/**
+	 * A file load request.
+	 */
+	public static final int LOAD = 0;
+
+	/**
+	 * A file save request.
+	 */
+	public static final int SAVE = 1;
+
+	/**
+	 * An autosave request. Only supported for local files.
+	 */
+	public static final int AUTOSAVE = 2;
+
+	/**
+	 * An insert file request.
+	 */
+	public static final int INSERT = 3;
+
+	/**
+	 * Magic number used for auto-detecting Unicode and GZIP files.
+	 */
+	public static final int GZIP_MAGIC_1 = 0x1f;
+	public static final int GZIP_MAGIC_2 = 0x8b;
+	public static final int UNICODE_MAGIC_1 = 0xfe;
+	public static final int UNICODE_MAGIC_2 = 0xff;
+	//}}}
+
+	//{{{ BufferIORequest constructor
+	/**
+	 * Creates a new buffer I/O request.
+	 * @param type The request type
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param session The VFS session
+	 * @param vfs The VFS
+	 * @param path The path
+	 */
+	public BufferIORequest(int type, View view, Buffer buffer,
+		Object session, VFS vfs, String path)
+	{
+		this.type = type;
+		this.view = view;
+		this.buffer = buffer;
+		this.session = session;
+		this.vfs = vfs;
+		this.path = path;
+
+		markersPath = vfs.getParentOfPath(path)
+			+ '.' + vfs.getFileName(path)
+			+ ".marks";
+	} //}}}
+
+	//{{{ run() method
+	public void run()
+	{
+		switch(type)
+		{
+		case LOAD:
+			load();
+			break;
+		case SAVE:
+			save();
+			break;
+		case AUTOSAVE:
+			autosave();
+			break;
+		case INSERT:
+			insert();
+			break;
+		}
+	} //}}}
+
+	//{{{ toString() method
+	public String toString()
+	{
+		String typeString;
+		switch(type)
+		{
+		case LOAD:
+			typeString = "LOAD";
+			break;
+		case SAVE:
+			typeString = "SAVE";
+			break;
+		case AUTOSAVE:
+			typeString = "AUTOSAVE";
+			break;
+		default:
+			typeString = "UNKNOWN!!!";
+		}
+
+		return getClass().getName() + "[type=" + typeString
+			+ ",buffer=" + buffer + "]";
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private int type;
+	private View view;
+	private Buffer buffer;
+	private Object session;
+	private VFS vfs;
+	private String path;
+	private String markersPath;
+	//}}}
+
+	//{{{ read() method
+	private void read(Buffer buffer, InputStream _in, long length)
+		throws IOException
+	{
+		IntegerArray endOffsets = new IntegerArray();
+
+		// only true if the file size is known
+		boolean trackProgress = (length != 0);
+		File file = buffer.getFile();
+
+		setProgressValue(0);
+		setProgressMaximum((int)length);
+
+		// if the file size is not known, start with a resonable
+		// default buffer size
+		if(length == 0)
+			length = IOBUFSIZE;
+
+		SegmentBuffer seg = new SegmentBuffer((int)length + 1);
+
+		InputStreamReader in = new InputStreamReader(_in,
+			buffer.getStringProperty(Buffer.ENCODING));
+		char[] buf = new char[IOBUFSIZE];
+
+		// Number of characters in 'buf' array.
+		// InputStream.read() doesn't always fill the
+		// array (eg, the file size is not a multiple of
+		// IOBUFSIZE, or it is a GZipped file, etc)
+		int len;
+
+		// True if a \n was read after a \r. Usually
+		// means this is a DOS/Windows file
+		boolean CRLF = false;
+
+		// A \r was read, hence a MacOS file
+		boolean CROnly = false;
+
+		// Was the previous read character a \r?
+		// If we read a \n and this is true, we assume
+		// we have a DOS/Windows file
+		boolean lastWasCR = false;
+
+		// Number of lines read. Every 100 lines, we update the
+		// progress bar
+		int lineCount = 0;
+
+		while((len = in.read(buf,0,buf.length)) != -1)
+		{
+			// Offset of previous line, relative to
+			// the start of the I/O buffer (NOT
+			// relative to the start of the document)
+			int lastLine = 0;
+
+			for(int i = 0; i < len; i++)
+			{
+				// Look for line endings.
+				switch(buf[i])
+				{
+				case '\r':
+					// If we read a \r and
+					// lastWasCR is also true,
+					// it is probably a Mac file
+					// (\r\r in stream)
+					if(lastWasCR)
+					{
+						CROnly = true;
+						CRLF = false;
+					}
+					// Otherwise set a flag,
+					// so that \n knows that last
+					// was a \r
+					else
+					{
+						lastWasCR = true;
+					}
+
+					// Insert a line
+					seg.append(buf,lastLine,i -
+						lastLine);
+					endOffsets.add(seg.count);
+					seg.append('\n');
+					if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
+						setProgressValue(seg.count);
+
+					// This is i+1 to take the
+					// trailing \n into account
+					lastLine = i + 1;
+					break;
+				case '\n':
+					// If lastWasCR is true,
+					// we just read a \r followed
+					// by a \n. We specify that
+					// this is a Windows file,
+					// but take no further
+					// action and just ignore
+					// the \r.
+					if(lastWasCR)
+					{
+						CROnly = false;
+						CRLF = true;
+						lastWasCR = false;
+						// Bump lastLine so
+						// that the next line
+						// doesn't erronously
+						// pick up the \r
+						lastLine = i + 1;
+					}
+					// Otherwise, we found a \n
+					// that follows some other
+					// character, hence we have
+					// a Unix file
+					else
+					{
+						CROnly = false;
+						CRLF = false;
+						seg.append(buf,lastLine,
+							i - lastLine);
+						endOffsets.add(seg.count);
+						seg.append('\n');
+						if(trackProgress && lineCount++ % PROGRESS_INTERVAL == 0)
+							setProgressValue(seg.count);
+						lastLine = i + 1;
+					}
+					break;
+				default:
+					// If we find some other
+					// character that follows
+					// a \r, so it is not a
+					// Windows file, and probably
+					// a Mac file
+					if(lastWasCR)
+					{
+						CROnly = true;
+						CRLF = false;
+						lastWasCR = false;
+					}
+					break;
+				}
+			}
+
+			if(trackProgress)
+				setProgressValue(seg.count);
+
+			// Add remaining stuff from buffer
+			seg.append(buf,lastLine,len - lastLine);
+		}
+
+		setAbortable(false);
+
+		String lineSeparator;
+		if(CRLF)
+			lineSeparator = "\r\n";
+		else if(CROnly)
+			lineSeparator = "\r";
+		else
+			lineSeparator = "\n";
+
+		in.close();
+
+		// Chop trailing newline and/or ^Z (if any)
+		int bufferLength = seg.count;
+		if(bufferLength != 0)
+		{
+			char ch = seg.array[bufferLength - 1];
+			if(ch == 0x1a /* DOS ^Z */)
+				seg.count--;
+		}
+
+		buffer.setBooleanProperty(Buffer.TRAILING_EOL,false);
+		if(bufferLength != 0)
+		{
+			char ch = seg.array[bufferLength - 1];
+			if(ch == '\n')
+			{
+				buffer.setBooleanProperty(Buffer.TRAILING_EOL,true);
+				seg.count--;
+				endOffsets.setSize(endOffsets.getSize() - 1);
+			}
+		}
+
+		// to avoid having to deal with read/write locks and such,
+		// we insert the loaded data into the buffer in the
+		// post-load cleanup runnable, which runs in the AWT thread.
+		buffer.setProperty(LOAD_DATA,seg);
+		buffer.setProperty(END_OFFSETS,endOffsets);
+		buffer.setProperty(NEW_PATH,path);
+		buffer.setProperty(Buffer.LINESEP,lineSeparator);
+	} //}}}
+
+	//{{{ readMarkers() method
+	private void readMarkers(Buffer buffer, InputStream _in)
+		throws IOException
+	{
+		// For `reload' command
+		buffer.removeAllMarkers();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
+
+		String line;
+		while((line = in.readLine()) != null)
+		{
+			// compatibility kludge for jEdit 3.1 and earlier
+			if(!line.startsWith("!"))
+				continue;
+
+			char shortcut = line.charAt(1);
+			int start = line.indexOf(';');
+			int end = line.indexOf(';',start + 1);
+			int position = Integer.parseInt(line.substring(start + 1,end));
+			buffer.addMarker(shortcut,position);
+		}
+
+		in.close();
+	} //}}}
+
+	//}}}
+}

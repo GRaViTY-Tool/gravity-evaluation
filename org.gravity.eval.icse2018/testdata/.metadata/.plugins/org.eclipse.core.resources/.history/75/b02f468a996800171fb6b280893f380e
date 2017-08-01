@@ -1,0 +1,419 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.apache.log4j;
+
+import java.util.Enumeration;
+import java.util.ResourceBundle;
+
+import org.apache.log4j.spi.LoggerFactory;
+import org.apache.log4j.spi.LoggingEvent;
+import org.apache.log4j.spi.RootLogger;
+import org.apache.log4j.util.EnhancedJunitTestRunnerFilter;
+import org.apache.log4j.util.EnhancedLineNumberFilter;
+import org.apache.log4j.util.Filter;
+import org.apache.log4j.util.SerializationTestHelper;
+import org.apache.log4j.util.SunReflectFilter;
+import org.apache.log4j.util.Transformer;
+
+
+/**
+  This is the central class in the log4j package. Most logging
+  operations, except configuration, are done through this class.
+
+  @since log4j 1.2
+
+  @author Ceki G&uuml;lc&uuml; */
+public class Logger extends Category {
+
+  /**
+     The fully qualified name of the Logger class. See also the
+     getFQCN method. */
+  private static final String FQCN = Logger.class.getName();
+
+
+  protected
+  Logger(String name) {
+    super(name);
+  }
+
+  /**
+    Log a message object with the {@link Level#FINE FINE} level which
+    is just an alias for the {@link Level#DEBUG DEBUG} level.
+
+    <p>This method first checks if this category is <code>DEBUG</code>
+    enabled by comparing the level of this category with the {@link
+    Level#DEBUG DEBUG} level. If this category is
+    <code>DEBUG</code> enabled, then it converts the message object
+    (passed as parameter) to a string by invoking the appropriate
+    {@link org.apache.log4j.or.ObjectRenderer}. It then proceeds to call all the
+    registered appenders in this category and also higher in the
+    hierarchy depending on the value of the additivity flag.
+
+    <p><b>WARNING</b> Note that passing a {@link Throwable} to this
+    method will print the name of the <code>Throwable</code> but no
+    stack trace. To print a stack trace use the {@link #debug(Object,
+    Throwable)} form instead.
+
+    @param message the message object to log. */
+  //public
+  //void fine(Object message) {
+  //  if(repository.isDisabled(Level.DEBUG_INT))
+  //	return;
+  //  if(Level.DEBUG.isGreaterOrEqual(this.getChainedLevel())) {
+  //	forcedLog(FQCN, Level.DEBUG, message, null);
+  //  }
+  //}
+
+
+  /**
+   Log a message object with the <code>FINE</code> level including
+   the stack trace of the {@link Throwable} <code>t</code> passed as
+   parameter.
+
+   <p>See {@link #fine(Object)} form for more detailed information.
+
+   @param message the message object to log.
+   @param t the exception to log, including its stack trace.  */
+  //public
+  //void fine(Object message, Throwable t) {
+  //  if(repository.isDisabled(Level.DEBUG_INT))
+  //	return;
+  //  if(Level.DEBUG.isGreaterOrEqual(this.getChainedLevel()))
+  //	forcedLog(FQCN, Level.FINE, message, t);
+  //}
+
+  /**
+   * Retrieve a logger named according to the value of the
+   * <code>name</code> parameter. If the named logger already exists,
+   * then the existing instance will be returned. Otherwise, a new
+   * instance is created.  
+   *
+   * <p>By default, loggers do not have a set level but inherit it
+   * from their neareast ancestor with a set level. This is one of the
+   * central features of log4j.
+   *
+   * @param name The name of the logger to retrieve.  
+  */
+  static
+  public
+  Logger getLogger(String name) {
+    return LogManager.getLogger(name);
+  }
+
+  /**
+   * Shorthand for <code>getLogger(clazz.getName())</code>.
+   *
+   * @param clazz The name of <code>clazz</code> will be used as the
+   * name of the logger to retrieve.  See {@link #getLogger(String)}
+   * for more detailed information.
+   */
+  static
+  public
+  Logger getLogger(Class clazz) {
+    return LogManager.getLogger(clazz.getName());
+  }
+
+
+  /**
+   * Return the root logger for the current logger repository.
+   * <p>
+   * The {@link #getName Logger.getName()} method for the root logger always returns
+   * string value: "root". However, calling
+   * <code>Logger.getLogger("root")</code> does not retrieve the root
+   * logger but a logger just under root named "root".
+   * <p>
+   * In other words, calling this method is the only way to retrieve the 
+   * root logger.
+   */
+  public
+  static
+  Logger getRootLogger() {
+    return LogManager.getRootLogger();
+  }
+
+  /**
+     Like {@link #getLogger(String)} except that the type of logger
+     instantiated depends on the type returned by the {@link
+     LoggerFactory#makeNewLoggerInstance} method of the
+     <code>factory</code> parameter.
+
+     <p>This method is intended to be used by sub-classes.
+
+     @param name The name of the logger to retrieve.
+
+     @param factory A {@link LoggerFactory} implementation that will
+     actually create a new Instance.
+
+     @since 0.8.5 */
+  public
+  static
+  Logger getLogger(String name, LoggerFactory factory) {
+    return LogManager.getLogger(name, factory);
+  }
+
+    /**
+     * Log a message object with the {@link org.apache.log4j.Level#TRACE TRACE} level.
+     *
+     * @param message the message object to log.
+     * @see #debug(Object) for an explanation of the logic applied.
+     * @since 1.2.12
+     */
+    public void trace(Object message) {
+      if (repository.isDisabled(Level.TRACE_INT)) {
+        return;
+      }
+
+      if (Level.TRACE.isGreaterOrEqual(this.getEffectiveLevel())) {
+        forcedLog(FQCN, Level.TRACE, message, null);
+      }
+    }
+
+    /**
+     * Log a message object with the <code>TRACE</code> level including the
+     * stack trace of the {@link Throwable}<code>t</code> passed as parameter.
+     *
+     * <p>
+     * See {@link #debug(Object)} form for more detailed information.
+     * </p>
+     *
+     * @param message the message object to log.
+     * @param t the exception to log, including its stack trace.
+     * @since 1.2.12
+     */
+    public void trace(Object message, Throwable t) {
+      if (repository.isDisabled(Level.TRACE_INT)) {
+        return;
+      }
+
+      if (Level.TRACE.isGreaterOrEqual(this.getEffectiveLevel())) {
+        forcedLog(FQCN, Level.TRACE, message, t);
+      }
+    }
+
+    /**
+     * Check whether this category is enabled for the TRACE  Level.
+     * @since 1.2.12
+     *
+     * @return boolean - <code>true</code> if this category is enabled for level
+     *         TRACE, <code>false</code> otherwise.
+     */
+    public boolean isTraceEnabled() {
+        if (repository.isDisabled(Level.TRACE_INT)) {
+            return false;
+          }
+
+          return Level.TRACE.isGreaterOrEqual(this.getEffectiveLevel());
+    }
+
+	/**
+	   * Serialize a simple logging event and check it against
+	   * a witness.
+	   * @throws Exception if exception during test.
+	   */
+	  public void testSerializationSimple() throws Exception {
+	    Logger root = Logger.getRootLogger();
+	    LoggingEvent event =
+	      new LoggingEvent(
+	        root.getClass().getName(), root, Level.INFO, "Hello, world.", null);
+	//    event.prepareForDeferredProcessing();
+	
+	    int[] skip = new int[] { 352, 353, 354, 355, 356 };
+	    SerializationTestHelper.assertSerializationEquals(
+	      "witness/serialization/simple.bin", event, skip, 237);
+	  }
+
+	/**
+	   * Serialize a logging event with ndc.
+	   * @throws Exception if exception during test.
+	   *
+	   */
+	  public void testSerializationNDC() throws Exception {
+	    Logger root = Logger.getRootLogger();
+	    NDC.push("ndc test");
+	
+	    LoggingEvent event =
+	      new LoggingEvent(
+	        root.getClass().getName(), root, Level.INFO, "Hello, world.", null);
+	//    event.prepareForDeferredProcessing();
+	
+	    int[] skip = new int[] { 352, 353, 354, 355, 356 };
+	    SerializationTestHelper.assertSerializationEquals(
+	      "witness/serialization/ndc.bin", event, skip, 237);
+	    }
+
+	/**
+	   * Serialize a logging event with an exception and check it against
+	   * a witness.
+	   * @throws Exception if exception during test.
+	   *
+	   */
+	  public void testSerializationWithException() throws Exception {
+	    Logger root = Logger.getRootLogger();
+	    Exception ex = new Exception("Don't panic");
+	    LoggingEvent event =
+	      new LoggingEvent(
+	        root.getClass().getName(), root, Level.INFO, "Hello, world.", ex);
+	//    event.prepareForDeferredProcessing();
+	
+	    int[] skip = new int[] { 352, 353, 354, 355, 356 };
+	    SerializationTestHelper.assertSerializationEquals(
+	      "witness/serialization/exception.bin", event, skip, 237);
+	  }
+
+	/**
+	   * Serialize a logging event with mdc.
+	   * @throws Exception if exception during test.
+	   *
+	   */
+	  public void testSerializationMDC() throws Exception {
+	    Logger root = Logger.getRootLogger();
+	    MDC.put("mdckey", "mdcvalue");
+	
+	    LoggingEvent event =
+	      new LoggingEvent(
+	        root.getClass().getName(), root, Level.INFO, "Hello, world.", null);
+	//    event.prepareForDeferredProcessing();
+	
+	    int[] skip = new int[] { 352, 353, 354, 355, 356 };
+	    SerializationTestHelper.assertSerializationEquals(
+	      "witness/serialization/mdc.bin", event, skip, 237);
+	  }
+
+	public void testMDC1() throws Exception {
+	    configure("input/pattern/enhancedPatternLayout.mdc.1.properties");
+	    clearMDC();
+	    MDC.put("key1", "va11");
+	    MDC.put("key2", "va12");
+	    logger.debug("Hello World");
+	    MDC.remove("key1");
+	    MDC.remove("key2");
+	
+	    Transformer.transform(
+	      TEMP, FILTERED,
+	      new Filter[] {
+	        new EnhancedLineNumberFilter(), new SunReflectFilter(),
+	        new EnhancedJunitTestRunnerFilter(),
+	        new MDCOrderFilter()
+	      });
+	    assertTrue(compare(FILTERED, "witness/pattern/enhancedPatternLayout.mdc.1"));
+	  }
+
+	public void tearDown() {
+	    root.getLoggerRepository().resetConfiguration();
+	  }
+
+	public void setUp() {
+	    root = Logger.getRootLogger();
+	    logger = Logger.getLogger(EnhancedPatternLayoutTest.class);
+	  }
+
+	void common() {
+	    int i = -1;
+	
+	    logger.debug("Message " + ++i);
+	    root.debug("Message " + i);
+	
+	    logger.info("Message " + ++i);
+	    root.info("Message " + i);
+	
+	    logger.warn("Message " + ++i);
+	    root.warn("Message " + i);
+	
+	    logger.error("Message " + ++i);
+	    root.error("Message " + i);
+	
+	    logger.log(Level.FATAL, "Message " + ++i);
+	    root.log(Level.FATAL, "Message " + i);
+	
+	    Exception e = new Exception("Just testing");
+	
+	    logger.debug("Message " + ++i, e);
+	    logger.info("Message " + ++i, e);
+	    logger.warn("Message " + ++i, e);
+	    logger.error("Message " + ++i, e);
+	    logger.log(Level.FATAL, "Message " + ++i, e);
+	  }
+
+	public
+	  void testRB3() {
+	    Logger root = Logger.getRootLogger(); 
+	    root.setResourceBundle(rbUS);
+	    ResourceBundle t = root.getResourceBundle();
+	    assertSame(t, rbUS);
+	
+	    Logger x = Logger.getLogger("x");
+	    Logger x_y = Logger.getLogger("x.y");
+	    Logger x_y_z = Logger.getLogger("x.y.z");
+	
+	    x_y.setResourceBundle(rbFR);
+	    x_y_z.setResourceBundle(rbCH);
+	    t = x.getResourceBundle();     assertSame(t, rbUS);
+	    t = x_y.getResourceBundle();   assertSame(t, rbFR);
+	    t = x_y_z.getResourceBundle(); assertSame(t, rbCH);    
+	  }
+
+	public
+	  void testHierarchy1() {
+	    Hierarchy h = new Hierarchy(new RootLogger((Level) Level.ERROR));
+	    Logger a0 = h.getLogger("a");
+	    assertEquals("a", a0.getName());
+	    assertNull(a0.getLevel());
+	    assertSame(Level.ERROR, a0.getEffectiveLevel());
+	
+	    Logger a1 = h.getLogger("a");
+	    assertSame(a0, a1);
+	  }
+
+	/**
+	     Add an appender X, Y, remove X and check if Y is the only
+	     remaining appender.
+	  */
+	  public
+	  void testAppender2() {
+	    a1 = new FileAppender();
+	    a1.setName("testAppender2.1");           
+	    a2 = new FileAppender();
+	    a2.setName("testAppender2.2");           
+	
+	    logger = Logger.getLogger("test");
+	    logger.addAppender(a1);
+	    logger.addAppender(a2);    
+	    logger.removeAppender("testAppender2.1");
+	    Enumeration enumeration = logger.getAllAppenders();
+	    Appender aHat = (Appender) enumeration.nextElement();    
+	    assertEquals(a2, aHat);
+	    assertTrue(!enumeration.hasMoreElements());
+	  }
+
+	public
+	  void testRB1() {
+	    Logger root = Logger.getRootLogger(); 
+	    root.setResourceBundle(rbUS);
+	    ResourceBundle t = root.getResourceBundle();
+	    assertSame(t, rbUS);
+	
+	    Logger x = Logger.getLogger("x");
+	    Logger x_y = Logger.getLogger("x.y");
+	    Logger x_y_z = Logger.getLogger("x.y.z");
+	
+	    t = x.getResourceBundle();     assertSame(t, rbUS);
+	    t = x_y.getResourceBundle();   assertSame(t, rbUS);
+	    t = x_y_z.getResourceBundle(); assertSame(t, rbUS);
+	  }
+
+}

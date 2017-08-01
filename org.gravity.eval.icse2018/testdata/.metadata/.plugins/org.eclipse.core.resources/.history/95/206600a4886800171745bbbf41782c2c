@@ -1,0 +1,111 @@
+package net.sourceforge.pmd.rules.design;
+
+import java.util.List;
+
+import net.sourceforge.pmd.ast.ASTCatchStatement;
+import net.sourceforge.pmd.ast.ASTCompilationUnit;
+import net.sourceforge.pmd.ast.ASTConditionalAndExpression;
+import net.sourceforge.pmd.ast.ASTConditionalExpression;
+import net.sourceforge.pmd.ast.ASTConditionalOrExpression;
+import net.sourceforge.pmd.ast.ASTExpression;
+import net.sourceforge.pmd.ast.ASTReturnStatement;
+import net.sourceforge.pmd.ast.ASTTryStatement;
+import net.sourceforge.pmd.ast.SimpleJavaNode;
+import net.sourceforge.pmd.rules.CyclomaticComplexity.Entry;
+import net.sourceforge.pmd.stat.StatisticalRule;
+import net.sourceforge.pmd.util.NumericConstants;
+
+/**
+ * NPath complexity is a measurement of the acyclic execution paths through a
+ * function. See Nejmeh, Communications of the ACM Feb 1988 pp 188-200.
+ * 
+ * @author Jason Bennett
+ */
+public class NpathComplexity extends StatisticalRule {
+
+	
+	public Object visit(SimpleJavaNode node, Object data) {
+//    int npath = 1;
+//
+//    for ( int i = 0; i < node.jjtGetNumChildren(); i++ ) {
+//      SimpleJavaNode simpleNode = (SimpleJavaNode) node.jjtGetChild( i );
+//      Integer complexity = (Integer) simpleNode.jjtAccept( this, data );
+//      npath *= complexity.intValue();
+//    }
+
+	 int npath = complexityMultipleOf(node, 1, data);
+	 
+    return new Integer( npath );
+  }
+
+  public Object visit(ASTReturnStatement node, Object data) {
+    // return statements are valued at 1, or the value of the boolean expression
+
+    ASTExpression expr = (ASTExpression) node.getFirstChildOfType( ASTExpression.class );
+
+    if ( expr == null ) {
+      return NumericConstants.ONE;
+    }
+
+    List andNodes = expr.findChildrenOfType( ASTConditionalAndExpression.class );
+    List orNodes = expr.findChildrenOfType( ASTConditionalOrExpression.class );
+    int boolCompReturn = andNodes.size() + orNodes.size();
+
+    if ( boolCompReturn > 0 ) {
+      return new Integer( boolCompReturn );
+    }
+    return NumericConstants.ONE;
+  }
+
+  public Object visit(ASTTryStatement node, Object data) {
+    /*
+     * This scenario was not addressed by the original paper. Based on the
+     * principles outlined in the paper, as well as the Checkstyle NPath
+     * implementation, this code will add the complexity of the try to the
+     * complexities of the catch and finally blocks.
+     */
+
+//    int npath = 0;
+//
+//    for ( int i = 0; i < node.jjtGetNumChildren(); i++ ) {
+//      SimpleJavaNode simpleNode = (SimpleJavaNode) node.jjtGetChild( i );
+//      Integer complexity = (Integer) simpleNode.jjtAccept( this, data );
+//      npath += complexity.intValue();
+//    }
+
+	  int npath = complexitySumOf(node, 0, data);
+	  
+    return new Integer( npath );
+
+  }
+
+  public Object visit(ASTConditionalExpression node, Object data) {
+    if ( node.isTernary() ) {
+//      int npath = 0;
+//
+//      for ( int i = 0; i < node.jjtGetNumChildren(); i++ ) {
+//        SimpleJavaNode simpleNode = (SimpleJavaNode) node.jjtGetChild( i );
+//        Integer complexity = (Integer) simpleNode.jjtAccept( this, data );
+//        npath += complexity.intValue();
+//      }
+    	int npath = complexitySumOf(node, 0, data);
+    	
+      npath += 2;
+      return new Integer( npath );
+    }
+    return NumericConstants.ONE;
+  }
+
+  public Object visit(ASTCompilationUnit node, Object data) {
+    reportLevel = getIntProperty( "reportLevel" );
+    super.visit( node, data );
+    return data;
+  }
+
+public Object visit(ASTCatchStatement node, Object data) {
+    ( (Entry) entryStack.peek() ).bumpDecisionPoints();
+    super.visit( node, data );
+    return data;
+  }
+
+}

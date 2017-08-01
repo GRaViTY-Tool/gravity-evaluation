@@ -1,0 +1,49 @@
+/**
+ * BSD-style license; for more info see http://pmd.sourceforge.net/license.html
+ */
+package net.sourceforge.pmd.rules.strings;
+
+import net.sourceforge.pmd.AbstractRule;
+import net.sourceforge.pmd.ast.ASTArgumentList;
+import net.sourceforge.pmd.ast.ASTName;
+import net.sourceforge.pmd.ast.ASTStatementExpression;
+import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.symboltable.VariableNameDeclaration;
+
+/*
+ * How this rule works:
+ * find additive expressions: +
+ * check that the addition is between anything other than two literals
+ * if true and also the parent is StringBuffer constructor or append,
+ * report a violation.
+ * 
+ * @author mgriffa
+ */
+public class InefficientStringBuffering extends AbstractRule {
+
+    protected static boolean isInStringBufferOperation(SimpleNode node, int length, String methodName) {
+        if (!xParentIsStatementExpression(node, length)) {
+            return false;
+        }
+        ASTStatementExpression s = (ASTStatementExpression) node.getFirstParentOfType(ASTStatementExpression.class);
+        if (s == null) {
+            return false;
+        }
+        ASTName n = (ASTName)s.getFirstChildOfType(ASTName.class);
+        if (n == null || n.getImage().indexOf(methodName) == -1 || !(n.getNameDeclaration() instanceof VariableNameDeclaration)) {
+            return false;
+        }
+
+        // TODO having to hand-code this kind of dredging around is ridiculous
+        // we need something to support this in the framework
+        // but, "for now" (tm):
+        // if more than one arg to append(), skip it
+        ASTArgumentList argList = (ASTArgumentList)s.getFirstChildOfType(ASTArgumentList.class);
+        if (argList == null || argList.jjtGetNumChildren() > 1) {
+            return false;
+        }
+
+        return ((VariableNameDeclaration)n.getNameDeclaration()).getTypeImage().equals("StringBuffer");
+    }
+}
+

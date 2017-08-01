@@ -1,0 +1,1 @@
+/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/testdata/01_QuickUML2001_tmp_blob/.columbus_java/SrcMeter.ljsi

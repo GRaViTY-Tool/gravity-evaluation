@@ -1,0 +1,43 @@
+/**
+ * BSD-style license; for more info see http://pmd.sourceforge.net/license.html
+ */
+package test.net.sourceforge.pmd.ast;
+
+import net.sourceforge.pmd.ast.ASTClassOrInterfaceDeclaration;
+import net.sourceforge.pmd.ast.AccessNode;
+import test.net.sourceforge.pmd.testframework.ParserTst;
+
+import java.util.Set;
+
+public class AccessNodeTest extends ParserTst {
+
+    public void testModifiersOnClassDecl() throws Throwable {
+        Set ops = getNodes(ASTClassOrInterfaceDeclaration.class, TEST1);
+        assertTrue(((ASTClassOrInterfaceDeclaration) (ops.iterator().next())).isPublic());
+    }
+
+    private static final String TEST1 =
+            "public class Foo {}";
+
+
+    public void testStatic() {
+        AccessNode node = new AccessNode(1);
+        assertFalse("Node should default to not static.", node.isStatic());
+        node.setStatic();
+        assertTrue("Node set to static, not static.", node.isStatic());
+    }
+
+    public void testPrivate() {
+        AccessNode node = new AccessNode(1);
+        assertFalse("Node should default to not private.", node.isPrivate());
+        node.setPrivate();
+        assertTrue("Node set to private, not private.", node.isPrivate());
+    }
+
+    public void testAbstract() {
+        AccessNode node = new AccessNode(1);
+        assertFalse("Node should default to not abstract.", node.isAbstract());
+        node.setAbstract();
+        assertTrue("Node set to abstract, not abstract.", node.isAbstract());
+    }
+}

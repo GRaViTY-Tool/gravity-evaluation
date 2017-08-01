@@ -1,0 +1,320 @@
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 13:14:00.733LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.internal.indexdiff.GitResourceDeltaVisitor.visit(GitResourceDeltaVisitor.java:115)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:64)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:75)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:48)
+	at org.eclipse.egit.core.internal.indexdiff.IndexDiffCacheEntry$6.resourceChanged(IndexDiffCacheEntry.java:730)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:299)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:289)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:152)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:374)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1469)
+	at org.eclipse.core.internal.resources.Project.internalCopy(Project.java:692)
+	at org.eclipse.core.internal.resources.Project.copy(Project.java:218)
+	at org.eclipse.core.internal.resources.Resource.copy(Resource.java:532)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyProject(EclipseProjectUtil.java:30)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyJavaProject(EclipseProjectUtil.java:14)
+	at org.gravity.eval.icse2018.RQ1_2.perform(RQ1_2.java:131)
+	at org.gravity.eval.icse2018.RQ1_2.resolveBlob(RQ1_2.java:124)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.gravity.eval.icse2018.util.ToFileLogger$1.evaluate(ToFileLogger.java:65)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.pde.internal.junit.runtime.RemotePluginTestRunner.main(RemotePluginTestRunner.java:66)
+	at org.eclipse.pde.internal.junit.runtime.PlatformUITestHarness.lambda$0(PlatformUITestHarness.java:43)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:182)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4536)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4154)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$4.run(PartRenderingEngine.java:1121)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1022)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:150)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:693)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:610)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.runApp(NonUIThreadTestApplication.java:52)
+	at org.eclipse.pde.internal.junit.runtime.UITestApplication.runApp(UITestApplication.java:43)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.start(NonUIThreadTestApplication.java:46)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1492)
+LOG: 1500030843806 GRaViTY convert project: 05_Nutch0.9_tmp_blob
+LOG: 1500030843806 MoDisco discover project: 05_Nutch0.9_tmp_blob
+LOG: 1500030847507 MoDisco discover project - done 3701ms
+LOG: 1500030847507 MoDisco preprocessing
+LOG: 1500030847815 MoDisco preprocessing - done 308ms
+LOG: 1500030847816 eMoflon TGG fwd trafo
+LOG: 1500030864650 eMoflon TGG fwd trafo - done 16834ms
+LOG: 1500030864650 GRaViTY convert project - done 20844ms
+LOG: 1500030864672 Hulk Anti-Pattern Detection
+LOG: 1500030864672 Hulk Number of outgoing invocations
+LOG: 1500030864676 Hulk Number of outgoing invocations - done 4ms
+LOG: 1500030864676 Hulk Incomming Invocation custom
+LOG: 1500030864680 Hulk Incomming Invocation custom - done 4ms
+LOG: 1500030864680 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500030864682 Hulk Relation between Incoming and Outgoing Invocations - done 2ms
+LOG: 1500030864682 Hulk Controller Class Smell
+LOG: 1500030864725 Hulk Controller Class Smell - done 43ms
+LOG: 1500030864725 Hulk Number of distinct fields accessed by each method
+LOG: 1500030864732 Hulk Number of distinct fields accessed by each method - done 7ms
+LOG: 1500030864732 Hulk Number of Methods
+LOG: 1500030864735 Hulk Number of Methods - done 3ms
+LOG: 1500030864735 Hulk Number of fields
+LOG: 1500030864738 Hulk Number of fields - done 3ms
+LOG: 1500030864738 Hulk Calculate LCOM5 on PG
+LOG: 1500030864744 Hulk Calculate LCOM5 on PG - done 6ms
+LOG: 1500030864744 Hulk Low Cohesion Smell
+LOG: 1500030864825 Hulk Low Cohesion Smell - done 81ms
+LOG: 1500030864825 Hulk Number of Members
+LOG: 1500030864827 Hulk Number of Members - done 2ms
+LOG: 1500030864827 Hulk Large Class Smell
+LOG: 1500030864916 Hulk Large Class Smell - done 89ms
+LOG: 1500030864916 Hulk Large Class or Low Cohesion Smell
+LOG: 1500030864920 Hulk Large Class or Low Cohesion Smell - done 4ms
+LOG: 1500030864920 Hulk God Class [Anti-Pattern]
+LOG: 1500030864922 Hulk God Class [Anti-Pattern] - done 2ms
+LOG: 1500030864922 Hulk Number of Getters
+LOG: 1500030864926 Hulk Number of Getters - done 4ms
+LOG: 1500030864926 Hulk Number of setter Methods
+LOG: 1500030864929 Hulk Number of setter Methods - done 3ms
+LOG: 1500030864929 Hulk Relation between Methods and Getters/Setters
+LOG: 1500030864934 Hulk Relation between Methods and Getters/Setters - done 5ms
+LOG: 1500030864934 Hulk Getter/Setter Smell
+LOG: 1500030864942 Hulk Getter/Setter Smell - done 8ms
+LOG: 1500030864943 Hulk Data Class Smell
+LOG: 1500030865080 Hulk Data Class Smell - done 137ms
+LOG: 1500030865080 Hulk Data Class Accessor Smell
+LOG: 1500030865089 Hulk Data Class Accessor Smell - done 9ms
+LOG: 1500030865089 Hulk The Blob [Anti-Pattern]
+LOG: 1500030865146 Hulk The Blob [Anti-Pattern] - done 57ms
+LOG: 1500030865146 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1500030865212 Hulk Calculate the Method accesses from Blob to DataClass - done 66ms
+LOG: 1500030865212 Hulk Connected Members
+LOG: 1500030865214 Hulk Connected Members - done 2ms
+LOG: 1500030865214 Hulk Member Cluster Accesses
+LOG: 1500030865218 Hulk Member Cluster Accesses - done 4ms
+LOG: 1500030865218 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1500030865425 Hulk Alternative Resolve Blob [Anti-Pattern] - done 207ms
+LOG: 1500030865425 Hulk Anti-Pattern Detection - done 753ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:14:25] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:14:43] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:14:43] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:14:43] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:14:43] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:14:48] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:14:48] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:14:48] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:14:48] Starting task: DcfTask
+LOG: >   [2017-07-14 13:14:48] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:14:49] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:14:51] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:14:51] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:14:51] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:14:51] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:14:51] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:14:52] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:14:52] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:14:52] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:14:52] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:14:52] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:14:52] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:14:52] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:14:54] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:14:54] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:14:54] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:14:54] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:14:55] Task ended: GraphDumpTask Result:OK
+LOG: void testGetNormalizedName() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testAdd() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testIsMultiValued() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGet() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testSet() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: SpellCheckedMetadata writeRead(SpellCheckedMetadata) [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testRemove() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testWritable() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testObject() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testNames() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: static SpellCheckedMetadata constructSpellCheckedMetadata() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testSetProperties() [in TestSpellCheckedMetadata [in TestSpellCheckedMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void parse(Path) [in ParseSegment [in ParseSegment.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void map(WritableComparable, Writable, OutputCollector, Reporter) [in ParseSegment [in ParseSegment.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetClassLoader() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void setUp() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetExtensionAndAttributes() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetResources() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetExtensionInstances() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testLoadPlugins() [in TestPluginSystem [in TestPluginSystem.java [in org.apache.nutch.plugin [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testWritable() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testSetProperties() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testIsMultiValued() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testNames() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testAdd() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGet() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: Metadata writeRead(Metadata) [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testObject() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testRemove() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testSet() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testWriteNonNull() [in TestMetadata [in TestMetadata.java [in org.apache.nutch.metadata [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: Parser[] getParsers(String, String) [in ParserFactory [in ParserFactory.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: List findExtensions(String) [in ParserFactory [in ParserFactory.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: boolean match(Extension, String, String) [in ParserFactory [in ParserFactory.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: Parser getParserById(String) [in ParserFactory [in ParserFactory.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: List getExtensions(String) [in ParserFactory [in ParserFactory.java [in org.apache.nutch.parse [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: Hits search(Query, int, int, String, String, boolean) [in NutchBean [in NutchBean.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void init(Path, Path, Path, Path) [in NutchBean [in NutchBean.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void doGet(HttpServletRequest, HttpServletResponse) [in OpenSearchServlet [in OpenSearchServlet.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void init(ServletConfig) [in OpenSearchServlet [in OpenSearchServlet.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testMerge() [in TestCrawlDbMerger [in TestCrawlDbMerger.java [in org.apache.nutch.crawl [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void setUp() [in TestCrawlDbMerger [in TestCrawlDbMerger.java [in org.apache.nutch.crawl [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void run() [in FetcherThread [in Fetcher2 [in Fetcher2.java [in org.apache.nutch.fetcher [in src [in 05_Nutch0.9_tmp_blob]]]]]]
+LOG: ParseStatus output(Text, CrawlDatum, Content, ProtocolStatus, int) [in FetcherThread [in Fetcher2 [in Fetcher2.java [in org.apache.nutch.fetcher [in src [in 05_Nutch0.9_tmp_blob]]]]]]
+LOG: void testGetInstance() [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void setUp() [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: byte[] getData(String) [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetMimeTypeFromData() [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetMimeTypeFromDataAndExtension() [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testGetMimeFromExtension() [in TestMimeTypes [in TestMimeTypes.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: Protocol getRemote(Hit) [in Client [in DistributedSearch [in DistributedSearch.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]]
+LOG: Protocol getRemote(HitDetails) [in Client [in DistributedSearch [in DistributedSearch.java [in org.apache.nutch.searcher [in src [in 05_Nutch0.9_tmp_blob]]]]]]
+LOG: void testConstructorString() [in TestMimeType [in TestMimeType.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: static void cleanExceptionChecker(String) [in TestMimeType [in TestMimeType.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testClean() [in TestMimeType [in TestMimeType.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void testConstructorStringString() [in TestMimeType [in TestMimeType.java [in org.apache.nutch.util.mime [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void reduce(WritableComparable, Iterator, OutputCollector, Reporter) [in SegmentMerger [in SegmentMerger.java [in org.apache.nutch.segment [in src [in 05_Nutch0.9_tmp_blob]]]]]
+LOG: void reduce(WritableComparable, Iterator, OutputCollector, Reporter) [in Merger [in CrawlDbMerger [in CrawlDbMerger.java [in org.apache.nutch.crawl [in src [in 05_Nutch0.9_tmp_blob]]]]]]
+LOG: 1500030906463 GRaViTY convert project: 05_Nutch0.9_tmp_blob
+LOG: 1500030906463 MoDisco discover project: 05_Nutch0.9_tmp_blob
+LOG: 1500030909357 MoDisco discover project - done 2894ms
+LOG: 1500030909357 MoDisco preprocessing
+LOG: 1500030909614 MoDisco preprocessing - done 257ms
+LOG: 1500030909614 eMoflon TGG fwd trafo
+LOG: 1500030923334 eMoflon TGG fwd trafo - done 13720ms
+LOG: 1500030923335 GRaViTY convert project - done 16872ms
+LOG: 1500030923414 Hulk Anti-Pattern Detection
+LOG: 1500030923414 Hulk Number of outgoing invocations
+LOG: 1500030923419 Hulk Number of outgoing invocations - done 5ms
+LOG: 1500030923419 Hulk Incomming Invocation custom
+LOG: 1500030923425 Hulk Incomming Invocation custom - done 6ms
+LOG: 1500030923425 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500030923430 Hulk Relation between Incoming and Outgoing Invocations - done 5ms
+LOG: 1500030923430 Hulk Controller Class Smell
+LOG: 1500030923494 Hulk Controller Class Smell - done 64ms
+LOG: 1500030923494 Hulk Number of distinct fields accessed by each method
+LOG: 1500030923502 Hulk Number of distinct fields accessed by each method - done 8ms
+LOG: 1500030923502 Hulk Number of Methods
+LOG: 1500030923506 Hulk Number of Methods - done 4ms
+LOG: 1500030923506 Hulk Number of fields
+LOG: 1500030923510 Hulk Number of fields - done 4ms
+LOG: 1500030923510 Hulk Calculate LCOM5 on PG
+LOG: 1500030923516 Hulk Calculate LCOM5 on PG - done 6ms
+LOG: 1500030923517 Hulk Low Cohesion Smell
+LOG: 1500030923608 Hulk Low Cohesion Smell - done 91ms
+LOG: 1500030923608 Hulk Number of Members
+LOG: 1500030923609 Hulk Number of Members - done 1ms
+LOG: 1500030923609 Hulk Large Class Smell
+LOG: 1500030923696 Hulk Large Class Smell - done 87ms
+LOG: 1500030923696 Hulk Large Class or Low Cohesion Smell
+LOG: 1500030923699 Hulk Large Class or Low Cohesion Smell - done 3ms
+LOG: 1500030923699 Hulk God Class [Anti-Pattern]
+LOG: 1500030923700 Hulk God Class [Anti-Pattern] - done 1ms
+LOG: 1500030923700 Hulk Number of Getters
+LOG: 1500030923703 Hulk Number of Getters - done 3ms
+LOG: 1500030923703 Hulk Number of setter Methods
+LOG: 1500030923706 Hulk Number of setter Methods - done 3ms
+LOG: 1500030923706 Hulk Relation between Methods and Getters/Setters
+LOG: 1500030923710 Hulk Relation between Methods and Getters/Setters - done 4ms
+LOG: 1500030923710 Hulk Getter/Setter Smell
+LOG: 1500030923717 Hulk Getter/Setter Smell - done 7ms
+LOG: 1500030923717 Hulk Data Class Smell
+LOG: 1500030923834 Hulk Data Class Smell - done 117ms
+LOG: 1500030923834 Hulk Data Class Accessor Smell
+LOG: 1500030923842 Hulk Data Class Accessor Smell - done 8ms
+LOG: 1500030923842 Hulk The Blob [Anti-Pattern]
+LOG: 1500030923858 Hulk The Blob [Anti-Pattern] - done 16ms
+LOG: 1500030923858 Hulk Anti-Pattern Detection - done 444ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:15:24] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:15:48] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:15:48] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:15:48] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:15:48] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:15:54] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:15:54] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:15:54] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:15:54] Starting task: DcfTask
+LOG: >   [2017-07-14 13:15:54] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:15:55] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:15:58] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:15:58] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:15:58] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:15:58] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:15:58] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:15:59] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:15:59] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:16:01] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:16:01] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:16:01] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:16:01] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:16:02] Task ended: GraphDumpTask Result:OK

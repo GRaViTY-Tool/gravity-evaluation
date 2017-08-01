@@ -1,0 +1,95 @@
+/*
+ * HumanResource.java
+ *
+ * Created on 27. Mai 2003, 22:19
+ */
+
+package net.sourceforge.ganttproject.resource;
+
+import java.io.Writer;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+
+import net.sourceforge.ganttproject.roles.Role;
+import net.sourceforge.ganttproject.task.ResourceAssignment;
+import net.sourceforge.ganttproject.task.Task;
+
+/**
+ *
+ * @author  barmeier
+ */
+public class HumanResource extends ProjectResource {
+    
+    private String phone="";
+    private String email="";
+    private int function;
+    private Role myRole;
+
+    
+    HumanResource () {
+        this.name="";
+        this.id=-1;     //has to be assigned from the managr when resource is added
+    }
+    
+    /** Creates a new instance of HumanResource */
+    HumanResource(String name, int id) {
+        this.name=name;
+        this.id=id;
+    }
+    
+    public void setMail (String email) {
+        this.email = email;
+    }
+    
+    public String getMail() {
+        return email;
+    }
+    
+    public void setPhone (String phone) {
+        this.phone = phone;
+    }
+    
+    public String getPhone() {
+        return phone;
+    }
+    
+//    public void setFunction (int function) {
+//        this.function=function;
+//    }
+    
+//    public int getFunction () {
+//        return myRole==null ? 0 : myRole.getID();
+//    }
+
+    public void setRole(Role role) {
+        myRole = role;
+    }
+    
+    public Role getRole() {
+        return myRole;
+    }
+
+	/** Write the assignement between tasks and users */
+	  public void writeAllocations(Writer fout) {
+	      try {
+	
+	          for (int i = 1; i < lot.size(); i++) {
+	              Task task = (Task) ((DefaultMutableTreeNode) lot.get(i)).
+	                      getUserObject();
+	              //ArrayList users = task.getUsersList();
+	              ResourceAssignment[] assignments = task.getAssignments();
+	              for (int j = 0; j < assignments.length; j++) {
+	                  int task_id = task.getTaskID();//(i-1);
+	                  ResourceAssignment next = assignments[j];
+	
+	                  fout.write(s + s + "<allocation task-id=\"" +
+	                          task_id + "\" resource-id=\"" + next.getResource().getId() +
+	                          "\" load=\"" + next.getLoad() + "\"/>\n");
+	              }
+	          }
+	
+	      } catch (Exception e) {
+	          System.out.println(e);
+	      }
+	  }
+}

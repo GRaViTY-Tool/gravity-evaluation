@@ -1,0 +1,217 @@
+/*
+ * BufferIORequest.java - I/O request
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.jedit.io;
+
+import java.io.*;
+import java.util.zip.*;
+import java.util.Vector;
+import org.gjt.sp.jedit.*;
+import org.gjt.sp.util.*;
+//}}}
+
+/**
+ * A buffer I/O request.
+ * @author Slava Pestov
+ * @version $Id: BufferIORequest.java,v 1.23 2002/04/08 13:13:56 spestov Exp $
+ */
+public class BufferIORequest extends WorkRequest
+{
+	//{{{ Constants
+	/**
+	 * Size of I/O buffers.
+	 */
+	public static final int IOBUFSIZE = 32768;
+
+	/**
+	 * Number of lines per progress increment.
+	 */
+	public static final int PROGRESS_INTERVAL = 300;
+
+	public static final String LOAD_DATA = "BufferIORequest__loadData";
+	public static final String END_OFFSETS = "BufferIORequest__endOffsets";
+	public static final String NEW_PATH = "BufferIORequest__newPath";
+
+	/**
+	 * Buffer boolean property set when an error occurs.
+	 */
+	public static final String ERROR_OCCURRED = "BufferIORequest__error";
+
+	/**
+	 * A file load request.
+	 */
+	public static final int LOAD = 0;
+
+	/**
+	 * A file save request.
+	 */
+	public static final int SAVE = 1;
+
+	/**
+	 * An autosave request. Only supported for local files.
+	 */
+	public static final int AUTOSAVE = 2;
+
+	/**
+	 * An insert file request.
+	 */
+	public static final int INSERT = 3;
+
+	/**
+	 * Magic number used for auto-detecting Unicode and GZIP files.
+	 */
+	public static final int GZIP_MAGIC_1 = 0x1f;
+	public static final int GZIP_MAGIC_2 = 0x8b;
+	public static final int UNICODE_MAGIC_1 = 0xfe;
+	public static final int UNICODE_MAGIC_2 = 0xff;
+	//}}}
+
+	//{{{ BufferIORequest constructor
+	/**
+	 * Creates a new buffer I/O request.
+	 * @param type The request type
+	 * @param view The view
+	 * @param buffer The buffer
+	 * @param session The VFS session
+	 * @param vfs The VFS
+	 * @param path The path
+	 */
+	public BufferIORequest(int type, View view, Buffer buffer,
+		Object session, VFS vfs, String path)
+	{
+		this.type = type;
+		this.view = view;
+		this.buffer = buffer;
+		this.session = session;
+		this.vfs = vfs;
+		this.path = path;
+
+		markersPath = vfs.getParentOfPath(path)
+			+ '.' + vfs.getFileName(path)
+			+ ".marks";
+	} //}}}
+
+	//{{{ run() method
+	public void run()
+	{
+		switch(type)
+		{
+		case LOAD:
+			load();
+			break;
+		case SAVE:
+			save();
+			break;
+		case AUTOSAVE:
+			autosave();
+			break;
+		case INSERT:
+			insert();
+			break;
+		}
+	} //}}}
+
+	//{{{ toString() method
+	public String toString()
+	{
+		String typeString;
+		switch(type)
+		{
+		case LOAD:
+			typeString = "LOAD";
+			break;
+		case SAVE:
+			typeString = "SAVE";
+			break;
+		case AUTOSAVE:
+			typeString = "AUTOSAVE";
+			break;
+		default:
+			typeString = "UNKNOWN!!!";
+		}
+
+		return getClass().getName() + "[type=" + typeString
+			+ ",buffer=" + buffer + "]";
+	} //}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private int type;
+	private View view;
+	private Buffer buffer;
+	private Object session;
+	private VFS vfs;
+	private String path;
+	private String markersPath;
+	//}}}
+
+	//{{{ readMarkers() method
+	private void readMarkers(Buffer buffer, InputStream _in)
+		throws IOException
+	{
+		// For `reload' command
+		buffer.removeAllMarkers();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(_in));
+
+		String line;
+		while((line = in.readLine()) != null)
+		{
+			// compatibility kludge for jEdit 3.1 and earlier
+			if(!line.startsWith("!"))
+				continue;
+
+			char shortcut = line.charAt(1);
+			int start = line.indexOf(';');
+			int end = line.indexOf(';',start + 1);
+			int position = Integer.parseInt(line.substring(start + 1,end));
+			buffer.addMarker(shortcut,position);
+		}
+
+		in.close();
+	} //}}}
+
+	//{{{ writeMarkers() method
+	private void writeMarkers(Buffer buffer, OutputStream out)
+		throws IOException
+	{
+		Writer o = new BufferedWriter(new OutputStreamWriter(out));
+		Vector markers = buffer.getMarkers();
+		for(int i = 0; i < markers.size(); i++)
+		{
+			Marker marker = (Marker)markers.elementAt(i);
+			o.write('!');
+			o.write(marker.getShortcut());
+			o.write(';');
+
+			String pos = String.valueOf(marker.getPosition());
+			o.write(pos);
+			o.write(';');
+			o.write(pos);
+			o.write('\n');
+		}
+		o.close();
+	} //}}}
+
+	//}}}
+}

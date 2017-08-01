@@ -1,0 +1,63 @@
+package edu.ncsu.csc.itrust.unit.bean;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.beans.LabProcedureBean;
+
+public class LabProcedureBeanTest  extends TestCase{
+	LabProcedureBean l;
+	public void testViewedByPatient() throws Exception {
+		// In order to set the LP as viewed by patient, the status must be completed.
+		LabProcedureBean lp = new LabProcedureBean();
+		lp.setStatus(LabProcedureBean.In_Transit);
+		assertEquals(false, lp.isViewedByPatient());
+		lp.setViewedByPatient(true);
+		assertEquals(false, lp.isViewedByPatient());
+		lp.setStatus(LabProcedureBean.Completed);
+		lp.setViewedByPatient(true);
+		assertEquals(true, lp.isViewedByPatient());
+	}
+	
+	/**
+	 * testGetNumericalResultAsDouble
+	 * @throws Exception
+	 */
+	public void testGetNumericalResultAsDouble() throws Exception {
+		LabProcedureBean lp = new LabProcedureBean();
+		assertEquals("", lp.getNumericalResult());
+		assertEquals(Double.NaN, lp.getNumericalResultAsDouble(), 1e-7);
+		
+		lp.setNumericalResult("0.0");
+		assertEquals("0.0", lp.getNumericalResult());
+		assertEquals(0.0, lp.getNumericalResultAsDouble(), 1e-7);
+		
+		lp.setNumericalResult("0.1");
+		assertEquals("0.1", lp.getNumericalResult());
+		assertEquals(0.1, lp.getNumericalResultAsDouble(), 1e-7);
+		
+		lp.setNumericalResult("-5.1");
+		assertEquals("-5.1", lp.getNumericalResult());
+		assertEquals(-5.1, lp.getNumericalResultAsDouble(), 1e-7);
+	}
+	
+	/**
+	 * testGetLowerBoundAsDouble
+	 * @throws Exception
+	 */
+	public void testGetLowerBoundAsDouble() throws Exception {
+		LabProcedureBean lp = new LabProcedureBean();
+		assertEquals("", lp.getLowerBound());
+		assertEquals(Double.NaN, lp.getLowerBoundAsDouble(), 1e-7);
+		
+		lp.setLowerBound("0.0");
+		assertEquals("0.0", lp.getLowerBound());
+		assertEquals(0.0, lp.getLowerBoundAsDouble(), 1e-7);
+		
+		lp.setLowerBound("0.1");
+		assertEquals("0.1", lp.getLowerBound());
+		assertEquals(0.1, lp.getLowerBoundAsDouble(), 1e-7);
+		
+		lp.setLowerBound("-5.1");
+		assertEquals("-5.1", lp.getLowerBound());
+		assertEquals(-5.1, lp.getLowerBoundAsDouble(), 1e-7);
+	}
+}

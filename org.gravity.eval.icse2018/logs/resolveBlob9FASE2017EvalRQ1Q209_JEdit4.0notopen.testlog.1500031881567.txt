@@ -1,0 +1,310 @@
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 13:31:21.917LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.internal.indexdiff.GitResourceDeltaVisitor.visit(GitResourceDeltaVisitor.java:115)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:64)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:75)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:48)
+	at org.eclipse.egit.core.internal.indexdiff.IndexDiffCacheEntry$6.resourceChanged(IndexDiffCacheEntry.java:730)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:299)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:289)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:152)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:374)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1469)
+	at org.eclipse.core.internal.resources.Project.internalCopy(Project.java:692)
+	at org.eclipse.core.internal.resources.Project.copy(Project.java:218)
+	at org.eclipse.core.internal.resources.Resource.copy(Resource.java:532)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyProject(EclipseProjectUtil.java:30)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyJavaProject(EclipseProjectUtil.java:14)
+	at org.gravity.eval.icse2018.RQ1_2.perform(RQ1_2.java:131)
+	at org.gravity.eval.icse2018.RQ1_2.resolveBlob(RQ1_2.java:124)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.gravity.eval.icse2018.util.ToFileLogger$1.evaluate(ToFileLogger.java:65)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.pde.internal.junit.runtime.RemotePluginTestRunner.main(RemotePluginTestRunner.java:66)
+	at org.eclipse.pde.internal.junit.runtime.PlatformUITestHarness.lambda$0(PlatformUITestHarness.java:43)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:182)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4536)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4154)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$4.run(PartRenderingEngine.java:1121)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1022)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:150)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:693)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:610)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.runApp(NonUIThreadTestApplication.java:52)
+	at org.eclipse.pde.internal.junit.runtime.UITestApplication.runApp(UITestApplication.java:43)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.start(NonUIThreadTestApplication.java:46)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1492)
+LOG: 1500031884381 GRaViTY convert project: 09_JEdit4.0_tmp_blob
+LOG: 1500031884381 MoDisco discover project: 09_JEdit4.0_tmp_blob
+LOG: 1500031888749 MoDisco discover project - done 4368ms
+LOG: 1500031888749 MoDisco preprocessing
+LOG: 1500031889100 MoDisco preprocessing - done 351ms
+LOG: 1500031889100 eMoflon TGG fwd trafo
+LOG: 1500031914498 eMoflon TGG fwd trafo - done 25398ms
+LOG: 1500031914498 GRaViTY convert project - done 30117ms
+LOG: 1500031914538 Hulk Anti-Pattern Detection
+LOG: 1500031914538 Hulk Number of outgoing invocations
+LOG: 1500031914546 Hulk Number of outgoing invocations - done 8ms
+LOG: 1500031914546 Hulk Incomming Invocation custom
+LOG: 1500031914552 Hulk Incomming Invocation custom - done 6ms
+LOG: 1500031914552 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500031914557 Hulk Relation between Incoming and Outgoing Invocations - done 5ms
+LOG: 1500031914557 Hulk Controller Class Smell
+LOG: 1500031914694 Hulk Controller Class Smell - done 137ms
+LOG: 1500031914694 Hulk Number of distinct fields accessed by each method
+LOG: 1500031914703 Hulk Number of distinct fields accessed by each method - done 9ms
+LOG: 1500031914703 Hulk Number of Methods
+LOG: 1500031914708 Hulk Number of Methods - done 5ms
+LOG: 1500031914708 Hulk Number of fields
+LOG: 1500031914713 Hulk Number of fields - done 5ms
+LOG: 1500031914713 Hulk Calculate LCOM5 on PG
+LOG: 1500031914720 Hulk Calculate LCOM5 on PG - done 7ms
+LOG: 1500031914720 Hulk Low Cohesion Smell
+LOG: 1500031914978 Hulk Low Cohesion Smell - done 258ms
+LOG: 1500031914979 Hulk Number of Members
+LOG: 1500031914982 Hulk Number of Members - done 3ms
+LOG: 1500031914982 Hulk Large Class Smell
+LOG: 1500031915281 Hulk Large Class Smell - done 299ms
+LOG: 1500031915282 Hulk Large Class or Low Cohesion Smell
+LOG: 1500031915285 Hulk Large Class or Low Cohesion Smell - done 3ms
+LOG: 1500031915285 Hulk God Class [Anti-Pattern]
+LOG: 1500031915288 Hulk God Class [Anti-Pattern] - done 3ms
+LOG: 1500031915288 Hulk Number of Getters
+LOG: 1500031915295 Hulk Number of Getters - done 7ms
+LOG: 1500031915296 Hulk Number of setter Methods
+LOG: 1500031915303 Hulk Number of setter Methods - done 7ms
+LOG: 1500031915303 Hulk Relation between Methods and Getters/Setters
+LOG: 1500031915311 Hulk Relation between Methods and Getters/Setters - done 8ms
+LOG: 1500031915311 Hulk Getter/Setter Smell
+LOG: 1500031915327 Hulk Getter/Setter Smell - done 16ms
+LOG: 1500031915327 Hulk Data Class Smell
+LOG: 1500031915729 Hulk Data Class Smell - done 402ms
+LOG: 1500031915729 Hulk Data Class Accessor Smell
+LOG: 1500031915741 Hulk Data Class Accessor Smell - done 12ms
+LOG: 1500031915741 Hulk The Blob [Anti-Pattern]
+LOG: 1500031915786 Hulk The Blob [Anti-Pattern] - done 45ms
+LOG: 1500031915786 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1500031915843 Hulk Calculate the Method accesses from Blob to DataClass - done 57ms
+LOG: 1500031915843 Hulk Connected Members
+LOG: 1500031915845 Hulk Connected Members - done 2ms
+LOG: 1500031915845 Hulk Member Cluster Accesses
+LOG: 1500031915848 Hulk Member Cluster Accesses - done 3ms
+LOG: 1500031915848 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1500031916289 Hulk Alternative Resolve Blob [Anti-Pattern] - done 441ms
+LOG: 1500031916289 Hulk Anti-Pattern Detection - done 1751ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:31:56] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:32:26] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:32:26] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:32:26] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:32:26] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:32:35] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:32:35] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:32:35] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:32:35] Starting task: DcfTask
+LOG: >   [2017-07-14 13:32:35] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:32:36] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:32:42] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:32:42] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:32:42] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:32:42] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:32:42] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:32:42] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:32:42] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:32:42] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:32:43] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:32:43] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:32:44] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:32:44] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:32:47] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:32:47] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:32:47] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:32:47] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:32:49] Task ended: GraphDumpTask Result:OK
+LOG: Class toClass() [in Name [in Name.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: Object resolveThisFieldReference(CallStack, NameSpace, Interpreter, String, boolean) [in Name [in Name.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: Object consumeNextObjectField(CallStack, Interpreter, boolean) [in Name [in Name.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: LHS toLHS(CallStack, Interpreter) [in Name [in Name.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: boolean weHaveVar(String) [in BlockNameSpace [in BlockNameSpace.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void read(Buffer, InputStream, long) [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void insert() [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void autosave() [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void save() [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void write(Buffer, OutputStream) [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void load() [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void writeMarkers(Buffer, OutputStream) [in BufferIORequest [in BufferIORequest.java [in org.gjt.sp.jedit.io [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: boolean checkDependencies(String) [in JARClassLoader [in JARClassLoader.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void loadPluginClass(String) [in JARClassLoader [in JARClassLoader.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: String getResourceAsPath(String) [in JARClassLoader [in JARClassLoader.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void startAllPlugins() [in JARClassLoader [in JARClassLoader.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void loadBufferSwitcher() [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void propertiesChanged() [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void recentBuffer() [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void handleBufferUpdate(BufferUpdate) [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void close() [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void setBuffer(Buffer) [in EditPane [in EditPane.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+  class <anonymous #1>
+    void run()
+  class <anonymous #2>
+    void run()
+LOG: Object eval(CallStack, Interpreter) [in BSHTryStatement [in BSHTryStatement.java [in bsh [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static void _runScript(View, String, Reader, boolean) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static Object runCachedBlock(String, View, NameSpace) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static void init() [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static void handleException(View, String, Throwable) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static void unwrapException(Exception) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static Object _eval(View, NameSpace, String) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static void showEvaluateLinesDialog(View) [in BeanShell [in BeanShell.java [in org.gjt.sp.jedit [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: ParserRuleSet getRuleSet(String) [in TokenMarker [in TokenMarker.java [in org.gjt.sp.jedit.syntax [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static boolean find(View) [in SearchAndReplace [in SearchAndReplace.java [in org.gjt.sp.jedit.search [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: static boolean replace(View) [in SearchAndReplace [in SearchAndReplace.java [in org.gjt.sp.jedit.search [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void ok() [in SearchDialog [in SearchDialog.java [in org.gjt.sp.jedit.search [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: boolean save() [in SearchDialog [in SearchDialog.java [in org.gjt.sp.jedit.search [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void mouseReleased(MouseEvent) [in MouseHandler [in Gutter [in Gutter.java [in org.gjt.sp.jedit.textarea [in src [in 09_JEdit4.0_tmp_blob]]]]]]
+LOG: void mouseDragged(MouseEvent) [in MouseHandler [in Gutter [in Gutter.java [in org.gjt.sp.jedit.textarea [in src [in 09_JEdit4.0_tmp_blob]]]]]]
+LOG: void mousePressed(MouseEvent) [in MouseHandler [in Gutter [in Gutter.java [in org.gjt.sp.jedit.textarea [in src [in 09_JEdit4.0_tmp_blob]]]]]]
+LOG: void load() [in ModeProperties [in ModeOptionPane [in ModeOptionPane.java [in org.gjt.sp.jedit.options [in src [in 09_JEdit4.0_tmp_blob]]]]]]
+LOG: void save() [in ModeProperties [in ModeOptionPane [in ModeOptionPane.java [in org.gjt.sp.jedit.options [in src [in 09_JEdit4.0_tmp_blob]]]]]]
+LOG: void startElement(String) [in XModeHandler [in XModeHandler.java [in org.gjt.sp.jedit.syntax [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void endElement(String) [in XModeHandler [in XModeHandler.java [in org.gjt.sp.jedit.syntax [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void addKeyword(String, byte) [in XModeHandler [in XModeHandler.java [in org.gjt.sp.jedit.syntax [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: void _error(String) [in XModeHandler [in XModeHandler.java [in org.gjt.sp.jedit.syntax [in src [in 09_JEdit4.0_tmp_blob]]]]]
+LOG: 1500031975211 GRaViTY convert project: 09_JEdit4.0_tmp_blob
+LOG: 1500031975211 MoDisco discover project: 09_JEdit4.0_tmp_blob
+LOG: 1500031978659 MoDisco discover project - done 3448ms
+LOG: 1500031978659 MoDisco preprocessing
+LOG: 1500031978995 MoDisco preprocessing - done 336ms
+LOG: 1500031978995 eMoflon TGG fwd trafo
+LOG: 1500032004757 eMoflon TGG fwd trafo - done 25762ms
+LOG: 1500032004757 GRaViTY convert project - done 29546ms
+LOG: 1500032004913 Hulk Anti-Pattern Detection
+LOG: 1500032004914 Hulk Number of outgoing invocations
+LOG: 1500032004922 Hulk Number of outgoing invocations - done 8ms
+LOG: 1500032004922 Hulk Incomming Invocation custom
+LOG: 1500032004929 Hulk Incomming Invocation custom - done 7ms
+LOG: 1500032004929 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500032004935 Hulk Relation between Incoming and Outgoing Invocations - done 6ms
+LOG: 1500032004935 Hulk Controller Class Smell
+LOG: 1500032005071 Hulk Controller Class Smell - done 136ms
+LOG: 1500032005071 Hulk Number of distinct fields accessed by each method
+LOG: 1500032005080 Hulk Number of distinct fields accessed by each method - done 9ms
+LOG: 1500032005080 Hulk Number of Methods
+LOG: 1500032005085 Hulk Number of Methods - done 5ms
+LOG: 1500032005085 Hulk Number of fields
+LOG: 1500032005090 Hulk Number of fields - done 5ms
+LOG: 1500032005090 Hulk Calculate LCOM5 on PG
+LOG: 1500032005098 Hulk Calculate LCOM5 on PG - done 8ms
+LOG: 1500032005098 Hulk Low Cohesion Smell
+LOG: 1500032005365 Hulk Low Cohesion Smell - done 267ms
+LOG: 1500032005365 Hulk Number of Members
+LOG: 1500032005369 Hulk Number of Members - done 4ms
+LOG: 1500032005369 Hulk Large Class Smell
+LOG: 1500032005669 Hulk Large Class Smell - done 300ms
+LOG: 1500032005669 Hulk Large Class or Low Cohesion Smell
+LOG: 1500032005673 Hulk Large Class or Low Cohesion Smell - done 4ms
+LOG: 1500032005673 Hulk God Class [Anti-Pattern]
+LOG: 1500032005676 Hulk God Class [Anti-Pattern] - done 3ms
+LOG: 1500032005676 Hulk Number of Getters
+LOG: 1500032005683 Hulk Number of Getters - done 7ms
+LOG: 1500032005683 Hulk Number of setter Methods
+LOG: 1500032005690 Hulk Number of setter Methods - done 7ms
+LOG: 1500032005690 Hulk Relation between Methods and Getters/Setters
+LOG: 1500032005699 Hulk Relation between Methods and Getters/Setters - done 9ms
+LOG: 1500032005699 Hulk Getter/Setter Smell
+LOG: 1500032005715 Hulk Getter/Setter Smell - done 16ms
+LOG: 1500032005715 Hulk Data Class Smell
+LOG: 1500032006125 Hulk Data Class Smell - done 410ms
+LOG: 1500032006125 Hulk Data Class Accessor Smell
+LOG: 1500032006137 Hulk Data Class Accessor Smell - done 12ms
+LOG: 1500032006137 Hulk The Blob [Anti-Pattern]
+LOG: 1500032006171 Hulk The Blob [Anti-Pattern] - done 34ms
+LOG: 1500032006171 Hulk Anti-Pattern Detection - done 1258ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:33:26] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:33:55] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:33:55] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:33:55] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:33:55] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:34:05] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:34:05] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:34:05] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:34:05] Starting task: DcfTask
+LOG: >   [2017-07-14 13:34:05] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:34:06] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:34:12] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:34:12] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:34:12] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:34:12] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:34:12] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:34:12] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:34:12] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:34:12] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:34:13] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:34:13] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:34:14] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:34:14] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:34:17] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:34:17] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:34:17] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:34:17] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:34:19] Task ended: GraphDumpTask Result:OK

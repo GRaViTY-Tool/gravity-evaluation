@@ -1,0 +1,166 @@
+/*
+ * DBStrings.java
+ *
+ * Created on October 1, 2007, 6:33 PM
+ *
+ * To change this template, choose Tools | Template Manager
+ * and open the template in the editor.
+ */
+
+package net.sf.jabref.sql;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+import net.sf.jabref.Globals;
+
+/**
+ *
+ * @author pattonlk
+ */
+public class DBStrings {
+   
+    private String serverType;
+    private String serverHostname;
+    private String database;
+    private String username;
+    private String password;
+
+    private String[] serverTypes;
+    private boolean isInitialized;
+    private boolean configValid;
+
+    /** Creates a new instance of DBStrings */
+    public DBStrings() {
+        this.setServerType(null);
+        this.setServerHostname(null);
+        this.setDatabase(null);
+        this.setUsername(null);
+        this.setPassword(null);
+        this.isInitialized(false);
+        this.isConfigValid(false);
+    }
+
+    public void initialize() {
+        //String [] servers = {Globals.lang("MySQL"), Globals.lang("Derby")};
+        String [] servers = {Globals.lang("MySQL")};
+        setServerTypes(servers);
+        setServerType(Globals.lang("MySQL"));
+        setServerHostname(Globals.lang("localhost"));
+        setDatabase(Globals.lang("jabref"));
+        setUsername(Globals.lang("root"));
+        setPassword("");
+        isInitialized(true);
+    }
+
+    public void setServerType(String serverType) {
+        this.serverType = serverType;
+    }
+
+    public void setServerHostname(String serverHostname) {
+        this.serverHostname = serverHostname;
+    }
+
+    public void setDatabase(String database) {
+        this.database = database;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getServerType() {
+        return serverType;
+    }
+
+    public String getServerHostname() {
+        return serverHostname;
+    }
+
+    public String getDatabase() {
+        return database;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String[] getServerTypes() {
+        return serverTypes;
+    }
+
+    public void setServerTypes(String[] serverTypes) {
+        this.serverTypes = serverTypes;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
+    }
+
+    public void isInitialized(boolean isInitialized) {
+        this.isInitialized = isInitialized;
+    }
+
+    public boolean isConfigValid() {
+        return configValid;
+    }
+
+    public void isConfigValid(boolean configValid) {
+        this.configValid = configValid;
+    }
+
+	/**
+	 * This routine accepts the location of a MySQL database specified as a url as 
+	 * well as the username and password for the MySQL user with appropriate access
+	 * to this database.  The routine returns a valid Connection object if the MySQL 
+	 * database is successfully opened. It returns a null object otherwise.
+	 */
+	public static Connection connectToDB (DBStrings dbstrings)
+	    throws Exception {
+	
+	    String url = createJDBCurl(dbstrings);
+	    String drv = getJDBCdriver(dbstrings);
+	
+	    Class.forName (drv).newInstance ();
+	    Connection conn = DriverManager.getConnection (url,
+	                       dbstrings.getUsername(), dbstrings.getPassword());
+	
+	    return conn;
+	
+	}
+
+	/**
+	 * This routine returns the JDBC url corresponding to the DBStrings input.
+	 *
+	 * @param dbstrings
+	 *          The DBStrings to use to make the connection
+	 * @return The JDBC url corresponding to the input DBStrings
+	 */
+	public static String createJDBCurl (DBStrings dbs) {
+	
+	    String url = "";
+	    String servertype = dbs.getServerType();
+	
+	    if (servertype.equalsIgnoreCase("mysql")) {
+	        url = "jdbc:" + dbs.getServerType().toLowerCase() + "://" 
+	                      + dbs.getServerHostname() + "/" 
+	                      + dbs.getDatabase();
+	    }
+	
+	    if (servertype.equalsIgnoreCase("derby")) {
+	        url = "jdbc:" + dbs.getServerType().toLowerCase() + ":"
+	                      + dbs.getDatabase() + ";create=true";
+	    }
+	
+	    return url;
+	}
+
+}

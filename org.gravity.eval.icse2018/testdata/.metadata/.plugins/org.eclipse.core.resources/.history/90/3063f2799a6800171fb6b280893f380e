@@ -1,0 +1,249 @@
+/*
+ * WorkRequest.java - Runnable subclass
+ * Copyright (C) 2000 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.util;
+
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.util.zip.GZIPInputStream;
+
+import javax.swing.text.Segment;
+
+import org.gjt.sp.jedit.Buffer;
+import org.gjt.sp.jedit.jEdit;
+import org.gjt.sp.jedit.io.VFS;
+import org.gjt.sp.jedit.io.VFSManager;
+
+/**
+ * A subclass of the Runnable interface.
+ * @since jEdit 2.6pre1
+ */
+public abstract class WorkRequest implements Runnable
+{
+	/**
+	 * Sets if the request can be aborted.
+	 */
+	public void setAbortable(boolean abortable)
+	{
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setAbortable(abortable);
+	}
+
+	/**
+	 * Sets the status text.
+	 * @param status The status text
+	 */
+	public void setStatus(String status)
+	{
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setStatus(status);
+	}
+
+	/**
+	 * Sets the progress value.
+	 * @param status The progress value.
+	 */
+	public void setProgressValue(int value)
+	{
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setProgressValue(value);
+	}
+
+	/**
+	 * Sets the maximum progress value.
+	 * @param status The progress value.
+	 */
+	public void setProgressMaximum(int value)
+	{
+		Thread thread = Thread.currentThread();
+		if(thread instanceof WorkThread)
+			((WorkThread)thread).setProgressMaximum(value);
+	}
+
+	//{{{ insert() method
+	private void insert()
+	{
+		InputStream in = null;
+	
+		try
+		{
+			try
+			{
+				String[] args = { vfs.getFileName(path) };
+				setStatus(jEdit.getProperty("vfs.status.load",args));
+				setAbortable(true);
+	
+				path = vfs._canonPath(session,path,view);
+	
+				VFS.DirectoryEntry entry = vfs._getDirectoryEntry(
+					session,path,view);
+				long length;
+				if(entry != null)
+					length = entry.length;
+				else
+					length = 0L;
+	
+				in = vfs._createInputStream(session,path,false,view);
+				if(in == null)
+					return;
+	
+				if(path.endsWith(".gz"))
+					in = new GZIPInputStream(in);
+	
+				read(buffer,in,length);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] pp = { io.toString() };
+				VFSManager.error(view,path,"ioerror.read-error",pp);
+	
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+			if(in != null)
+			{
+				try
+				{
+					in.close();
+				}
+				catch(IOException io)
+				{
+				}
+			}
+	
+			buffer.setBooleanProperty(ERROR_OCCURRED,true);
+		}
+		finally
+		{
+			try
+			{
+				vfs._endVFSSession(session,view);
+			}
+			catch(IOException io)
+			{
+				Log.log(Log.ERROR,this,io);
+				String[] pp = { io.toString() };
+				VFSManager.error(view,path,"ioerror.read-error",pp);
+	
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			}
+			catch(WorkThread.Abort a)
+			{
+				buffer.setBooleanProperty(ERROR_OCCURRED,true);
+			}
+		}
+	} //}}}
+
+	//{{{ autosave() method
+	private void autosave()
+	{
+		OutputStream out = null;
+	
+		try
+		{
+			String[] args = { vfs.getFileName(path) };
+			setStatus(jEdit.getProperty("vfs.status.autosave",args));
+	
+			// the entire save operation can be aborted...
+			setAbortable(true);
+	
+			try
+			{
+				//buffer.readLock();
+	
+				if(!buffer.isDirty())
+				{
+					// buffer has been saved while we
+					// were waiting.
+					return;
+				}
+	
+				out = vfs._createOutputStream(session,path,view);
+				if(out == null)
+					return;
+	
+				write(buffer,out);
+			}
+			catch(Exception e)
+			{
+			}
+			finally
+			{
+				//buffer.readUnlock();
+			}
+		}
+		catch(WorkThread.Abort a)
+		{
+			if(out != null)
+			{
+				try
+				{
+					out.close();
+				}
+				catch(IOException io)
+				{
+				}
+			}
+		}
+	} //}}}
+
+	//{{{ write() method
+	private void write(Buffer buffer, OutputStream _out)
+		throws IOException
+	{
+		BufferedWriter out = new BufferedWriter(
+			new OutputStreamWriter(_out,
+				buffer.getStringProperty(Buffer.ENCODING)),
+				IOBUFSIZE);
+		Segment lineSegment = new Segment();
+		String newline = buffer.getStringProperty(Buffer.LINESEP);
+		if(newline == null)
+			newline = System.getProperty("line.separator");
+	
+		setProgressMaximum(buffer.getLineCount() / PROGRESS_INTERVAL);
+		setProgressValue(0);
+	
+		int i = 0;
+		while(i < buffer.getLineCount())
+		{
+			buffer.getLineText(i,lineSegment);
+			out.write(lineSegment.array,lineSegment.offset,
+				lineSegment.count);
+	
+			if(i != buffer.getLineCount() - 1
+				|| buffer.getBooleanProperty(Buffer.TRAILING_EOL))
+			{
+				out.write(newline);
+			}
+	
+			if(++i % PROGRESS_INTERVAL == 0)
+				setProgressValue(i / PROGRESS_INTERVAL);
+		}
+		out.close();
+	} //}}}
+}

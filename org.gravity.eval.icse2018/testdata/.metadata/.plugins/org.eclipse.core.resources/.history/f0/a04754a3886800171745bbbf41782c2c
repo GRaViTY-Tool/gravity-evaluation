@@ -1,0 +1,81 @@
+/**
+ * BSD-style license; for more info see http://pmd.sourceforge.net/license.html
+ */
+package net.sourceforge.pmd.rules;
+
+import java.util.Stack;
+
+import net.sourceforge.pmd.AbstractRule;
+import net.sourceforge.pmd.ast.ASTConditionalExpression;
+import net.sourceforge.pmd.ast.ASTConstructorDeclaration;
+import net.sourceforge.pmd.ast.ASTExpression;
+import net.sourceforge.pmd.ast.SimpleNode;
+import net.sourceforge.pmd.rules.design.NpathComplexity;
+
+/**
+ * @author Donald A. Leckie
+ * @version $Revision: 1.18 $, $Date: 2006/10/16 13:25:23 $
+ * @since January 14, 2003
+ */
+public class CyclomaticComplexity extends AbstractRule {
+
+  private int reportLevel;
+
+  private static class Entry {
+    private SimpleNode node;
+    private int decisionPoints = 1;
+    public int highestDecisionPoints;
+    public int methodCount;
+
+    private Entry(SimpleNode node) {
+      this.node = node;
+    }
+
+    public void bumpDecisionPoints() {
+      decisionPoints++;
+    }
+
+    public void bumpDecisionPoints(int size) {
+      decisionPoints += size;
+    }
+
+    public int getComplexityAverage() {
+      return ( (double) methodCount == 0 ) ? 1
+          : (int) ( Math.rint( (double) decisionPoints / (double) methodCount ) );
+    }
+  }
+
+  private Stack entryStack = new Stack();
+
+  public Object visit(ASTConditionalExpression node, Object data) {
+    if ( node.isTernary() ) {
+      int boolCompTern = NpathComplexity.sumExpressionComplexity( (ASTExpression) node.getFirstChildOfType( ASTExpression.class ) );
+      // Ternary statement always has a complexity of at least 1
+      boolCompTern++;
+
+      ( (Entry) entryStack.peek() ).bumpDecisionPoints( boolCompTern );
+      super.visit( node, data );
+    }
+    return data;
+  }
+
+  public Object visit(ASTConstructorDeclaration node, Object data) {
+    entryStack.push( new Entry( node ) );
+    super.visit( node, data );
+    Entry constructorEntry = (Entry) entryStack.pop();
+    int constructorDecisionPointCount = constructorEntry.decisionPoints;
+    Entry classEntry = (Entry) entryStack.peek();
+    classEntry.methodCount++;
+    classEntry.decisionPoints += constructorDecisionPointCount;
+    if ( constructorDecisionPointCount > classEntry.highestDecisionPoints ) {
+      classEntry.highestDecisionPoints = constructorDecisionPointCount;
+    }
+    if ( constructorEntry.decisionPoints >= reportLevel ) {
+      addViolation( data, node, new String[] { "constructor",
+          classEntry.node.getImage(),
+          String.valueOf( constructorDecisionPointCount ) } );
+    }
+    return data;
+  }
+
+}

@@ -1,0 +1,669 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.nutch.metadata;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.UTF8;
+import org.apache.hadoop.io.Writable;
+import org.apache.hadoop.io.WritableComparable;
+import org.apache.hadoop.mapred.OutputCollector;
+import org.apache.hadoop.mapred.Reporter;
+import org.apache.nutch.crawl.CrawlDatum;
+import org.apache.nutch.crawl.SignatureFactory;
+import org.apache.nutch.fetcher.FetcherOutput;
+import org.apache.nutch.parse.Parse;
+import org.apache.nutch.parse.ParseImpl;
+import org.apache.nutch.parse.ParseStatus;
+import org.apache.nutch.parse.ParseUtil;
+import org.apache.nutch.protocol.Content;
+import org.apache.nutch.protocol.ProtocolStatus;
+import org.apache.nutch.scoring.ScoringFilterException;
+import org.apache.nutch.util.LogUtil;
+import org.apache.nutch.util.StringUtil;
+
+
+/**
+ * A multi-valued metadata container.
+ *
+ * @author Chris Mattmann
+ * @author J&eacute;r&ocirc;me Charron
+ *
+ */
+public class Metadata implements Writable, CreativeCommons,
+DublinCore, HttpHeaders, Nutch, Office {
+
+  /**
+   * A map of all metadata attributes.
+   */
+  private Map<String, String[]> metadata = null;
+
+
+  /**
+   * Constructs a new, empty metadata.
+   */
+  public Metadata() {
+    metadata = new HashMap<String, String[]>();
+  }
+
+  /**
+   * Returns true if named value is multivalued.
+   * @param name name of metadata
+   * @return true is named value is multivalued, false if single
+   * value or null
+   */
+  public boolean isMultiValued(final String name) {
+    return metadata.get(name) != null && metadata.get(name).length > 1;
+  }
+
+  /**
+   * Returns an array of the names contained in the metadata.
+   * @return Metadata names
+   */
+  public String[] names() {
+    return metadata.keySet().toArray(new String[metadata.keySet().size()]);
+  }
+
+  /**
+   * Get the value associated to a metadata name.
+   * If many values are assiociated to the specified name, then the first
+   * one is returned.
+   *
+   * @param name of the metadata.
+   * @return the value associated to the specified metadata name.
+   */
+  public String get(final String name) {
+    String[] values = metadata.get(name);
+    if (values == null) {
+      return null;
+    } else {
+      return values[0];
+    }
+  }
+
+  /**
+   * Get the values associated to a metadata name.
+   * @param name of the metadata.
+   * @return the values associated to a metadata name.
+   */
+  public String[] getValues(final String name) {
+    return _getValues(name);
+  }
+  
+  private String[] _getValues(final String name) {
+    String[] values = metadata.get(name);
+    if (values == null) {
+      values = new String[0];
+    }
+    return values;
+  }
+
+  /**
+   * Add a metadata name/value mapping.
+   * Add the specified value to the list of values associated to the
+   * specified metadata name.
+   *
+   * @param name the metadata name.
+   * @param value the metadata value.
+   */
+  public void add(final String name, final String value) {
+    String[] values = metadata.get(name);
+    if (values == null) {
+      set(name, value);
+    } else {
+      String[] newValues = new String[values.length + 1];
+      System.arraycopy(values, 0, newValues, 0, values.length);
+      newValues[newValues.length - 1] = value;
+      metadata.put(name, newValues);
+    }
+  }
+
+  /**
+   * Copy All key-value pairs from properties.
+   * @param properties properties to copy from
+   */
+  public void setAll(Properties properties) {
+    Enumeration names = properties.propertyNames();
+    while (names.hasMoreElements()) {
+      String name = (String) names.nextElement();
+      metadata.put(name, new String[]{properties.getProperty(name)});
+    }
+  }
+
+  /**
+   * Set metadata name/value.
+   * Associate the specified value to the specified metadata name. If some
+   * previous values were associated to this name, they are removed.
+   *
+   * @param name the metadata name.
+   * @param value the metadata value.
+   */
+  public void set(String name, String value) {
+    metadata.put(name, new String[]{value});
+  }
+
+  /**
+   * Remove a metadata and all its associated values.
+   * @param name metadata name to remove
+   */
+  public void remove(String name) {
+    metadata.remove(name);
+  }
+
+  /**
+   * Returns the number of metadata names in this metadata.
+   * @return number of metadata names
+   */
+  public int size() {
+    return metadata.size();
+  }
+
+  public boolean equals(Object o) {
+
+    if (o == null) { return false; }
+
+    Metadata other = null;
+    try {
+      other = (Metadata) o;
+    } catch (ClassCastException cce) {
+      return false;
+    }
+
+    if (other.size() != size()) { return false; }
+
+    String[] names = names();
+    for (int i = 0; i < names.length; i++) {
+      String[] otherValues = other._getValues(names[i]);
+      String[] thisValues = _getValues(names[i]);
+      if (otherValues.length != thisValues.length) {
+        return false;
+      }
+      for (int j = 0; j < otherValues.length; j++) {
+        if (!otherValues[j].equals(thisValues[j])) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public String toString() {
+    StringBuffer buf = new StringBuffer();
+    String[] names = names();
+    for (int i = 0; i < names.length; i++) {
+      String[] values = _getValues(names[i]);
+      for (int j = 0; j < values.length; j++) {
+        buf.append(names[i])
+           .append("=")
+           .append(values[j])
+           .append(" ");
+      }
+    }
+    return buf.toString();
+  }
+
+  public final void write(DataOutput out) throws IOException {
+    out.writeInt(size());
+    String[] values = null;
+    String[] names = names();
+    for (int i = 0; i < names.length; i++) {
+      Text.writeString(out, names[i]);
+      values = _getValues(names[i]);
+      int cnt = 0;
+      for (int j = 0; j < values.length; j++) {
+        if (values[j] != null)
+          cnt++;
+      }
+      out.writeInt(cnt);
+      for (int j = 0; j < values.length; j++) {
+        if (values[j] != null) {
+          Text.writeString(out, values[j]);
+        }
+      }
+    }
+  }
+
+  public final void readFields(DataInput in) throws IOException {
+    int keySize = in.readInt();
+    String key;
+    for (int i = 0; i < keySize; i++) {
+      key = Text.readString(in);
+      int valueSize = in.readInt();
+      for (int j = 0; j < valueSize; j++) {
+        add(key, Text.readString(in));
+      }
+    }
+  }
+
+public void map(WritableComparable key, Writable value,
+                  OutputCollector output, Reporter reporter)
+    throws IOException {
+    // convert on the fly from old UTF8 keys
+    if (key instanceof UTF8) {
+      newKey.set(key.toString());
+      key = newKey;
+    }
+    Content content = (Content) value;
+    content.forceInflate();
+
+    Parse parse = null;
+    ParseStatus status;
+    try {
+      parse = new ParseUtil(getConf()).parse(content);
+      status = parse.getData().getStatus();
+    } catch (Exception e) {
+      status = new ParseStatus(e);
+    }
+
+    // compute the new signature
+    byte[] signature = SignatureFactory.getSignature(getConf()).calculate(content, parse);
+    if (parse != null) {
+      parse.getData().getContentMeta().set(Nutch.SIGNATURE_KEY, StringUtil.toHexString(signature));
+      parse.getData().getContentMeta().set(Nutch.SEGMENT_NAME_KEY, getConf().get(Nutch.SEGMENT_NAME_KEY));
+    }
+    
+    if (status.isSuccess()) {
+      try {
+        scfilters.passScoreAfterParsing((Text)key, content, parse);
+      } catch (ScoringFilterException e) {
+        if (LOG.isWarnEnabled()) {
+          e.printStackTrace(LogUtil.getWarnStream(LOG));
+          LOG.warn("Error passing score: "+key+": "+e.getMessage());
+        }
+        return;
+      }
+      output.collect(key, new ParseImpl(parse.getText(), parse.getData()));
+    } else if (LOG.isWarnEnabled()) {
+      LOG.warn("Error parsing: " + key + ": "+status.toString());
+    }
+  }
+
+private ParseStatus output(Text key, CrawlDatum datum,
+                    Content content, ProtocolStatus pstatus, int status) {
+
+  datum.setStatus(status);
+  datum.setFetchTime(System.currentTimeMillis());
+  if (pstatus != null) datum.getMetaData().put(Nutch.WRITABLE_PROTO_STATUS_KEY, pstatus);
+
+  if (content == null) {
+    String url = key.toString();
+    content = new Content(url, url, new byte[0], "", new Metadata(), this.conf);
+  }
+  Metadata metadata = content.getMetadata();
+  // add segment to metadata
+  metadata.set(Nutch.SEGMENT_NAME_KEY, segmentName);
+  // add score to content metadata so that ParseSegment can pick it up.
+  try {
+    scfilters.passScoreBeforeParsing(key, datum, content);
+  } catch (Exception e) {
+    if (LOG.isWarnEnabled()) {
+      e.printStackTrace(LogUtil.getWarnStream(LOG));
+      LOG.warn("Couldn't pass score, url " + key + " (" + e + ")");
+    }
+  }
+
+  Parse parse = null;
+  if (parsing && status == CrawlDatum.STATUS_FETCH_SUCCESS) {
+    ParseStatus parseStatus;
+    try {
+      parse = this.parseUtil.parse(content);
+      parseStatus = parse.getData().getStatus();
+    } catch (Exception e) {
+      parseStatus = new ParseStatus(e);
+    }
+    if (!parseStatus.isSuccess()) {
+      if (LOG.isWarnEnabled()) {
+        LOG.warn("Error parsing: " + key + ": " + parseStatus);
+      }
+      parse = parseStatus.getEmptyParse(getConf());
+    }
+    // Calculate page signature. For non-parsing fetchers this will
+    // be done in ParseSegment
+    byte[] signature = SignatureFactory.getSignature(getConf()).calculate(content, parse);
+    metadata.set(Nutch.SIGNATURE_KEY, StringUtil.toHexString(signature));
+    datum.setSignature(signature);
+    // Ensure segment name and score are in parseData metadata
+    parse.getData().getContentMeta().set(Nutch.SEGMENT_NAME_KEY, segmentName);
+    parse.getData().getContentMeta().set(Nutch.SIGNATURE_KEY, StringUtil.toHexString(signature));
+    try {
+      scfilters.passScoreAfterParsing(key, content, parse);
+    } catch (Exception e) {
+      if (LOG.isWarnEnabled()) {
+        e.printStackTrace(LogUtil.getWarnStream(LOG));
+        LOG.warn("Couldn't pass score, url " + key + " (" + e + ")");
+      }
+    }
+    
+  }
+
+  try {
+    output.collect
+      (key,
+       new FetcherOutput(datum,
+                         storingContent ? content : null,
+                         parse != null ? new ParseImpl(parse) : null));
+  } catch (IOException e) {
+    if (LOG.isFatalEnabled()) {
+      e.printStackTrace(LogUtil.getFatalStream(LOG));
+      LOG.fatal("fetcher caught:"+e.toString());
+    }
+  }
+  if (parse != null) return parse.getData().getStatus();
+  else return null;
+}
+
+/** Test for <code>Writable</code> implementation. */
+  public void testWritable() {
+    SpellCheckedMetadata result = null;
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    result = writeRead(meta);
+    assertEquals(0, result.size());
+    meta.add("name-one", "value-1.1");
+    result = writeRead(meta);
+    meta.add("Contenttype", "text/html");
+    assertEquals(1, result.size());
+    assertEquals(1, result.getValues("name-one").length);
+    assertEquals("value-1.1", result.get("name-one"));
+    meta.add("name-two", "value-2.1");
+    meta.add("name-two", "value-2.2");
+    result = writeRead(meta);
+    assertEquals(3, result.size());
+    assertEquals(1, result.getValues("name-one").length);
+    assertEquals("value-1.1", result.getValues("name-one")[0]);
+    assertEquals(2, result.getValues("name-two").length);
+    assertEquals("value-2.1", result.getValues("name-two")[0]);
+    assertEquals("value-2.2", result.getValues("name-two")[1]);
+    assertEquals("text/html", result.get(Metadata.CONTENT_TYPE));
+  }
+
+/** Test for <code>equals(Object)</code> method. */
+  public void testObject() {
+    SpellCheckedMetadata meta1 = new SpellCheckedMetadata();
+    SpellCheckedMetadata meta2 = new SpellCheckedMetadata();
+    assertFalse(meta1.equals(null));
+    assertFalse(meta1.equals("String"));
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.2");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.x");
+    assertFalse(meta1.equals(meta2));
+  }
+
+/** Test for <code>remove(String)</code> method. */
+  public void testRemove() {
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    meta.remove("name-one");
+    assertEquals(0, meta.size());
+    meta.add("name-one", "value-1.1");
+    meta.add("name-one", "value-1.2");
+    meta.add("name-two", "value-2.2");
+    assertEquals(2, meta.size());
+    assertNotNull(meta.get("name-one"));
+    assertNotNull(meta.get("name-two"));
+    meta.remove("name-one");
+    assertEquals(1, meta.size());
+    assertNull(meta.get("name-one"));
+    assertNotNull(meta.get("name-two"));
+    meta.remove("name-two");
+    assertEquals(0, meta.size());
+    assertNull(meta.get("name-one"));
+    assertNull(meta.get("name-two"));
+  }
+
+/** Test for <code>setAll(Properties)</code> method. */
+  public void testSetProperties() {
+    String[] values = null;
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    Properties props = new Properties();
+
+    meta.setAll(props);
+    assertEquals(0, meta.size());
+
+    props.setProperty("name-one", "value1.1");
+    meta.setAll(props);
+    assertEquals(1, meta.size());
+    values = meta.getValues("name-one");
+    assertEquals(1, values.length);
+    assertEquals("value1.1", values[0]);
+
+    props.setProperty("name-two", "value2.1");
+    meta.setAll(props);
+    assertEquals(2, meta.size());
+    values = meta.getValues("name-one");
+    assertEquals(1, values.length);
+    assertEquals("value1.1", values[0]);
+    values = meta.getValues("name-two");
+    assertEquals(1, values.length);
+    assertEquals("value2.1", values[0]);
+  }
+
+private SpellCheckedMetadata writeRead(SpellCheckedMetadata meta) {
+    SpellCheckedMetadata readed = new SpellCheckedMetadata();
+    try {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      meta.write(new DataOutputStream(out));
+      readed.readFields(new DataInputStream(new ByteArrayInputStream(out
+          .toByteArray())));
+    } catch (IOException ioe) {
+      fail(ioe.toString());
+    }
+    return readed;
+  }
+
+/** Test for <code>isMultiValued()</code> method. */
+  public void testIsMultiValued() {
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    assertFalse(meta.isMultiValued("key"));
+    meta.add("key", "value1");
+    assertFalse(meta.isMultiValued("key"));
+    meta.add("key", "value2");
+    assertTrue(meta.isMultiValued("key"));
+  }
+
+/** Test for <code>names</code> method. */
+  public void testNames() {
+    String[] names = null;
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    names = meta.names();
+    assertEquals(0, names.length);
+
+    meta.add("name-one", "value");
+    names = meta.names();
+    assertEquals(1, names.length);
+    assertEquals("name-one", names[0]);
+    meta.add("name-two", "value");
+    names = meta.names();
+    assertEquals(2, names.length);
+  }
+
+/** Test for the <code>set(String, String)</code> method. */
+  public void testSet() {
+    String[] values = null;
+    Metadata meta = new Metadata();
+
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(0, values.length);
+
+    meta.set(CONTENTTYPE, "value1");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(1, values.length);
+    assertEquals("value1", values[0]);
+
+    meta.set(CONTENTTYPE, "value2");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(1, values.length);
+    assertEquals("value2", values[0]);
+
+    meta.set(CONTENTTYPE, "new value 1");
+    meta.add("contenttype", "new value 2");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(2, values.length);
+    assertEquals("new value 1", values[0]);
+    assertEquals("new value 2", values[1]);
+  }
+
+/** Test for <code>remove(String)</code> method. */
+  public void testRemove() {
+    Metadata meta = new Metadata();
+    meta.remove("name-one");
+    assertEquals(0, meta.size());
+    meta.add("name-one", "value-1.1");
+    meta.add("name-one", "value-1.2");
+    meta.add("name-two", "value-2.2");
+    assertEquals(2, meta.size());
+    assertNotNull(meta.get("name-one"));
+    assertNotNull(meta.get("name-two"));
+    meta.remove("name-one");
+    assertEquals(1, meta.size());
+    assertNull(meta.get("name-one"));
+    assertNotNull(meta.get("name-two"));
+    meta.remove("name-two");
+    assertEquals(0, meta.size());
+    assertNull(meta.get("name-one"));
+    assertNull(meta.get("name-two"));
+  }
+
+/** Test for <code>Writable</code> implementation. */
+  public void testWritable() {
+    Metadata result = null;
+    Metadata meta = new Metadata();
+    result = writeRead(meta);
+    assertEquals(0, result.size());
+    meta.add("name-one", "value-1.1");
+    result = writeRead(meta);
+    assertEquals(1, result.size());
+    assertEquals(1, result.getValues("name-one").length);
+    assertEquals("value-1.1", result.get("name-one"));
+    meta.add("name-two", "value-2.1");
+    meta.add("name-two", "value-2.2");
+    result = writeRead(meta);
+    assertEquals(2, result.size());
+    assertEquals(1, result.getValues("name-one").length);
+    assertEquals("value-1.1", result.getValues("name-one")[0]);
+    assertEquals(2, result.getValues("name-two").length);
+    assertEquals("value-2.1", result.getValues("name-two")[0]);
+    assertEquals("value-2.2", result.getValues("name-two")[1]);
+  }
+
+/** Test for <code>get(String)</code> method. */
+  public void testGet() {
+    Metadata meta = new Metadata();
+    assertNull(meta.get("a-name"));
+    meta.add("a-name", "value-1");
+    assertEquals("value-1", meta.get("a-name"));
+    meta.add("a-name", "value-2");
+    assertEquals("value-1", meta.get("a-name"));
+  }
+
+/**
+   * Test to ensure that only non-null values get written when the
+   * {@link Metadata} object is written using a Writeable.
+   * 
+   * @since NUTCH-406
+   * 
+   */
+  public void testWriteNonNull() {
+    Metadata met = new Metadata();
+    met.add(CONTENTTYPE, null);
+    met.add(CONTENTTYPE, "text/bogus");
+    met.add(CONTENTTYPE, "text/bogus2");
+    met = writeRead(met);
+
+    assertNotNull(met);
+    assertEquals(met.size(), 1);
+
+    boolean hasBogus = false, hasBogus2 = false;
+
+    String[] values = met.getValues(CONTENTTYPE);
+    assertNotNull(values);
+    assertEquals(values.length, 2);
+
+    for (int i = 0; i < values.length; i++) {
+      if (values[i].equals("text/bogus")) {
+        hasBogus = true;
+      }
+
+      if (values[i].equals("text/bogus2")) {
+        hasBogus2 = true;
+      }
+    }
+
+    assertTrue(hasBogus && hasBogus2);
+  }
+
+/** Test for <code>equals(Object)</code> method. */
+  public void testObject() {
+    Metadata meta1 = new Metadata();
+    Metadata meta2 = new Metadata();
+    assertFalse(meta1.equals(null));
+    assertFalse(meta1.equals("String"));
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.2");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.x");
+    assertFalse(meta1.equals(meta2));
+  }
+
+private Metadata writeRead(Metadata meta) {
+    Metadata readed = new Metadata();
+    try {
+      ByteArrayOutputStream out = new ByteArrayOutputStream();
+      meta.write(new DataOutputStream(out));
+      readed.readFields(new DataInputStream(new ByteArrayInputStream(out
+          .toByteArray())));
+    } catch (IOException ioe) {
+      fail(ioe.toString());
+    }
+    return readed;
+  }
+
+}

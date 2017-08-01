@@ -1,0 +1,126 @@
+/*
+ * ProjectResource.java
+ *
+ * Created on 27. Mai 2003, 08:11
+ */
+
+package net.sourceforge.ganttproject.resource;
+
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+
+import net.sourceforge.ganttproject.roles.Role;
+
+/**
+ *
+ * @author  barmeier
+ */
+public abstract class ProjectResource {
+    
+    protected int id;
+    protected String name;
+    private double costsPerUnit;
+    private int maximumUnitsPerDay;
+    private String unitMeasure; // means hours, days, meter, ...
+    private String description;
+    
+    public void setName(String name) {
+        this.name=name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setDescription(String description) {
+        this.description=description;
+    }
+    
+    public String getDescription() {
+        return description;
+    }
+
+    public void setUnitMeasure(String unitMeasure) {
+        this.unitMeasure=unitMeasure;
+    }
+    
+    public String getUnitMeasure() {
+        return unitMeasure;
+    }
+    
+    public void setCostsPerUnit(double costsPerUnit) {
+        this.costsPerUnit=costsPerUnit;
+    }
+    
+    public double getCostsPerUnit() {
+        return costsPerUnit;
+    }
+    
+    public void setMaximumUnitsPerDay(int maximumUnitsPerDay) {
+        this.maximumUnitsPerDay=maximumUnitsPerDay;
+    }
+    
+    public int getMaximumUnitsPerDay() {
+        return maximumUnitsPerDay;
+    }
+    
+    public void setId(int id) {
+        if (this.id==-1)        // setting the id is only allowed when id is not assigned
+            this.id=id;
+    }
+    
+    public int getId() {
+        return id;
+    }
+    
+    
+    public String toString() {
+        return name;
+    }
+
+	/** write the resources. */
+	private void writeResources(OutputStreamWriter out) throws IOException 
+	{
+		//parse all resources
+		for (int i = 0; i < resources.size(); i++)
+	    {
+	    	HumanResource p = (HumanResource) resources.get(i);
+	    	
+	    	//ID
+			if(csvOptions.bExportResourceID)
+				out.write(correctField(""+p.getId())+
+						(bFixedSize?"":csvOptions.sSeparatedChar));
+			//Name
+			if(csvOptions.bExportResourceName)
+				out.write((bFixedSize?"":csvOptions.sSeparatedTextChar)+
+						correctField(p.getName())+
+						(bFixedSize?"":csvOptions.sSeparatedTextChar+
+						csvOptions.sSeparatedChar));
+			//Mail
+			if(csvOptions.bExportResourceMail)
+				out.write((bFixedSize?"":csvOptions.sSeparatedTextChar)+
+						correctField(p.getMail())+
+						(bFixedSize?"":csvOptions.sSeparatedTextChar+
+						csvOptions.sSeparatedChar));
+			//Phone
+			if(csvOptions.bExportResourcePhone)
+				out.write((bFixedSize?"":csvOptions.sSeparatedTextChar)+
+						correctField(p.getPhone())+
+						(bFixedSize?"":csvOptions.sSeparatedTextChar+
+						csvOptions.sSeparatedChar));
+			//Role
+			if(csvOptions.bExportResourcePhone) {
+				Role role = p.getRole();
+		        String sRoleID = "0";
+		        if(role != null) sRoleID = role.getPersistentID();
+		        
+				out.write((bFixedSize?"":csvOptions.sSeparatedTextChar)+
+						correctField(sRoleID)+
+						(bFixedSize?"":csvOptions.sSeparatedTextChar+
+						csvOptions.sSeparatedChar));
+			}
+			out.write("\n");
+	    }
+	} //end of write resources
+    
+}

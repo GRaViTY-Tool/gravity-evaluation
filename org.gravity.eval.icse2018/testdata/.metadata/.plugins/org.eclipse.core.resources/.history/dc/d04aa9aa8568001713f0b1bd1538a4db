@@ -1,0 +1,108 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.nutch.metadata;
+
+import java.util.Properties;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+/**
+ * JUnit based tests of class
+ * {@link org.apache.nutch.metadata.SpellCheckedMetadata}.
+ *
+ * @author Chris Mattmann
+ * @author J&eacute;r&ocirc;me Charron
+ */
+public class TestSpellCheckedMetadata extends TestCase {
+
+  private static final int NUM_ITERATIONS = 10000;
+
+  public TestSpellCheckedMetadata(String testName) {
+    super(testName);
+  }
+
+  public static Test suite() {
+    return new TestSuite(TestSpellCheckedMetadata.class);
+  }
+
+  public static void main(String[] args) {
+    TestRunner.run(suite());
+  }
+
+  /** Test for <code>setAll(Properties)</code> method. */
+  public void testSetProperties() {
+    String[] values = null;
+    SpellCheckedMetadata meta = new SpellCheckedMetadata();
+    Properties props = new Properties();
+
+    meta.setAll(props);
+    assertEquals(0, meta.size());
+
+    props.setProperty("name-one", "value1.1");
+    meta.setAll(props);
+    assertEquals(1, meta.size());
+    values = meta.getValues("name-one");
+    assertEquals(1, values.length);
+    assertEquals("value1.1", values[0]);
+
+    props.setProperty("name-two", "value2.1");
+    meta.setAll(props);
+    assertEquals(2, meta.size());
+    values = meta.getValues("name-one");
+    assertEquals(1, values.length);
+    assertEquals("value1.1", values[0]);
+    values = meta.getValues("name-two");
+    assertEquals(1, values.length);
+    assertEquals("value2.1", values[0]);
+  }
+
+  /**
+   * IO Test method, usable only when you plan to do changes in metadata
+   * to measure relative performance impact.
+   */
+  public final void testHandlingSpeed() {
+    SpellCheckedMetadata result;
+    long start = System.currentTimeMillis();
+    for (int i = 0; i < NUM_ITERATIONS; i++) {
+      SpellCheckedMetadata scmd = constructSpellCheckedMetadata();
+      result = writeRead(scmd);
+    }
+    System.out.println(NUM_ITERATIONS + " spellchecked metadata I/O time:"
+        + (System.currentTimeMillis() - start) + "ms.");
+  }
+
+  /**
+   * Assembles a Spellchecked metadata Object.
+   */
+  public static final SpellCheckedMetadata constructSpellCheckedMetadata() {
+    SpellCheckedMetadata scmd = new SpellCheckedMetadata();
+    scmd.add("Content-type", "foo/bar");
+    scmd.add("Connection", "close");
+    scmd.add("Last-Modified", "Sat, 09 Dec 2006 15:09:57 GMT");
+    scmd.add("Server", "Foobar");
+    scmd.add("Date", "Sat, 09 Dec 2006 18:07:20 GMT");
+    scmd.add("Accept-Ranges", "bytes");
+    scmd.add("ETag", "\"1234567-89-01234567\"");
+    scmd.add("Content-Length", "123");
+    scmd.add(Nutch.SEGMENT_NAME_KEY, "segmentzzz");
+    scmd.add(Nutch.SIGNATURE_KEY, "123");
+    return scmd;
+  }
+
+}

@@ -1,0 +1,33 @@
+/**
+ * BSD-style license; for more info see http://pmd.sourceforge.net/license.html
+ */
+package net.sourceforge.pmd.typeresolution.rules;
+
+import net.sourceforge.pmd.AbstractRule;
+import net.sourceforge.pmd.ast.ASTFormalParameters;
+import net.sourceforge.pmd.ast.ASTMethodDeclarator;
+
+/**
+ * The method clone() should only be implemented if the class implements the
+ * Cloneable interface with the exception of a final method that only throws
+ * CloneNotSupportedException. This version uses PMD's type resolution
+ * facilities, and can detect if the class implements or extends a Cloneable
+ * class
+ * 
+ * @author acaplan
+ * 
+ */
+public class CloneMethodMustImplementCloneable extends AbstractRule {
+
+    public Object visit(ASTMethodDeclarator node, Object data) {
+        if (!"clone".equals(node.getImage())) {
+            return data;
+        }
+        int countParams = ((ASTFormalParameters) node.jjtGetChild(0)).jjtGetNumChildren();
+        if (countParams != 0) {
+            return data;
+        }
+        addViolation(data, node);
+        return data;
+    }
+}

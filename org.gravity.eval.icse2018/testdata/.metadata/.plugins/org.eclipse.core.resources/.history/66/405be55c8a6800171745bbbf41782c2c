@@ -1,0 +1,24 @@
+package edu.ncsu.csc.itrust.unit.dao.auth;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
+
+public class AuthDAOExceptionTest extends TestCase {
+	private AuthDAO evilDAO = EvilDAOFactory.getEvilInstance().getAuthDAO();
+
+	@Override
+	protected void setUp() throws Exception {
+	}
+
+	public void testGetSecurityQuestion() throws Exception {
+		try {
+			evilDAO.getSecurityAnswer(0L);
+			fail("DBException should have been thrown");
+		} catch (DBException e) {
+			assertEquals(EvilDAOFactory.MESSAGE, e.getSQLException().getMessage());
+		}
+	}
+	
+}

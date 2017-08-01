@@ -1,0 +1,139 @@
+/***************************************************************************
+                           GanttHTMLExport.java  -  description
+                             -------------------
+    begin                : feb 2003
+    copyright            : (C) 2003 by Thomas Alexandre
+    email                : alexthomas(at)ganttproject.org
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+
+package net.sourceforge.ganttproject.io;
+
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+
+import net.sourceforge.ganttproject.GanttProject;
+import net.sourceforge.ganttproject.GanttTree;
+import net.sourceforge.ganttproject.language.GanttLanguage;
+import net.sourceforge.ganttproject.resource.HumanResource;
+import net.sourceforge.ganttproject.resource.HumanResourceManager;
+import net.sourceforge.ganttproject.task.ResourceAssignment;
+import net.sourceforge.ganttproject.task.Task;
+
+/** 
+  * Class able to export the project in HTML
+  * @author Pawel Lipinski (90%)
+  */
+public class GanttHTMLExport {	
+	private static GanttLanguage language = GanttLanguage.getInstance();				
+	
+	/** Write the tasks */
+	private static String writeTasks(GanttTree tree) {	
+		StringBuffer out = new StringBuffer();
+		ArrayList lot=tree.getAllTasks();
+		for(int i=0, k=lot.size(); i < k; i++) {
+      DefaultMutableTreeNode node = (DefaultMutableTreeNode)lot.get(i);
+			Task t = (Task) (node).getUserObject();
+            
+      int depth = 0;
+      TreeNode up = node;
+       while ((up = up.getParent()) != null && up != tree.getRoot()) {
+          depth += 1;
+       }
+
+			if(t!=t.getManager().getRootTask()) {
+				out.append("\t\t<task depth=\""+depth+"\">\n");
+				out.append("\t\t\t<name>" + correct(t.getName())  + "</name>\n");
+				out.append("\t\t\t<begin>" + t.getStart()  + "</begin>\n");
+				out.append("\t\t\t<end>" + t.getEnd()  + "</end>\n");
+				out.append("\t\t\t<milestone>" + (t.isMilestone() ? "true" : "false")  + "</milestone>\n");
+				out.append("\t\t\t<progress>" + t.getCompletionPercentage()  + "</progress>\n");
+				// list all assigned users
+                StringBuffer usersS = new StringBuffer();
+                ResourceAssignment[] assignments = t.getAssignments();
+				if (assignments.length>0) {
+				    usersS.append(assignments[0].getResource().getName());
+                }
+				for(int j=1;j<assignments.length;j++) {
+					usersS.append(", " + assignments[j].getResource().getName());
+                }
+				out.append("\t\t\t<assigned-to>" + correct(usersS.toString())  + "</assigned-to>\n");
+				out.append("\t\t\t<notes><![CDATA[" + ((t.getNotes() == null || t.getNotes().length() == 0) ? " " : t.getNotes())  + "]]></notes>\n");
+				out.append("\t\t</task>\n");				    
+			}
+		}
+		return out.toString();
+	}
+	
+	/** Write the resources */
+	private static String writeResources(GanttProject appli)
+	{
+		StringBuffer out = new StringBuffer();				
+		
+		HumanResourceManager resMan=(HumanResourceManager) appli.getHumanResourceManager();
+        ArrayList lor=resMan.getResources();
+		
+//		String []_function=RoleManager.Access.getInstance().getRoleNames();
+		for(int i=0, j=lor.size(); i < j; i++) {
+			HumanResource p = (HumanResource)lor.get(i);
+			out.append("\t\t<resource>\n");
+			out.append("\t\t\t<name>" + correct(p.toString()) + "</name>\n");
+			out.append("\t\t\t<role>" + correct(p.getRole().getName()) + "</role>\n");
+			out.append("\t\t\t<mail>" + (p.getMail()==null || p.getMail().length() == 0 ? " " : correct(p.getMail())) + "</mail>\n");
+			out.append("\t\t\t<phone>" + (p.getPhone()==null || p.getPhone().length() == 0 ? " " : correct(p.getPhone())) + "</phone>\n");
+			out.append("\t\t</resource>\n");
+		}
+		return out.toString();
+	}
+	
+	
+	/** Correct the charcters to be compatible with xml format */
+  public static String correct(String s) {
+    String res;
+    res = s.replaceAll("&", "&#38;");
+    res = res.replaceAll("<", "&#60;");
+    res = res.replaceAll(">", "&#62;");
+    res = res.replaceAll("/", "&#47;"); 
+    res = res.replaceAll("\"", "&#34;");  
+    return res;
+  }
+
+
+    /** the name of the files */	
+    public static String getFileName(File f) {
+        String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 &&  i < s.length() - 1) {
+           //ext = s.substring(0,i).toLowerCase();
+        	 ext = s.substring(0,i);
+        }
+        System.out.println(ext+"  "+s);
+        return ext;
+    }
+	
+	/**Return the extention for the file*/
+	public static String getExtention(File f){
+		String ext = null;
+        String s = f.getName();
+        int i = s.lastIndexOf('.');
+
+        if (i > 0 &&  i < s.length() - 1) {
+            ext = s.substring(i+1,s.length()).toLowerCase();
+        }
+        return ext;	
+	}
+}

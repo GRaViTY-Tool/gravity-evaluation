@@ -1,0 +1,23 @@
+package edu.ncsu.csc.itrust.unit.dao.patient;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
+
+public class PatientDAOExceptionTest extends TestCase {
+	private PatientDAO evilDAO = EvilDAOFactory.getEvilInstance().getPatientDAO();
+
+	@Override
+	protected void setUp() throws Exception {
+	}
+
+	public void testAddEmptyPatientException() throws Exception {
+		try {
+			evilDAO.addEmptyPatient();
+			fail("DBException should have been thrown");
+		} catch (DBException e) {
+			assertEquals(EvilDAOFactory.MESSAGE, e.getSQLException().getMessage());
+		}
+	}
+}

@@ -1,0 +1,193 @@
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 13:10:46.849LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1500030653081 GRaViTY convert project: 01_QuickUML2001_tmp_blob
+LOG: 1500030653086 MoDisco discover project: 01_QuickUML2001_tmp_blob
+LOG: 1500030656958 MoDisco discover project - done 3872ms
+LOG: 1500030656958 MoDisco preprocessing
+LOG: 1500030657117 MoDisco preprocessing - done 159ms
+LOG: 1500030657119 eMoflon TGG fwd trafo
+LOG: 1500030670412 eMoflon TGG fwd trafo - done 13293ms
+LOG: 1500030670412 GRaViTY convert project - done 17331ms
+LOG: 1500030670507 Hulk Anti-Pattern Detection
+LOG: 1500030670528 Hulk Number of outgoing invocations
+LOG: 1500030670541 Hulk Number of outgoing invocations - done 13ms
+LOG: 1500030670541 Hulk Incomming Invocation custom
+LOG: 1500030670543 Hulk Incomming Invocation custom - done 2ms
+LOG: 1500030670543 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500030670545 Hulk Relation between Incoming and Outgoing Invocations - done 2ms
+LOG: 1500030670545 Hulk Controller Class Smell
+LOG: 1500030670561 Hulk Controller Class Smell - done 16ms
+LOG: 1500030670561 Hulk Number of distinct fields accessed by each method
+LOG: 1500030670564 Hulk Number of distinct fields accessed by each method - done 3ms
+LOG: 1500030670564 Hulk Number of Methods
+LOG: 1500030670565 Hulk Number of Methods - done 1ms
+LOG: 1500030670566 Hulk Number of fields
+LOG: 1500030670567 Hulk Number of fields - done 1ms
+LOG: 1500030670567 Hulk Calculate LCOM5 on PG
+LOG: 1500030670569 Hulk Calculate LCOM5 on PG - done 2ms
+LOG: 1500030670570 Hulk Low Cohesion Smell
+LOG: 1500030670584 Hulk Low Cohesion Smell - done 14ms
+LOG: 1500030670584 Hulk Number of Members
+LOG: 1500030670586 Hulk Number of Members - done 2ms
+LOG: 1500030670586 Hulk Large Class Smell
+LOG: 1500030670589 Hulk Large Class Smell - done 3ms
+LOG: 1500030670589 Hulk Large Class or Low Cohesion Smell
+LOG: 1500030670591 Hulk Large Class or Low Cohesion Smell - done 2ms
+LOG: 1500030670592 Hulk God Class [Anti-Pattern]
+LOG: 1500030670594 Hulk God Class [Anti-Pattern] - done 2ms
+LOG: 1500030670594 Hulk Number of Getters
+LOG: 1500030670604 Hulk Number of Getters - done 10ms
+LOG: 1500030670604 Hulk Number of setter Methods
+LOG: 1500030670605 Hulk Number of setter Methods - done 1ms
+LOG: 1500030670605 Hulk Relation between Methods and Getters/Setters
+LOG: 1500030670608 Hulk Relation between Methods and Getters/Setters - done 3ms
+LOG: 1500030670608 Hulk Getter/Setter Smell
+LOG: 1500030670615 Hulk Getter/Setter Smell - done 7ms
+LOG: 1500030670616 Hulk Data Class Smell
+LOG: 1500030670622 Hulk Data Class Smell - done 6ms
+LOG: 1500030670622 Hulk Data Class Accessor Smell
+LOG: 1500030670631 Hulk Data Class Accessor Smell - done 9ms
+LOG: 1500030670631 Hulk The Blob [Anti-Pattern]
+LOG: 1500030670637 Hulk The Blob [Anti-Pattern] - done 6ms
+LOG: 1500030670637 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1500030670674 Hulk Calculate the Method accesses from Blob to DataClass - done 37ms
+LOG: 1500030670676 Hulk Connected Members
+LOG: 1500030670679 Hulk Connected Members - done 3ms
+LOG: 1500030670679 Hulk Member Cluster Accesses
+LOG: 1500030670681 Hulk Member Cluster Accesses - done 2ms
+LOG: 1500030670681 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1500030670801 Hulk Alternative Resolve Blob [Anti-Pattern] - done 120ms
+LOG: 1500030670801 Hulk Anti-Pattern Detection - done 294ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:11:30] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:11:41] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:11:41] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:11:41] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:11:41] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:11:44] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:11:44] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:11:44] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:11:44] Starting task: DcfTask
+LOG: >   [2017-07-14 13:11:44] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:11:44] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:11:46] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:11:46] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:11:46] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:11:46] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:11:46] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:11:46] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:11:47] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:11:47] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:11:47] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:11:47] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:11:47] Task ended: GraphDumpTask Result:OK
+LOG: void saveMember(Member) [in MemberEditorPanel [in MemberEditorPanel.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: void editMember(Member) [in MemberEditorPanel [in MemberEditorPanel.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: void editMethod(Method) [in MethodEditorPanel [in MethodEditorPanel.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: void saveMethod(Method) [in MethodEditorPanel [in MethodEditorPanel.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: void saveItem(Item) [in ItemEditor [in ItemEditor.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: void setItem(Item) [in ItemEditor [in ItemEditor.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]
+LOG: 1500030720125 GRaViTY convert project: 01_QuickUML2001_tmp_blob
+LOG: 1500030720125 MoDisco discover project: 01_QuickUML2001_tmp_blob
+LOG: 1500030720612 MoDisco discover project - done 487ms
+LOG: 1500030720612 MoDisco preprocessing
+LOG: 1500030720645 MoDisco preprocessing - done 33ms
+LOG: 1500030720645 eMoflon TGG fwd trafo
+LOG: 1500030724132 eMoflon TGG fwd trafo - done 3487ms
+LOG: 1500030724132 GRaViTY convert project - done 4007ms
+LOG: 1500030724162 Hulk Anti-Pattern Detection
+LOG: 1500030724163 Hulk Number of outgoing invocations
+LOG: 1500030724169 Hulk Number of outgoing invocations - done 6ms
+LOG: 1500030724169 Hulk Incomming Invocation custom
+LOG: 1500030724170 Hulk Incomming Invocation custom - done 1ms
+LOG: 1500030724170 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500030724170 Hulk Relation between Incoming and Outgoing Invocations - done 0ms
+LOG: 1500030724171 Hulk Controller Class Smell
+LOG: 1500030724172 Hulk Controller Class Smell - done 1ms
+LOG: 1500030724172 Hulk Number of distinct fields accessed by each method
+LOG: 1500030724173 Hulk Number of distinct fields accessed by each method - done 1ms
+LOG: 1500030724173 Hulk Number of Methods
+LOG: 1500030724174 Hulk Number of Methods - done 1ms
+LOG: 1500030724174 Hulk Number of fields
+LOG: 1500030724174 Hulk Number of fields - done 0ms
+LOG: 1500030724174 Hulk Calculate LCOM5 on PG
+LOG: 1500030724176 Hulk Calculate LCOM5 on PG - done 2ms
+LOG: 1500030724176 Hulk Low Cohesion Smell
+LOG: 1500030724178 Hulk Low Cohesion Smell - done 2ms
+LOG: 1500030724178 Hulk Number of Members
+LOG: 1500030724180 Hulk Number of Members - done 2ms
+LOG: 1500030724180 Hulk Large Class Smell
+LOG: 1500030724182 Hulk Large Class Smell - done 2ms
+LOG: 1500030724183 Hulk Large Class or Low Cohesion Smell
+LOG: 1500030724189 Hulk Large Class or Low Cohesion Smell - done 6ms
+LOG: 1500030724189 Hulk God Class [Anti-Pattern]
+LOG: 1500030724190 Hulk God Class [Anti-Pattern] - done 1ms
+LOG: 1500030724190 Hulk Number of Getters
+LOG: 1500030724191 Hulk Number of Getters - done 1ms
+LOG: 1500030724191 Hulk Number of setter Methods
+LOG: 1500030724192 Hulk Number of setter Methods - done 1ms
+LOG: 1500030724192 Hulk Relation between Methods and Getters/Setters
+LOG: 1500030724193 Hulk Relation between Methods and Getters/Setters - done 1ms
+LOG: 1500030724193 Hulk Getter/Setter Smell
+LOG: 1500030724197 Hulk Getter/Setter Smell - done 4ms
+LOG: 1500030724197 Hulk Data Class Smell
+LOG: 1500030724201 Hulk Data Class Smell - done 4ms
+LOG: 1500030724201 Hulk Data Class Accessor Smell
+LOG: 1500030724204 Hulk Data Class Accessor Smell - done 3ms
+LOG: 1500030724204 Hulk The Blob [Anti-Pattern]
+LOG: 1500030724205 Hulk The Blob [Anti-Pattern] - done 1ms
+LOG: 1500030724205 Hulk Anti-Pattern Detection - done 43ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:12:11] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:12:16] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:12:16] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:12:16] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:12:16] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:12:18] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:12:18] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:12:18] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:12:18] Starting task: DcfTask
+LOG: >   [2017-07-14 13:12:18] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:12:18] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:12:19] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:12:19] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:12:19] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:12:19] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:12:19] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:12:19] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:12:19] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:12:19] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:12:19] Task ended: GraphDumpTask Result:OK

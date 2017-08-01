@@ -1,0 +1,223 @@
+package net.sf.jabref.imports;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JOptionPane;
+
+import net.sf.jabref.BibtexEntry;
+import net.sf.jabref.Globals;
+import net.sf.jabref.util.Pair;
+
+/**
+ * Role of an importer for JabRef.
+ * 
+ * <p>Importers are sorted according to following criteria
+ * <ol><li>
+ *   custom importers come first, then importers shipped with JabRef
+ * </li><li>
+ *   then importers are sorted by name.
+ * </li></ol>
+ * </p>
+ */
+public abstract class ImportFormat implements Comparable<ImportFormat> {
+
+    private boolean isCustomImporter;
+    
+    /**
+     * Constructor for custom importers.
+     */
+    public ImportFormat() {
+      this.isCustomImporter = false;
+    }
+
+    /**
+     * Check whether the source is in the correct format for this importer.
+     */
+    public abstract boolean isRecognizedFormat(InputStream in) throws IOException;
+
+    /**
+     * Parse the entries in the source, and return a List of BibtexEntry
+     * objects.
+     */
+    public abstract List<BibtexEntry> importEntries(InputStream in) throws IOException;
+
+
+    /**
+     * Name of this import format.
+     * 
+     * <p>The name must be unique.</p>
+     * 
+     * @return format name, must be unique and not <code>null</code>
+     */
+    public abstract String getFormatName();
+    
+    /**
+     * Extensions that this importer can read.
+     * 
+     * @return comma separated list of extensions or <code>null</code> for the default
+     */
+    public String getExtensions() {
+      return null;
+    }
+    
+    /**
+     * Short, one token ID to identify the format from the command line.
+     * 
+     * @return command line ID
+     */
+    public String getCLIId() {
+      String id = getFormatName();
+      StringBuffer result = new StringBuffer(id.length());
+      for (int i = 0; i < id.length(); i++) {
+        char c = id.charAt(i);
+        if (Character.isLetterOrDigit(c)) {
+          result.append(Character.toLowerCase(c));
+        }
+      }
+      return result.toString();
+    }
+    
+    /**
+     * Description  of the ImportFormat.
+     * 
+     * <p>Implementors of ImportFormats should override this. Ideally, it should specify
+     * <ul><li>
+     *   what kind of entries from what sources and based on what specification it is able to import
+     * </li><li>
+     *   by what criteria it {@link #isRecognizedFormat(InputStream) recognizes} an import format
+     * </li></ul>
+     * 
+     * @return description of the import format
+     */
+    public String getDescription() {
+      return "No description available for " + getFormatName() + ".";
+    }
+    
+    /**
+     * Sets if this is a custom importer.
+     * 
+     * <p>For custom importers added dynamically to JabRef, this will be
+     * set automatically by JabRef.</p>
+     * 
+     * @param isCustomImporter if this is a custom importer
+     */
+    public final void setIsCustomImporter(boolean isCustomImporter) {
+      this.isCustomImporter = isCustomImporter;
+    }
+    
+    /**
+     * Wether this importer is a custom importer.
+     * 
+     * <p>Custom importers will have precedence over built-in importers.</p>
+     * 
+     * @return  wether this is a custom importer
+     */
+    public final boolean getIsCustomImporter() {
+      return this.isCustomImporter; 
+    }
+        
+    /*
+     *  (non-Javadoc)
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+      return getFormatName().hashCode();
+    }
+    
+    /*
+     *  (non-Javadoc)
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object o) {
+      return o != null 
+          && o instanceof ImportFormat
+          && ((ImportFormat)o).getIsCustomImporter() == getIsCustomImporter() 
+          && ((ImportFormat)o).getFormatName().equals(getFormatName());
+    }
+    
+    /*
+     *  (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    public String toString() {
+      return getFormatName();
+    }
+    
+    /*
+     *  (non-Javadoc)
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+    public int compareTo(ImportFormat importer) {
+      int result = 0;
+      if (getIsCustomImporter() == importer.getIsCustomImporter()) {
+        result = getFormatName().compareTo(importer.getFormatName());
+      } else {
+        result = getIsCustomImporter() ? 1 : -1;
+      }
+      return result;
+    }
+
+	public void run() {
+	    if (!fileOk)
+	        return;
+	
+	    // We import all files and collect their results:
+		List<Pair<String, ParserResult>> imports = new ArrayList<Pair<String, ParserResult>>();
+		for (String filename : filenames) {
+			try {
+				if (importer != null) {
+					// Specific importer:
+					ParserResult pr = new ParserResult(
+						Globals.importFormatReader.importFromFile(importer,
+							filename));
+	
+					imports.add(new Pair<String, ParserResult>(importer
+						.getFormatName(), pr));
+				} else {
+					// Unknown format:
+	                frame.output(Globals.lang("Importing in unknown format")+"...");
+	                imports.add(Globals.importFormatReader
+						.importUnknownFormat(filename));
+				}
+			} catch (IOException e) {
+				// No entries found...
+	            e.printStackTrace();
+	        }
+		}
+	
+	
+	
+	    // Ok, done. Then try to gather in all we have found. Since we might
+		// have found
+	    // one or more bibtex results, it's best to gather them in a
+		// BibtexDatabase.
+	    bibtexResult = mergeImportResults(imports);
+	    
+	    
+	    /* show parserwarnings, if any. */
+		for (Pair<String, ParserResult> p : imports) {
+	        if (p != null) {
+	            ParserResult pr = p.v;
+	            if (pr.hasWarnings()) {
+	                if (Globals.prefs
+	                        .getBoolean("displayKeyWarningDialogAtStartup")
+	                        && pr.hasWarnings()) {
+	                    String[] wrns = pr.warnings();
+	                    StringBuffer wrn = new StringBuffer();
+	                    for (int j = 0; j < wrns.length; j++)
+	                        wrn.append(j + 1).append(". ").append(wrns[j])
+	                                .append("\n");
+	                    if (wrn.length() > 0)
+	                        wrn.deleteCharAt(wrn.length() - 1);
+	                    JOptionPane.showMessageDialog(frame, wrn.toString(),
+	                            Globals.lang("Warnings"),
+	                            JOptionPane.WARNING_MESSAGE);
+	                }
+	            }
+	        }
+		}
+	}
+}

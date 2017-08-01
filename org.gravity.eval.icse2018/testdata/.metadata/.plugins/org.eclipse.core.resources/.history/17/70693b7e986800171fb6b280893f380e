@@ -1,0 +1,33 @@
+package junit.tests;
+
+import junit.framework.TestCase;
+import junit.tests.framework.TestCaseTest.TornDown;
+
+/**
+ * A helper test case for testing whether the testing method
+ * is run.
+ */
+public class WasRun extends TestCase {
+	public boolean fWasRun= false;
+		protected void runTest() {
+			fWasRun= true;
+		}
+		public void testTearDownAfterError() {
+			TornDown fails= new TornDown();
+			verifyError(fails);
+			assertTrue(fails.fTornDown);
+		}
+		public void testRunAndTearDownFails() {
+			TornDown fails= new TornDown() {
+				protected void tearDown() {
+					super.tearDown();
+					throw new Error();
+				}
+				protected void runTest() {
+					throw new Error();
+				}
+			};
+			verifyError(fails);
+			assertTrue(fails.fTornDown);
+		}
+}

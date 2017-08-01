@@ -1,0 +1,55 @@
+/*
+ * Package package net.sf.jabref.imports;
+ * Created on Jul 12, 2004
+ * Author mspiegel
+ *
+ */
+package net.sf.jabref.imports;
+
+/**
+ * @author mspiegel
+ *
+ */
+public class BooleanAssign {
+    
+    boolean value;
+    
+    /**
+	 * @param b
+	 */
+	public BooleanAssign(boolean b) {
+		setValue(b);		
+	}
+
+	public void setValue(boolean value) {
+        this.value = value;
+    }
+    
+    public boolean getValue() {
+        return(value);
+    }
+
+	/**
+	 * @param oldValue
+	 * @param newValue
+	 * @param fieldName
+	 * @return overwrite
+	 */
+	private boolean makeOverwriteChoice(String oldValue, String newValue,
+	        String fieldName) {
+	    boolean overwrite;
+	    if ((oldValue == null) || (oldValue.equals("")))
+	        overwrite = true;
+	    else if (oldValue.equals(newValue))
+	        overwrite = false;
+	    else if (overwriteAll.getValue() == true)
+	        overwrite = true;
+	    else if (overwriteNone.getValue() == true)
+	        overwrite = false;
+	    else
+	        overwrite = overwriteDialog(oldValue, newValue, fieldName);
+	    if (overwrite)
+	        recordFound.setValue(true);
+	    return overwrite;
+	}
+}
