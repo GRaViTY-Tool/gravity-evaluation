@@ -1,0 +1,518 @@
+package tests.net.sf.jabref.util;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.Collection;
+import java.util.List;
+
+import junit.framework.TestCase;
+import net.sf.jabref.BibtexEntry;
+import net.sf.jabref.Globals;
+import net.sf.jabref.JabRefPreferences;
+import net.sf.jabref.imports.BibtexParser;
+import net.sf.jabref.imports.ParserResult;
+import net.sf.jabref.util.EncryptionNotSupportedException;
+import net.sf.jabref.util.XMPUtil;
+
+import org.pdfbox.exceptions.COSVisitorException;
+import org.pdfbox.pdmodel.PDDocument;
+import org.pdfbox.pdmodel.PDDocumentCatalog;
+import org.pdfbox.pdmodel.PDPage;
+import org.pdfbox.pdmodel.common.PDMetadata;
+
+/**
+ * 
+ * Limitations: The test suite only handles UTF8. Not UTF16.
+ * 
+ * @author Christopher Oezbek <oezi@oezi.de>
+ */
+public class XMPUtilTest extends TestCase {
+
+	/**
+	 * Wrap bibtex-data (<bibtex:author>...) into an rdf:Description.
+	 * 
+	 * @param bibtex
+	 * @return
+	 */
+	public static String bibtexDescription(String bibtex) {
+		return "      <rdf:Description rdf:about='' xmlns:bibtex='http://jabref.sourceforge.net/bibteXMP/'>\n"
+				+ bibtex + "\n" + "      </rdf:Description>\n";
+	}
+
+	/**
+	 * Wrap bibtex-descriptions (rdf:Description) into the xpacket header.
+	 * 
+	 * @param bibtexDescriptions
+	 * @return
+	 */
+	public static String bibtexXPacket(String bibtexDescriptions) {
+
+		StringBuffer xmp = new StringBuffer();
+
+		xmp.append("<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>\n");
+		xmp.append("  <x:xmpmeta xmlns:x='adobe:ns:meta/'>\n");
+		xmp
+				.append("    <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:iX='http://ns.adobe.com/iX/1.0/' xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'>\n");
+
+		xmp.append(bibtexDescriptions);
+
+		xmp.append("    </rdf:RDF>\n");
+		xmp.append("  </x:xmpmeta>\n");
+		xmp.append("<?xpacket end='r'?>");
+
+		return xmp.toString();
+	}
+
+	/**
+	 * Write a manually constructed xmp-string to file
+	 * 
+	 * @param xmpString
+	 * @throws Exception
+	 */
+	public void writeManually(File tempFile, String xmpString) throws Exception {
+
+		PDDocument document = null;
+
+		try {
+			document = PDDocument.load(tempFile.getAbsoluteFile());
+			if (document.isEncrypted()) {
+				System.err
+						.println("Error: Cannot add metadata to encrypted document.");
+				System.exit(1);
+			}
+			PDDocumentCatalog catalog = document.getDocumentCatalog();
+
+			// Convert to UTF8 and make available for metadata.
+			ByteArrayOutputStream bs = new ByteArrayOutputStream();
+			OutputStreamWriter os = new OutputStreamWriter(bs, "UTF8");
+			os.write(xmpString);
+			os.close();
+			ByteArrayInputStream in = new ByteArrayInputStream(bs.toByteArray());
+
+			PDMetadata metadataStream = new PDMetadata(document, in, false);
+			catalog.setMetadata(metadataStream);
+
+			document.save(tempFile.getAbsolutePath());
+
+		} finally {
+			if (document != null)
+				document.close();
+		}
+	}
+
+	public static String bibtexEntry2BibtexString(BibtexEntry e)
+			throws IOException {
+		StringWriter sw = new StringWriter();
+		e.write(sw, new net.sf.jabref.export.LatexFieldFormatter(), false);
+		return sw.getBuffer().toString();
+	}
+
+	/* TEST DATA */
+	public String t1BibtexString() {
+		return "@article{canh05,\n"
+				+ "  author = {Crowston, K. and Annabi, H. and Howison, J. and Masango, C.},\n"
+				+ "  title = {Effective work practices for floss development: A model and propositions},\n"
+				+ "  booktitle = {Hawaii International Conference On System Sciences (HICSS)},\n"
+				+ "  year = {2005},\n" + "  owner = {oezbek},\n"
+				+ "  timestamp = {2006.05.29},\n"
+				+ "  url = {http://james.howison.name/publications.html}}\n";
+	}
+
+	public BibtexEntry t1BibtexEntry() throws IOException {
+		return bibtexString2BibtexEntry(t1BibtexString());
+	}
+
+	public String t2XMP() {
+		return "<rdf:Description rdf:about='' xmlns:bibtex='http://jabref.sourceforge.net/bibteXMP/' "
+				+ "bibtex:title='�pt�mz�t��n' "
+				+ "bibtex:bibtexkey='OezbekC06' "
+				+ "bibtex:entrytype='INCOLLECTION' "
+				+ "bibtex:year='2003' "
+				+ "bibtex:booktitle='Proceedings of the of the 25th International Conference on \n Software-Engineering (Portland, Oregon)' "
+				+ ">\n"
+				+ "<bibtex:pdf>YeKis03 - Towards.pdf</bibtex:pdf>\n"
+				+ "</rdf:Description>\n";
+	}
+
+	public String t2BibtexString() throws IOException {
+		return bibtexEntry2BibtexString(t2BibtexEntry());
+	}
+
+	public String t3BibtexString() throws IOException {
+		return bibtexEntry2BibtexString(t3BibtexEntry());
+	}
+
+	public String t3XMP() {
+		return bibtexDescription("<bibtex:title>Hypersonic ultra-sound</bibtex:title>\n"
+				+ "<bibtex:author><rdf:Seq>\n"
+				+ "  <rdf:li>Kelly Clarkson</rdf:li>"
+				+ "  <rdf:li>Ozzy Osbourne</rdf:li>"
+				+ "</rdf:Seq></bibtex:author>"
+				+ "<bibtex:editor><rdf:Seq>"
+				+ "  <rdf:li>Huey Duck</rdf:li>"
+				+ "  <rdf:li>Dewey Duck</rdf:li>"
+				+ "  <rdf:li>Louie Duck</rdf:li>"
+				+ "</rdf:Seq></bibtex:editor>"
+				+ "<bibtex:bibtexkey>Clarkson06</bibtex:bibtexkey>"
+				+ "<bibtex:journal>International Journal of High Fidelity</bibtex:journal>"
+				+ "<bibtex:booktitle>Catch-22</bibtex:booktitle>"
+				+ "<bibtex:pdf>YeKis03 - Towards.pdf</bibtex:pdf>"
+				+ "<bibtex:keywords>peanut,butter,jelly</bibtex:keywords>"
+				+ "<bibtex:entrytype>Inproceedings</bibtex:entrytype>"
+				+ "<bibtex:year>1982</bibtex:year>"
+				+ "<bibtex:month>#jul#</bibtex:month>"
+				+ "<bibtex:abstract>The success of the Linux operating system has demonstrated the viability of an alternative form of software development � open source software � that challenges traditional assumptions about software markets. Understanding what drives open source developers to participate in open source projects is crucial for assessing the impact of open source software. This article identifies two broad types of motivations that account for their participation in open source projects. The first category includes internal factors such as intrinsic motivation and altruism, and the second category focuses on external rewards such as expected future returns and personal needs. This article also reports the results of a survey administered to open source programmers.</bibtex:abstract>");
+	}
+
+	/**
+	 * The PDF file that basically all operations are done upon.
+	 */
+	File pdfFile;
+
+	/**
+	 * Create a temporary PDF-file with a single empty page.
+	 */
+	public void setUp() throws IOException, COSVisitorException {
+
+		pdfFile = File.createTempFile("JabRef", ".pdf");
+
+		PDDocument pdf = null;
+		try {
+			pdf = new PDDocument();
+			pdf.addPage(new PDPage()); // Need page to open in Acrobat
+			pdf.save(pdfFile.getAbsolutePath());
+		} finally {
+			if (pdf != null)
+				pdf.close();
+		}
+
+		// Don't forget to initialize the preferences
+		if (Globals.prefs == null) {
+			Globals.prefs = JabRefPreferences.getInstance();
+		}
+
+		// Store Privacy Settings
+		prefs = JabRefPreferences.getInstance();
+
+		use = prefs.getBoolean("useXmpPrivacyFilter");
+		privacyFilters = prefs.getStringArray("xmpPrivacyFilters");
+
+		// The code assumes privacy filters to be off
+		prefs.putBoolean("useXmpPrivacyFilter", false);
+	}
+
+	JabRefPreferences prefs;
+
+	boolean use;
+
+	String[] privacyFilters;
+
+	public static String readManually(File tempFile) throws IOException {
+
+		PDDocument document = null;
+
+		try {
+			document = PDDocument.load(tempFile.getAbsoluteFile());
+			if (document.isEncrypted()) {
+				System.err
+						.println("Error: Cannot add metadata to encrypted document.");
+				System.exit(1);
+			}
+			PDDocumentCatalog catalog = document.getDocumentCatalog();
+			PDMetadata meta = catalog.getMetadata();
+
+			if (meta == null) {
+				return null;
+			} else {
+				// PDMetadata.getInputStreamAsString() does not work
+
+				// Convert to UTF8 and make available for metadata.
+				InputStreamReader is = new InputStreamReader(meta
+						.createInputStream(), "UTF8");
+				return slurp(is).trim(); // Trim to kill padding end-newline.
+			}
+		} finally {
+			if (document != null)
+				document.close();
+		}
+	}
+
+	/**
+	 * Test whether the helper function work correctly.
+	 * 
+	 * @throws Exception
+	 */
+	public void testWriteReadManually() throws Exception {
+
+		String bibtex = "<bibtex:year>2003</bibtex:year>\n"
+				+ "<bibtex:title>�pt�mz�t��n</bibtex:title>\n"
+				+ "<bibtex:bibtexkey>OezbekC06</bibtex:bibtexkey>\n";
+
+		writeManually(pdfFile, bibtexXPacket(bibtexDescription(bibtex)));
+		assertEquals(bibtexXPacket(bibtexDescription(bibtex)),
+				readManually(pdfFile));
+
+		bibtex = "<bibtex:author><rdf:Seq>\n"
+				+ "  <rdf:li>Kelly Clarkson</rdf:li>"
+				+ "  <rdf:li>Ozzy Osbourne</rdf:li>"
+				+ "</rdf:Seq></bibtex:author>" + "<bibtex:editor><rdf:Seq>"
+				+ "  <rdf:li>Huey Duck</rdf:li>"
+				+ "  <rdf:li>Dewey Duck</rdf:li>"
+				+ "  <rdf:li>Louie Duck</rdf:li>"
+				+ "</rdf:Seq></bibtex:editor>"
+				+ "<bibtex:bibtexkey>Clarkson06</bibtex:bibtexkey>";
+
+		writeManually(pdfFile, bibtexXPacket(bibtexDescription(bibtex)));
+		assertEquals(bibtexXPacket(bibtexDescription(bibtex)),
+				readManually(pdfFile));
+	}
+
+	/**
+	 * Test whether XMP.readFile can deal with text-properties that are not
+	 * element-nodes, but attribute-nodes
+	 * 
+	 * @throws Exception
+	 */
+	public void testAttributeRead() throws Exception {
+
+		// test 1 has attributes
+		String bibtex = t2XMP();
+
+		writeManually(pdfFile, bibtexXPacket(bibtex));
+
+		List<BibtexEntry> l = XMPUtil.readXMP(pdfFile.getAbsoluteFile());
+		assertEquals(1, l.size());
+		BibtexEntry e = l.get(0);
+
+		assertEquals(t2BibtexEntry(), e);
+	}
+
+	public void testEmpty() throws Exception {
+
+		assertEquals(null, XMPUtil.readXMP(pdfFile));
+
+	}
+
+	/**
+	 * Test whether the command-line client works correctly with writing a
+	 * single entry
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	public void testCommandLineSingleBib() throws Exception {
+
+		// First check conversion from .bib to .xmp
+		File tempBib = File.createTempFile("JabRef", ".bib");
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(tempBib);
+			fileWriter.write(t1BibtexString());
+			fileWriter.close();
+
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			PrintStream oldOut = System.out;
+			System.setOut(new PrintStream(s));
+			XMPUtil.main(new String[] { tempBib.getAbsolutePath() });
+			System.setOut(oldOut);
+			s.close();
+			String xmp = s.toString();
+
+			writeManually(pdfFile, xmp);
+
+			List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+			assertEquals(1, l.size());
+			assertEquals(t1BibtexEntry(), l.get(0));
+
+		} finally {
+			if (fileWriter != null)
+				fileWriter.close();
+			if (tempBib != null)
+				tempBib.delete();
+		}
+	}
+
+	/**
+	 * 
+	 * 
+	 * @depends XMPUtil.writeXMP
+	 * 
+	 */
+	public void testCommandLineSinglePdf() throws Exception {
+		{
+			// Write XMP to file
+
+			BibtexEntry e = t1BibtexEntry();
+
+			XMPUtil.writeXMP(pdfFile, e, null);
+
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			PrintStream oldOut = System.out;
+			System.setOut(new PrintStream(s));
+			XMPUtil.main(new String[] { pdfFile.getAbsolutePath() });
+			System.setOut(oldOut);
+			s.close();
+			String bibtex = s.toString();
+
+			ParserResult result = BibtexParser.parse(new StringReader(bibtex));
+			Collection<BibtexEntry> c = result.getDatabase().getEntries();
+			assertEquals(1, c.size());
+			BibtexEntry x = c.iterator().next();
+
+			assertEquals(e, x);
+		}
+		{
+			// Write XMP to file
+			BibtexEntry e = t1BibtexEntry();
+
+			XMPUtil.writeXMP(pdfFile, e, null);
+
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			PrintStream oldOut = System.out;
+			System.setOut(new PrintStream(s));
+			XMPUtil.main(new String[] { "-x", pdfFile.getAbsolutePath() });
+			System.setOut(oldOut);
+			s.close();
+			String xmp = s.toString();
+
+			/* Test minimal syntaxical completeness */
+			assertTrue(0 < xmp.indexOf("xpacket"));
+			assertTrue(0 < xmp.indexOf("adobe:ns:meta"));
+			assertTrue(0 < xmp
+					.indexOf("<bibtex:bibtexkey>canh05</bibtex:bibtexkey>")
+					|| 0 < xmp.indexOf("bibtex:bibtexkey="));
+			assertTrue(0 < xmp.indexOf("<rdf:li>K. Crowston</rdf:li>"));
+			assertTrue(0 < xmp.indexOf("id='W5M0MpCehiHzreSzNTczkc9d'?>")
+					|| 0 < xmp.indexOf("id=\"W5M0MpCehiHzreSzNTczkc9d\"?>"));
+			assertTrue(0 < xmp
+					.indexOf("xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'")
+					|| 0 < xmp
+							.indexOf("xmlns:rdf=\"http://www.w3.org/1999/02/22-rdf-syntax-ns#\""));
+			assertTrue(0 < xmp.indexOf("<rdf:Description"));
+			assertTrue(0 < xmp.indexOf("<?xpacket end='w'?>")
+					|| 0 < xmp.indexOf("<?xpacket end=\"w\"?>"));
+
+			/* Test contents of string */
+			writeManually(pdfFile, xmp);
+			List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+			assertEquals(1, l.size());
+
+			assertEquals(t1BibtexEntry(), l.get(0));
+		}
+	}
+
+	/**
+	 * Test whether the command-line client can pick one of several entries from
+	 * a bibtex file
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	public void testCommandLineByKey() throws Exception {
+
+		File tempBib = File.createTempFile("JabRef", ".bib");
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(tempBib);
+			fileWriter.write(t1BibtexString());
+			fileWriter.write(t2BibtexString());
+			fileWriter.close();
+
+			{ // First try canh05
+				ByteArrayOutputStream s = new ByteArrayOutputStream();
+				PrintStream oldOut = System.out;
+				System.setOut(new PrintStream(s));
+				XMPUtil.main(new String[] { "canh05",
+						tempBib.getAbsolutePath(), pdfFile.getAbsolutePath() });
+				System.setOut(oldOut);
+				s.close();
+
+				// PDF should be annotated:
+				List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+				assertEquals(1, l.size());
+				assertEquals(t1BibtexEntry(), l.get(0));
+			}
+			{ // Now try OezbekC06
+				ByteArrayOutputStream s = new ByteArrayOutputStream();
+				PrintStream oldOut = System.out;
+				System.setOut(new PrintStream(s));
+				XMPUtil.main(new String[] { "OezbekC06",
+						tempBib.getAbsolutePath(), pdfFile.getAbsolutePath() });
+				System.setOut(oldOut);
+				s.close();
+				// PDF should be annotated:
+				List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+				assertEquals(1, l.size());
+				assertEquals(t2BibtexEntry(), l.get(0));
+			}
+		} finally {
+			if (fileWriter != null)
+				fileWriter.close();
+
+			if (tempBib != null)
+				tempBib.delete();
+		}
+	}
+
+	/**
+	 * Test that we cannot use encrypted PDFs.
+	 */
+	public void testEncryption() throws Exception {
+
+		// // PDF was created using:
+		//
+		// PDDocument pdf = null;
+		// try {
+		// pdf = new PDDocument();
+		// pdf.addPage(new PDPage()); // Need page to open in Acrobat
+		// pdf.encrypt("hello", "world");
+		// pdf.save("d:/download/encrypted.pdf");
+		// } finally {
+		// if (pdf != null)
+		// pdf.close();
+		// }
+		//			
+
+		try {
+			XMPUtil.readXMP("src/tests/encrypted.pdf");
+			fail();
+		} catch (EncryptionNotSupportedException e) {
+		}
+
+		try {
+			XMPUtil.writeXMP("src/tests/encrypted.pdf", t1BibtexEntry(), null);
+			fail();
+		} catch (EncryptionNotSupportedException e) {
+		}
+	}
+
+	/**
+	 * Read the contents of a reader as one string
+	 * 
+	 * @param reader
+	 * @return
+	 * @throws IOException
+	 */
+	public static String slurp(Reader reader) throws IOException {
+		char[] chars = new char[4092];
+		StringBuffer totalBuffer = new StringBuffer();
+		int bytesRead;
+		while ((bytesRead = reader.read(chars)) != -1) {
+			if (bytesRead == 4092) {
+				totalBuffer.append(chars);
+			} else {
+				totalBuffer.append(new String(chars, 0, bytesRead));
+			}
+		}
+		return totalBuffer.toString();
+	}
+}

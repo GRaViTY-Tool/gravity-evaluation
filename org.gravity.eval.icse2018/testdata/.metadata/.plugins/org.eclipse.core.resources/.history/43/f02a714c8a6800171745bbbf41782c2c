@@ -1,0 +1,81 @@
+/**
+ * 
+ */
+package edu.ncsu.csc.itrust.unit.dao.billing;
+
+import static org.junit.Assert.*;
+
+import java.util.List;
+
+import org.junit.Test;
+
+import edu.ncsu.csc.itrust.beans.BillingBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.dao.mysql.BillingDAO;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+
+/**
+ */
+public class BillingDAOTest {
+
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private EvilDAOFactory evil;
+	private BillingDAO evil2;
+	private BillingDAO billingDAO = factory.getBillingDAO();
+	private BillingBean b1;
+	private BillingBean b2;
+	private BillingBean bean;
+	private static final long PATIENT_MID = 42L;
+	private static final int OV_ID = 3;
+	private static final long DOCTOR_MID = 9000000000L;
+	
+	/**
+	 * Test method for {@link edu.ncsu.csc.itrust.dao.mysql.BillingDAO#getBills(long)}.
+	 * @throws DBException 
+	 */
+	@Test
+	public void testGetBills() throws DBException {
+		billingDAO.addBill(b1);
+		List<BillingBean> billing = billingDAO.getBills(PATIENT_MID);
+		assertEquals(40, billing.get(0).getAmt());
+		assertEquals(3, billing.get(0).getApptID());
+		assertEquals(1, billing.get(0).getBillID());
+		assertEquals("123 somewhere drive", billing.get(0).getBillingAddress());
+		assertEquals("dad", billing.get(0).getCcHolderName());
+		assertEquals("123456789", billing.get(0).getCcNumber());
+		assertEquals("Visa", billing.get(0).getCcType());
+		assertEquals("123", billing.get(0).getCvv());
+		assertEquals(DOCTOR_MID, billing.get(0).getHcp());
+		assertEquals("123 else drive", billing.get(0).getInsAddress1());
+		assertEquals(" ", billing.get(0).getInsAddress2());
+		assertEquals("Durham", billing.get(0).getInsCity());
+		assertEquals("dad", billing.get(0).getInsHolderName());
+		assertEquals("1234", billing.get(0).getInsID());
+		assertEquals("333-333-3333", billing.get(0).getInsPhone());
+		assertEquals("insurance", billing.get(0).getInsProviderName());
+		assertEquals("NC", billing.get(0).getInsState());
+		assertEquals("27607", billing.get(0).getInsZip());
+		assertEquals(PATIENT_MID, billing.get(0).getPatient());
+		assertEquals("Unsubmitted", billing.get(0).getStatus());
+	}
+	/**
+	 * Test method for {@link edu.ncsu.csc.itrust.dao.mysql.BillingDAO#getPendingNum()}.
+	 * @throws DBException 
+	 */
+	@Test
+	public void testGetPendingNum(){
+		b1.setStatus(BillingBean.PENDING);
+		try{
+			billingDAO.addBill(b1);
+			assertEquals(1, billingDAO.getPendingNum());
+		} catch(DBException e){
+			fail();
+		}
+	}
+	
+	
+	
+
+}

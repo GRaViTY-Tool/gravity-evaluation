@@ -1,0 +1,75 @@
+/**
+ * BSD-style license; for more info see http://pmd.sourceforge.net/license.html
+ */
+package net.sourceforge.pmd.rules.strings;
+
+import net.sourceforge.pmd.AbstractRule;
+import net.sourceforge.pmd.ast.ASTAdditiveExpression;
+import net.sourceforge.pmd.ast.ASTBlockStatement;
+import net.sourceforge.pmd.ast.ASTLiteral;
+import net.sourceforge.pmd.ast.ASTName;
+import net.sourceforge.pmd.symboltable.VariableNameDeclaration;
+
+import java.util.Iterator;
+import java.util.List;
+
+/*
+ * How this rule works:
+ * find additive expressions: +
+ * check that the addition is between anything other than two literals
+ * if true and also the parent is StringBuffer constructor or append,
+ * report a violation.
+ * 
+ * @author mgriffa
+ */
+public class InefficientStringBuffering extends AbstractRule {
+
+    public Object visit(ASTAdditiveExpression node, Object data) {
+        ASTBlockStatement bs = (ASTBlockStatement) node.getFirstParentOfType(ASTBlockStatement.class);
+        if (bs == null) {
+            return data;
+        }
+
+        int immediateLiterals = 0;
+        List nodes = node.findChildrenOfType(ASTLiteral.class);
+        for (Iterator i = nodes.iterator();i.hasNext();) {
+            ASTLiteral literal = (ASTLiteral)i.next();
+            if (literal.jjtGetParent().jjtGetParent().jjtGetParent() instanceof ASTAdditiveExpression) {
+                immediateLiterals++;
+            }
+            try {
+                Integer.parseInt(literal.getImage());
+                return data;
+            } catch (NumberFormatException nfe) {
+                // NFE means new StringBuffer("a" + "b"), want to flag those
+            }
+        }
+
+        if (immediateLiterals > 1) {
+            return data;
+        }
+
+        // if literal + public static final, return
+        List nameNodes = node.findChildrenOfType(ASTName.class);
+        for (Iterator i = nameNodes.iterator(); i.hasNext();) {
+            ASTName name = (ASTName)i.next();
+            if (name.getNameDeclaration() instanceof VariableNameDeclaration) {
+                VariableNameDeclaration vnd = (VariableNameDeclaration)name.getNameDeclaration();
+                if (vnd.getAccessNodeParent().isFinal() && vnd.getAccessNodeParent().isStatic()) {
+                    return data;
+                }
+            }
+        }
+
+
+        if (bs.isAllocation()) {
+            if (isAllocatedStringBuffer(node)) {
+                addViolation(data, node);
+            }
+        } else if (isInStringBufferOperation(node, 6, "append")) {
+            addViolation(data, node);
+        }
+        return data;
+    }
+}
+

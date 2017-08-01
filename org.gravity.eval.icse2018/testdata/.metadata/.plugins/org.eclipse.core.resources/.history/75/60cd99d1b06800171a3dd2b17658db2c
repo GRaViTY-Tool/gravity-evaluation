@@ -1,0 +1,131 @@
+package tests.net.sf.jabref.imports;
+
+import java.io.IOException;
+import java.util.List;
+
+import junit.framework.TestCase;
+import net.sf.jabref.BibtexEntry;
+import net.sf.jabref.BibtexEntryType;
+import net.sf.jabref.imports.IsiImporter;
+
+/**
+ * Test cases for the IsiImporter
+ * 
+ * @author $Author: coezbek $
+ * @version $Revision: 2488 $ ($Date: 2007-11-14 01:25:31 +0100 (Wed, 14 Nov 2007) $)
+ * 
+ */
+public class IsiImporterTest extends TestCase {
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+
+	public void testImportEntries() throws IOException {
+		IsiImporter importer = new IsiImporter();
+
+		List<BibtexEntry> entries = importer.importEntries(IsiImporterTest.class
+			.getResourceAsStream("IsiImporterTest1.isi"));
+		assertEquals(1, entries.size());
+		BibtexEntry entry = entries.get(0);
+		assertEquals("Optical properties of MgO doped LiNbO$_3$ single crystals", entry
+			.getField("title"));
+		assertEquals(
+			"James Brown and James Marc Brown and Brown, J. M. and Brown, J. and Brown, J. M. and Brown, J.",
+			entry.getField("author"));
+
+		assertEquals(BibtexEntryType.ARTICLE, entry.getType());
+		assertEquals("Optical Materials", entry.getField("journal"));
+		assertEquals("2006", entry.getField("year"));
+		assertEquals("28", entry.getField("volume"));
+		assertEquals("5", entry.getField("number"));
+		assertEquals("467--72", entry.getField("pages"));
+
+		// What todo with PD and UT?
+	}
+
+	public void testIsiAuthorsConvert() {
+		assertEquals(
+			"James Brown and James Marc Brown and Brown, J. M. and Brown, J. and Brown, J. M. and Brown, J.",
+			IsiImporter
+				.isiAuthorsConvert("James Brown and James Marc Brown and Brown, J.M. and Brown, J. and Brown, J.M. and Brown, J."));
+
+		assertEquals(
+			"Joffe, Hadine and Hall, Janet E. and Gruber, Staci and Sarmiento, Ingrid A. and Cohen, Lee S. and Yurgelun-Todd, Deborah and Martin, Kathryn A.",
+			IsiImporter
+				.isiAuthorsConvert("Joffe, Hadine; Hall, Janet E; Gruber, Staci; Sarmiento, Ingrid A; Cohen, Lee S; Yurgelun-Todd, Deborah; Martin, Kathryn A"));
+
+	}
+
+	public void testIsiAuthorConvert() {
+		assertEquals("James Brown", IsiImporter.isiAuthorConvert("James Brown"));
+		assertEquals("James Marc Brown", IsiImporter.isiAuthorConvert("James Marc Brown"));
+		assertEquals("Brown, J. M.", IsiImporter.isiAuthorConvert("Brown, J.M."));
+		assertEquals("Brown, J.", IsiImporter.isiAuthorConvert("Brown, J."));
+		assertEquals("Brown, J. M.", IsiImporter.isiAuthorConvert("Brown, JM"));
+		assertEquals("Brown, J.", IsiImporter.isiAuthorConvert("Brown, J"));
+		assertEquals("Brown, James", IsiImporter.isiAuthorConvert("Brown, James"));
+		assertEquals("Hall, Janet E.", IsiImporter.isiAuthorConvert("Hall, Janet E"));
+		assertEquals("", IsiImporter.isiAuthorConvert(""));
+	}
+
+	public void testGetExtensions() {
+		// new IsiImporter().getExtensions();
+	}
+
+	public void testGetIsCustomImporter() {
+		IsiImporter importer = new IsiImporter();
+		assertEquals(false, importer.getIsCustomImporter());
+	}
+
+	public void testImportIEEEExport() throws IOException {
+		IsiImporter importer = new IsiImporter();
+
+		List<BibtexEntry> entries = importer.importEntries(IsiImporterTest.class
+			.getResourceAsStream("IEEEImport1.txt"));
+
+		assertEquals(1, entries.size());
+		BibtexEntry a = entries.get(0);
+		
+		assertEquals(a.getType().getName(), BibtexEntryType.ARTICLE, a.getType());
+		assertEquals("Geoscience and Remote Sensing Letters, IEEE", a.getField("journal"));
+		assertEquals(
+			"Improving Urban Road Extraction in High-Resolution " +
+			"Images Exploiting Directional Filtering, Perceptual " +
+			"Grouping, and Simple Topological Concepts",
+			a.getField("title"));
+
+		assertEquals("4", a.getField("volume"));
+		assertEquals("3", a.getField("number"));
+		
+		assertEquals("1545-598X", a.getField("SN"));  
+
+		assertEquals("387--391", a.getField("pages"));
+
+		assertEquals("Gamba, P. and Dell'Acqua, F. and Lisini, G.", a.getField("author"));
+
+		assertEquals("2006", a.getField("year"));
+
+		assertEquals("Perceptual grouping, street extraction, urban remote sensing", a.getField("keywords"));
+
+		assertEquals("In this letter, the problem of detecting urban road " +
+				"networks from high-resolution optical/synthetic aperture " +
+				"radar (SAR) images is addressed. To this end, this letter " +
+				"exploits a priori knowledge about road direction " +
+				"distribution in urban areas. In particular, this letter " +
+				"presents an adaptive filtering procedure able to capture the " +
+				"predominant directions of these roads and enhance the " +
+				"extraction results. After road element extraction, to both " +
+				"discard redundant segments and avoid gaps, a special " +
+				"perceptual grouping algorithm is devised, exploiting " +
+				"colinearity as well as proximity concepts. Finally, the road " +
+				"network topology is considered, checking for road " +
+				"intersections and regularizing the overall patterns using " +
+				"these focal points. The proposed procedure was tested on a " +
+				"pair of very high resolution images, one from an optical " +
+				"sensor and one from a SAR sensor. The experiments show an " +
+				"increase in both the completeness and the quality indexes " +
+				"for the extracted road network.", a.getField("abstract"));
+		
+	}
+}

@@ -1,0 +1,68 @@
+package net.sf.jabref.plugin.core;
+
+import net.sf.jabref.JabRefFrame;
+import net.sf.jabref.SidePaneComponent;
+import net.sf.jabref.plugin.PluginCore;
+import net.sf.jabref.plugin.SidePanePlugin;
+import net.sf.jabref.plugin.core.generated._JabRefPlugin;
+
+import java.util.List;
+
+import org.java.plugin.PluginLifecycleException;
+import org.java.plugin.PluginManager;
+
+/**
+ * Plug-in class for plug-in net.sf.jabref.core.
+ * 
+ * Feel free to modify this file, since only the class _JabRefPlugin 
+ * (in the subpackage net.sf.jabref.plugin.core.generated)
+ * will be overwritten, when you re-run the code generator.
+ */
+public class JabRefPlugin extends _JabRefPlugin {
+
+    public void doStart(){
+        // TODO: Will be called when plug-in is started.
+    }
+
+    public void doStop(){
+        // TODO: Will be called when plug-in is stopped.
+    }
+
+    /**
+	 * Go through all registered instances of SidePanePlugin, and register them
+	 * in the SidePaneManager.
+	 *
+	 * @param jrf The JabRefFrame.
+	 */
+	private void startSidePanePlugins(JabRefFrame jrf) {
+	
+	    JabRefPlugin jabrefPlugin = JabRefPlugin.getInstance(PluginCore.getManager());
+	    List<_JabRefPlugin.SidePanePluginExtension> plugins = jabrefPlugin.getSidePanePluginExtensions();
+	    for (_JabRefPlugin.SidePanePluginExtension extension : plugins) {
+	        SidePanePlugin plugin = extension.getSidePanePlugin();
+	        plugin.init(jrf, jrf.sidePaneManager);
+	        SidePaneComponent comp = plugin.getSidePaneComponent();
+	        jrf.sidePaneManager.register(comp.getName(), comp);
+	        jrf.addPluginMenuItem(plugin.getMenuItem());
+	    }
+	}
+
+	/**
+	 * Retrieve the Plug-in instance from the given manager.
+	 * 
+	 * @param manager
+	 *            The manager from which to retrieve the plug-in instance
+	 * 
+	 * @return The requested plug-in or null if not found.
+	 */
+	public static JabRefPlugin getInstance(PluginManager manager) {
+		try {
+            return (JabRefPlugin) manager
+					.getPlugin(JabRefPlugin.getId());
+		} catch (PluginLifecycleException e) {
+			return null;
+		} catch (IllegalArgumentException e) {
+		    return null;
+		}
+	}
+}

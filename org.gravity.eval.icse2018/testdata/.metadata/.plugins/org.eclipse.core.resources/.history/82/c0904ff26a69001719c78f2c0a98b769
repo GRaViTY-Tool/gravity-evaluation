@@ -1,0 +1,52 @@
+package test.net.sourceforge.pmd.jsp.ast;
+
+import net.sourceforge.pmd.jsp.ast.ASTCData;
+import net.sourceforge.pmd.jsp.ast.ASTElement;
+
+import java.util.Set;
+
+/**
+ * Test parsing of a JSP in document style, by checking the generated AST.
+ * 
+ * @author pieter_van_raemdonck - Application Engineers NV/SA - www.ae.be
+ * 
+ */
+public class JspDocStyleTest extends AbstractJspNodesTst {
+
+	/**
+	 * Smoke test for JSP parser.
+	 * 
+	 * @throws Throwable
+	 */
+	public void testSimplestJsp() throws Throwable {
+		assertNumberOfNodes(ASTElement.class, TEST_SIMPLEST_HTML, 1);
+	}
+
+	/**
+	 * Test correct parsing of CDATA.
+	 */
+	public void testCData() {
+		Set cdataNodes = getNodes(ASTCData.class, TEST_CDATA);
+
+		assertEquals("One CDATA node expected!", 1, cdataNodes.size());
+		ASTCData cdata = (ASTCData) cdataNodes.iterator().next();
+		assertEquals("Content incorrectly parsed!", " some <cdata> ]] ]> ", cdata
+				.getImage());
+	}
+
+	private static final String TEST_SIMPLEST_HTML = "<html/>";
+
+	private static final String TEST_ELEMENT_AND_NAMESPACE = "<h:html MyNsPrefix:MyAttr='MyValue'/>";
+
+	private static final String TEST_CDATA = "<html><![CDATA[ some <cdata> ]] ]> ]]></html>";
+
+	private static final String TEST_DOCTYPE = "<?xml version=\"1.0\" standalone='yes'?>\n"
+			+ "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" "
+			+ "\"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n"
+			+ "<greeting>Hello, world!</greeting>";
+	
+	private static final String TEST_COMMENT = "<html><!-- comment --></html>";
+	
+	private static final String TEST_ATTRIBUTE_VALUE_CONTAINING_HASH = 
+		"<tag:if something=\"#yes#\" foo=\"CREATE\">  <a href=\"#\">foo</a> </tag:if>";
+}

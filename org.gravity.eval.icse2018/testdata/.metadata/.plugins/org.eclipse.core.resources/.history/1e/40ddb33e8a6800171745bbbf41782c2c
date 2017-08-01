@@ -1,0 +1,61 @@
+package edu.ncsu.csc.itrust.exception;
+
+import java.util.List;
+
+import org.junit.Test;
+
+import edu.ncsu.csc.itrust.action.ViewFoodEntryAction;
+import edu.ncsu.csc.itrust.beans.FoodEntryBean;
+
+/**
+ * A specialized exception class for displaying iTrust error messages.
+ * This exception is handled by the default iTrust exception handler.
+ */
+public class ITrustException extends Exception {
+	private static final long serialVersionUID = 1L;
+	String message = null;
+
+	/**
+	 * The typical constructor.
+	 * @param message A message to be displayed to the screen.
+	 */
+	public ITrustException(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * For messages which are displayed to the user. Usually, this is a very general message for security
+	 * reasons.
+	 */
+	@Override
+	public String getMessage() {
+		if (message == null)
+			return "An error has occurred. Please see log for details.";
+		return message;
+	}
+
+	
+	/**
+	 * For exceptions which show a lot of technical detail, usually delegated to a subclass
+	 * 
+	 * @return
+	 */
+	public String getExtendedMessage() {
+		return "No extended information.";
+	}
+
+	/**
+	 * Ensures HCPs with specialty of nutritionist can still view a food diary
+	 * even when the food diary is empty.
+	 */
+	@Test
+	public void testViewingEmptyFoodDiaryAsHCP() {
+		action = new ViewFoodEntryAction(factory, 9000000071L);
+		try {
+			List<FoodEntryBean> foodDiary = action.getDiary(333);
+			assertEquals(0, foodDiary.size());
+		} catch (ITrustException e) {
+			fail(e.getMessage());
+		}
+	}
+}

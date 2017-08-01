@@ -1,0 +1,90 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.ncsu.csc.itrust.action.ViewMyMessagesAction;
+import edu.ncsu.csc.itrust.beans.MessageBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+import junit.framework.TestCase;
+
+/**
+ * ViewMyMessagesActionTest
+ */
+public class ViewMyMessagesActionTest extends TestCase {
+
+	private ViewMyMessagesAction action;
+	private ViewMyMessagesAction action2;
+	private ViewMyMessagesAction evilAction;
+	private DAOFactory factory;
+	private DAOFactory evilFactory;
+	private long mId = 2L;
+	private long hcpId = 9000000000L;
+	
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		
+		TestDataGenerator gen = new TestDataGenerator();
+		gen.clearAllTables();
+		gen.standardData();
+
+		this.factory = TestDAOFactory.getTestInstance();
+		this.evilFactory = EvilDAOFactory.getEvilInstance();
+		this.action = new ViewMyMessagesAction(this.factory, this.mId);
+		this.action2 = new ViewMyMessagesAction(this.factory, this.hcpId);
+		this.evilAction = new ViewMyMessagesAction(this.evilFactory, this.mId);
+	}
+	
+	/**
+	 * testGetAllMySentMessages
+	 * @throws DBException
+	 * @throws SQLException
+	 */
+	public void testGetAllMySentMessages() throws DBException, SQLException {		
+		
+		List<MessageBean> mbList = action2.getAllMySentMessages();
+		
+		assertEquals(2, mbList.size());
+	}
+	
+	/**
+	 * testThrowsExceptions
+	 * @throws DBException
+	 */
+	public void testThrowsExceptions() throws DBException {
+		List<MessageBean> resultList = null;
+		try {
+			resultList = evilAction.getAllMyMessages();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+		
+		resultList = null;
+		try {
+			resultList = evilAction.getAllMyMessagesNameAscending();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+		
+		resultList = null;
+		try {
+			resultList = evilAction.getAllMySentMessages();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+	}
+}

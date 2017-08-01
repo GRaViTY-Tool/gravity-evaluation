@@ -1,0 +1,78 @@
+package edu.ncsu.csc.itrust.unit.dao.visitreminders;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.beans.VisitFlag;
+import edu.ncsu.csc.itrust.beans.forms.VisitReminderReturnForm;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.dao.mysql.VisitRemindersDAO;
+import edu.ncsu.csc.itrust.exception.DBException;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+
+/**
+ * Currently only tests missed-last-year's-flu-shot half of flu shot methods (only includes static data)
+ * 
+ * Testing for month decision is in DateUtil tests
+ */
+public class GetVisitRemindersTest extends TestCase {
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private VisitRemindersDAO visRemDAO = factory.getVisitRemindersDAO();
+	private TestDataGenerator gen = new TestDataGenerator();
+	private long LHCP = 9000000003l;
+
+	@Override
+	protected void setUp() throws Exception {
+		gen.clearAllTables();
+
+	}
+
+	private int getCurrentMonth() {
+		Calendar cal = new GregorianCalendar();
+		return cal.get(Calendar.MONTH);
+	}
+
+	public void testGetFluShotDelinquents() throws DBException, IOException, FileNotFoundException,
+			SQLException {
+		gen.patient1();
+		gen.patient2();
+		gen.patient3();
+		List<VisitReminderReturnForm> visRems = visRemDAO.getFluShotDelinquents(LHCP);
+
+		assertEquals(2, visRems.size());
+		VisitReminderReturnForm reminder = visRems.get(0);
+		assertEquals(reminder.getLastName(), "Needs");
+		assertEquals(reminder.getPatientID(), 3);
+		/*
+		 * We need to account for "today" changing. Note that tests should NOT normally have if-statements in
+		 * them.
+		 */
+		if (getCurrentMonth() >= 8 && getCurrentMonth() <= 11) // if we are in [Sep,Dec]
+			assertEquals(VisitFlag.MISSING_MEDICATION, reminder.getVisitFlags()[0].getType());
+		else
+			// otherwise we are in [Jan,Aug]
+			assertEquals(VisitFlag.MISSED_MEDICATION, reminder.getVisitFlags()[0].getType());
+		assertEquals(reminder.getVisitFlags()[0].getValue(), "Flu Shot");
+		reminder = visRems.get(1);
+		assertEquals(reminder.getLastName(), "Person");
+		assertEquals(reminder.getPatientID(), 1);
+		if (getCurrentMonth() >= 8 && getCurrentMonth() <= 11) // if we are in [Sep,Dec]
+			assertEquals(reminder.getVisitFlags()[0].getType(), VisitFlag.MISSING_MEDICATION);
+		else
+			// otherwise we are in [Jan,Aug]
+			assertEquals(reminder.getVisitFlags()[0].getType(), VisitFlag.MISSED_MEDICATION);
+		assertEquals(reminder.getVisitFlags()[0].getValue(), "Flu Shot");
+	}
+
+	public void testGetDiagnosedVisitNeedersEmpty() throws DBException, IOException, FileNotFoundException,
+			SQLException {
+		List<VisitReminderReturnForm> visRems = visRemDAO.getDiagnosedVisitNeeders(LHCP);
+		assertEquals(0, visRems.size());
+	}
+}

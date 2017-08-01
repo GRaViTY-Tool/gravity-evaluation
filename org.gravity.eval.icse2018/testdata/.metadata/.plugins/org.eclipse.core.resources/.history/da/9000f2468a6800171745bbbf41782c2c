@@ -1,0 +1,85 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.action.EditPatientAction;
+import edu.ncsu.csc.itrust.beans.PatientBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.dao.mysql.AuthDAO;
+import edu.ncsu.csc.itrust.dao.mysql.PatientDAO;
+import edu.ncsu.csc.itrust.exception.ITrustException;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+
+public class EditPatientActionTest extends TestCase {
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDataGenerator gen = new TestDataGenerator();
+	private EditPatientAction action;
+
+	@Override
+	protected void setUp() throws Exception {
+		gen.clearAllTables();
+		gen.patient2();
+		action = new EditPatientAction(factory, 9000000000L, "2");
+	}
+
+	public void testNull() throws Exception {
+		try {
+			action = new EditPatientAction(factory, 0L, null);
+			fail("exception should have been thrown");
+		} catch (ITrustException e) {
+			assertEquals("Patient ID is not a number: null", e.getMessage());
+		}
+	}
+	
+	public void testDeactivateActivate() throws Exception {
+		gen.patient1();
+		action = new EditPatientAction(factory, 1L, "1");
+		PatientDAO po = TestDAOFactory.getTestInstance().getPatientDAO();
+		action.deactivate();
+		PatientBean pb1 = po.getPatient(1l);
+		assertFalse(pb1.getDateOfDeactivationStr().equals(""));
+		action.activate();
+		PatientBean pb2 = po.getPatient(1l);
+		assertTrue(pb2.getDateOfDeactivationStr().equals(""));
+	}
+	
+	public void testIsDependent() throws Exception {
+		//Check that patient 2 is not a dependent
+		assertFalse(action.isDependent());
+		
+		//Change patient 2's dependency status
+		AuthDAO authDAO = factory.getAuthDAO();
+		authDAO.setDependent(2L, true);
+		
+		//Check that patient 2 is a dependent
+		assertTrue(action.isDependent());
+	}
+	
+	public void testSetDependent() throws Exception {
+		//2 represents 1, but not 4
+		gen.patient1();
+		gen.patient4();
+		//Add patient 4 to be represented by patient 2
+		PatientDAO patientDAO = new PatientDAO(factory);
+		patientDAO.addRepresentative(2L, 4L);
+
+		//Ensure the representatives were added correctly
+		assertEquals(2, patientDAO.getRepresented(2L).size());
+		
+		//Make patient 2 a dependent
+		assertTrue(action.setDependent(true));
+		
+		//Assert that no more patients are represented by patient 2
+		assertTrue(patientDAO.getRepresented(2L).isEmpty());
+		
+		//Check patient 2's dependency status
+		AuthDAO authDAO = factory.getAuthDAO();
+		assertTrue(authDAO.isDependent(2L));
+		
+		//Make patient 2 not a dependent
+		assertTrue(action.setDependent(false));
+		
+		//Check that patient 2 is not a dependent
+		assertFalse(authDAO.isDependent(2L));
+	}
+}

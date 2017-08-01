@@ -1,0 +1,34 @@
+package tests.net.sf.jabref.imports;
+
+import junit.framework.TestCase;
+import net.sf.jabref.imports.IsiImporter;
+
+/**
+ * Test cases for the IsiImporter
+ * 
+ * @author $Author: coezbek $
+ * @version $Revision: 2488 $ ($Date: 2007-11-14 01:25:31 +0100 (Wed, 14 Nov 2007) $)
+ * 
+ */
+public class IsiImporterTest extends TestCase {
+
+	protected void tearDown() throws Exception {
+		super.tearDown();
+	}
+
+	public void testIsiAuthorConvert() {
+		assertEquals("James Brown", IsiImporter.isiAuthorConvert("James Brown"));
+		assertEquals("James Marc Brown", IsiImporter.isiAuthorConvert("James Marc Brown"));
+		assertEquals("Brown, J. M.", IsiImporter.isiAuthorConvert("Brown, J.M."));
+		assertEquals("Brown, J.", IsiImporter.isiAuthorConvert("Brown, J."));
+		assertEquals("Brown, J. M.", IsiImporter.isiAuthorConvert("Brown, JM"));
+		assertEquals("Brown, J.", IsiImporter.isiAuthorConvert("Brown, J"));
+		assertEquals("Brown, James", IsiImporter.isiAuthorConvert("Brown, James"));
+		assertEquals("Hall, Janet E.", IsiImporter.isiAuthorConvert("Hall, Janet E"));
+		assertEquals("", IsiImporter.isiAuthorConvert(""));
+	}
+
+	public void testGetExtensions() {
+		// new IsiImporter().getExtensions();
+	}
+}

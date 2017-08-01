@@ -1,0 +1,72 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import edu.ncsu.csc.itrust.action.ViewMyMessagesAction;
+import edu.ncsu.csc.itrust.beans.MessageBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.exception.DBException;
+import junit.framework.TestCase;
+
+/**
+ * ViewMyMessagesActionTest
+ */
+public class ViewMyMessagesActionTest extends TestCase {
+
+	private ViewMyMessagesAction action;
+	private ViewMyMessagesAction action2;
+	private ViewMyMessagesAction evilAction;
+	private DAOFactory factory;
+	private DAOFactory evilFactory;
+	private long mId = 2L;
+	private long hcpId = 9000000000L;
+	
+	/**
+	 * testGetAllMySentMessages
+	 * @throws DBException
+	 * @throws SQLException
+	 */
+	public void testGetAllMySentMessages() throws DBException, SQLException {		
+		
+		List<MessageBean> mbList = action2.getAllMySentMessages();
+		
+		assertEquals(2, mbList.size());
+	}
+	
+	/**
+	 * testThrowsExceptions
+	 * @throws DBException
+	 */
+	public void testThrowsExceptions() throws DBException {
+		List<MessageBean> resultList = null;
+		try {
+			resultList = evilAction.getAllMyMessages();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+		
+		resultList = null;
+		try {
+			resultList = evilAction.getAllMyMessagesNameAscending();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+		
+		resultList = null;
+		try {
+			resultList = evilAction.getAllMySentMessages();
+			fail();
+		} catch (DBException e) {
+			assertNull(resultList);
+		} catch (SQLException e) {
+			assertNull(resultList);
+		}
+	}
+}

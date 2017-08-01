@@ -1,0 +1,98 @@
+LOG: 1499177680056 Hulk Anti-Pattern Detection
+LOG: 1499177680056 Init Model
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-04 16:14:40.167LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.GitProvider.getMoveDeleteHook(GitProvider.java:90)
+	at org.eclipse.team.internal.core.MoveDeleteManager.getHookFor(MoveDeleteManager.java:34)
+	at org.eclipse.team.internal.core.MoveDeleteManager.deleteFolder(MoveDeleteManager.java:62)
+	at org.eclipse.core.internal.resources.Resource.unprotectedDelete(Resource.java:1831)
+	at org.eclipse.core.internal.resources.Resource.delete(Resource.java:782)
+	at org.eclipse.jdt.internal.core.builder.BatchImageBuilder.cleanOutputFolders(BatchImageBuilder.java:115)
+	at org.eclipse.jdt.internal.core.builder.BatchImageBuilder.build(BatchImageBuilder.java:47)
+	at org.eclipse.jdt.internal.core.builder.JavaBuilder.buildAll(JavaBuilder.java:256)
+	at org.eclipse.jdt.internal.core.builder.JavaBuilder.build(JavaBuilder.java:175)
+	at org.eclipse.core.internal.events.BuildManager$2.run(BuildManager.java:735)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:206)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:246)
+	at org.eclipse.core.internal.events.BuildManager$1.run(BuildManager.java:301)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.BuildManager.basicBuild(BuildManager.java:304)
+	at org.eclipse.core.internal.events.BuildManager.basicBuildLoop(BuildManager.java:360)
+	at org.eclipse.core.internal.events.BuildManager.build(BuildManager.java:383)
+	at org.eclipse.core.internal.events.AutoBuildJob.doBuild(AutoBuildJob.java:144)
+	at org.eclipse.core.internal.events.AutoBuildJob.run(AutoBuildJob.java:235)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 1499177686745 GRaViTY convert project: 01_QuickUML2001_tmp_blob
+LOG: 1499177686745 MoDisco discover project: 01_QuickUML2001_tmp_blob
+LOG: 1499177689502 MoDisco discover project - done 2757ms
+LOG: 1499177689503 MoDisco preprocessing
+LOG: 1499177689634 MoDisco preprocessing - done 131ms
+LOG: 1499177689635 eMoflon TGG fwd trafo
+LOG: 1499177703016 eMoflon TGG fwd trafo - done 13381ms
+LOG: 1499177703016 GRaViTY convert project - done 16271ms
+LOG: 1499177703016 Init Hulk
+LOG: 1499177703210 Init Hulk - done 194ms
+LOG: 1499177703210 Init Model - done 23154ms
+LOG: 1499177703210 Hulk Detect AP
+LOG: 1499177703212 Hulk Anti-Pattern Detection
+LOG: 1499177703217 Hulk Number of outgoing invocations
+LOG: 1499177703237 Hulk Number of outgoing invocations - done 20ms
+LOG: 1499177703238 Hulk Incomming Invocation custom
+LOG: 1499177703242 Hulk Incomming Invocation custom - done 4ms
+LOG: 1499177703243 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1499177703246 Hulk Relation between Incoming and Outgoing Invocations - done 3ms
+LOG: 1499177703247 Hulk Controller Class Smell
+LOG: 1499177703259 Hulk Controller Class Smell - done 12ms
+LOG: 1499177703259 Hulk Number of distinct fields accessed by each method
+LOG: 1499177703263 Hulk Number of distinct fields accessed by each method - done 4ms
+LOG: 1499177703263 Hulk Number of Methods
+LOG: 1499177703267 Hulk Number of Methods - done 4ms
+LOG: 1499177703267 Hulk Number of fields
+LOG: 1499177703269 Hulk Number of fields - done 2ms
+LOG: 1499177703269 Hulk Calculate LCOM5 on PG
+LOG: 1499177703277 Hulk Calculate LCOM5 on PG - done 8ms
+LOG: 1499177703277 Hulk Low Cohesion Smell
+LOG: 1499177703283 Hulk Low Cohesion Smell - done 6ms
+LOG: 1499177703283 Hulk Number of Members
+LOG: 1499177703287 Hulk Number of Members - done 4ms
+LOG: 1499177703287 Hulk Large Class Smell
+LOG: 1499177703291 Hulk Large Class Smell - done 4ms
+LOG: 1499177703291 Hulk Large Class or Low Cohesion Smell
+LOG: 1499177703295 Hulk Large Class or Low Cohesion Smell - done 4ms
+LOG: 1499177703295 Hulk God Class [Anti-Pattern]
+LOG: 1499177703299 Hulk God Class [Anti-Pattern] - done 4ms
+LOG: 1499177703299 Hulk Number of Getters
+LOG: 1499177703303 Hulk Number of Getters - done 4ms
+LOG: 1499177703304 Hulk Number of setter Methods
+LOG: 1499177703307 Hulk Number of setter Methods - done 3ms
+LOG: 1499177703307 Hulk Relation between Methods and Getters/Setters
+LOG: 1499177703311 Hulk Relation between Methods and Getters/Setters - done 4ms
+LOG: 1499177703311 Hulk Getter/Setter Smell
+LOG: 1499177703334 Hulk Getter/Setter Smell - done 23ms
+LOG: 1499177703334 Hulk Data Class Smell
+LOG: 1499177703345 Hulk Data Class Smell - done 11ms
+LOG: 1499177703345 Hulk Data Class Accessor Smell
+LOG: 1499177703353 Hulk Data Class Accessor Smell - done 8ms
+LOG: 1499177703353 Hulk The Blob [Anti-Pattern]
+LOG: 1499177703357 Hulk The Blob [Anti-Pattern] - done 4ms
+LOG: 1499177703358 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1499177703409 Hulk Calculate the Method accesses from Blob to DataClass - done 51ms
+LOG: 1499177703409 Hulk Connected Members
+LOG: 1499177703413 Hulk Connected Members - done 4ms
+LOG: 1499177703413 Hulk Member Cluster Accesses
+LOG: 1499177703418 Hulk Member Cluster Accesses - done 5ms
+LOG: 1499177703418 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1499177703542 Hulk Alternative Resolve Blob [Anti-Pattern] - done 124ms
+LOG: 1499177703543 Hulk Anti-Pattern Detection - done 331ms
+LOG: 1499177703543 Hulk Detect AP - done
+LOG: String[] getMethodStrings() [in Box [in Box.java [in quj [in src [in 01_QuickUML2001_tmp_blob]]]]]

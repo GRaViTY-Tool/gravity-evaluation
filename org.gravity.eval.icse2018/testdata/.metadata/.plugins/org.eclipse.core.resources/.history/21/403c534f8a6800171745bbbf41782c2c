@@ -1,0 +1,46 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import edu.ncsu.csc.itrust.action.EditLabProceduresAction;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+import junit.framework.TestCase;
+
+/**
+ * EditLabProceduresActionTest
+ */
+public class EditLabProceduresActionTest extends TestCase {
+	
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDataGenerator gen = new TestDataGenerator();
+	private EditLabProceduresAction action;
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		gen.clearAllTables();
+		gen.standardData();
+	}
+
+	/**
+	 * testAutoAssignLabTech
+	 * @throws Exception
+	 */
+	public void testAutoAssignLabTech() throws Exception {
+		//setup: assign lab procs to techs
+		//the lab tech with the least amount of work should get the assignment
+	}
+	
+	/**
+	 * testGetLabTechQueueSize
+	 * @throws Exception
+	 */
+	public void testGetLabTechQueueSize() throws Exception {
+		action = new EditLabProceduresAction(factory, 9000000000L, "1", "11");
+		assertEquals(19, action.getLabTechQueueSize(5000000001L));
+		assertEquals(26, action.getLabTechQueueSize(5000000002L));
+		assertEquals(0, action.getLabTechQueueSize(5000000003L));
+		assertEquals(0, action.getLabTechQueueSize(5432100001L)); // bad id
+	}
+
+}

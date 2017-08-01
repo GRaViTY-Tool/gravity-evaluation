@@ -1,0 +1,62 @@
+package edu.ncsu.csc.itrust.exception;
+
+import org.junit.Test;
+
+import edu.ncsu.csc.itrust.action.EditExerciseEntryAction;
+import edu.ncsu.csc.itrust.action.ViewExerciseEntryAction;
+
+/**
+ * A specialized exception class for displaying iTrust error messages.
+ * This exception is handled by the default iTrust exception handler.
+ */
+public class ITrustException extends Exception {
+	private static final long serialVersionUID = 1L;
+	String message = null;
+
+	/**
+	 * The typical constructor.
+	 * @param message A message to be displayed to the screen.
+	 */
+	public ITrustException(String message) {
+		this.message = message;
+	}
+
+	/**
+	 * For messages which are displayed to the user. Usually, this is a very general message for security
+	 * reasons.
+	 */
+	@Override
+	public String getMessage() {
+		if (message == null)
+			return "An error has occurred. Please see log for details.";
+		return message;
+	}
+
+	
+	/**
+	 * For exceptions which show a lot of technical detail, usually delegated to a subclass
+	 * 
+	 * @return
+	 */
+	public String getExtendedMessage() {
+		return "No extended information.";
+	}
+
+	/**
+	 * Tests that nothing happens when a user tries to udpate
+	 * a nonexistent exercise entry. Random Person (1) has no entries.
+	 */
+	@Test
+	public void testEditNoEntry() {
+		action = new EditExerciseEntryAction(factory, 1);
+		viewAction = new ViewExerciseEntryAction(factory, 1);
+		try {
+			exerciseBean.setEntryID(100);
+			assertEquals(0, action.editEntry(exerciseBean));
+		} catch (ITrustException e) {
+			fail(e.getMessage());
+		} catch (FormValidationException d) {
+			fail(d.getMessage());
+		}
+	}
+}

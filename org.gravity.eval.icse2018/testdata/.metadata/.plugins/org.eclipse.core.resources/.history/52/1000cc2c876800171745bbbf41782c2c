@@ -1,0 +1,78 @@
+package org.apache.lucene.search;
+
+/**
+ * Copyright 2004 The Apache Software Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import junit.framework.TestCase;
+import org.apache.lucene.analysis.SimpleAnalyzer;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.index.*;
+import org.apache.lucene.store.RAMDirectory;
+import org.apache.lucene.util.English;
+
+import java.io.IOException;
+
+public class TestTermVectors extends TestCase {
+  private IndexSearcher searcher;
+  private RAMDirectory directory = new RAMDirectory();
+  public TestTermVectors(String s) {
+    super(s);
+  }
+
+  public void setUp() throws Exception {                  
+    IndexWriter writer
+            = new IndexWriter(directory, new SimpleAnalyzer(), true);
+    //writer.setUseCompoundFile(true);
+    //writer.infoStream = System.out;
+    StringBuffer buffer = new StringBuffer();
+    for (int i = 0; i < 1000; i++) {
+      Document doc = new Document();
+      doc.add(Field.Text("field", English.intToEnglish(i), true));
+      writer.addDocument(doc);
+    }
+    writer.close();
+    searcher = new IndexSearcher(directory);
+  }
+
+  protected void tearDown() {
+
+  }
+
+  public void test() {
+    assertTrue(searcher != null);
+  }
+
+  public void testTermPositionVectors() {
+    Query query = new TermQuery(new Term("field", "fifty"));
+    try {
+      Hits hits = searcher.search(query);
+      assertEquals(100, hits.length());
+      
+      for (int i = 0; i < hits.length(); i++)
+      {
+        TermFreqVector [] vector = searcher.reader.getTermFreqVectors(hits.id(i));
+        assertTrue(vector != null);
+        assertTrue(vector.length == 1);
+        //assertTrue();
+      }
+    } catch (IOException e) {
+      assertTrue(false);
+    }
+  }
+  
+  
+}

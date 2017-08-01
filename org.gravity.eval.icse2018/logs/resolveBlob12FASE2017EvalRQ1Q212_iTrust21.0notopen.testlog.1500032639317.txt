@@ -1,0 +1,618 @@
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 13:43:59.965LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.internal.indexdiff.GitResourceDeltaVisitor.visit(GitResourceDeltaVisitor.java:115)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:64)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:75)
+	at org.eclipse.core.internal.events.ResourceDelta.accept(ResourceDelta.java:48)
+	at org.eclipse.egit.core.internal.indexdiff.IndexDiffCacheEntry$6.resourceChanged(IndexDiffCacheEntry.java:730)
+	at org.eclipse.core.internal.events.NotificationManager$1.run(NotificationManager.java:299)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.core.internal.events.NotificationManager.notify(NotificationManager.java:289)
+	at org.eclipse.core.internal.events.NotificationManager.broadcastChanges(NotificationManager.java:152)
+	at org.eclipse.core.internal.resources.Workspace.broadcastPostChange(Workspace.java:374)
+	at org.eclipse.core.internal.resources.Workspace.endOperation(Workspace.java:1469)
+	at org.eclipse.core.internal.resources.Project.internalCopy(Project.java:692)
+	at org.eclipse.core.internal.resources.Project.copy(Project.java:218)
+	at org.eclipse.core.internal.resources.Resource.copy(Resource.java:532)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyProject(EclipseProjectUtil.java:30)
+	at org.gravity.eval.icse2018.util.EclipseProjectUtil.copyJavaProject(EclipseProjectUtil.java:14)
+	at org.gravity.eval.icse2018.RQ1_2.perform(RQ1_2.java:131)
+	at org.gravity.eval.icse2018.RQ1_2.resolveBlob(RQ1_2.java:124)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:50)
+	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:47)
+	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+	at org.junit.internal.runners.statements.RunAfters.evaluate(RunAfters.java:27)
+	at org.gravity.eval.icse2018.util.ToFileLogger$1.evaluate(ToFileLogger.java:65)
+	at org.junit.rules.RunRules.evaluate(RunRules.java:20)
+	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:325)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:78)
+	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:57)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.junit.runners.Suite.runChild(Suite.java:128)
+	at org.junit.runners.Suite.runChild(Suite.java:27)
+	at org.junit.runners.ParentRunner$3.run(ParentRunner.java:290)
+	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:71)
+	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:288)
+	at org.junit.runners.ParentRunner.access$000(ParentRunner.java:58)
+	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:268)
+	at org.junit.runners.ParentRunner.run(ParentRunner.java:363)
+	at org.eclipse.jdt.internal.junit4.runner.JUnit4TestReference.run(JUnit4TestReference.java:86)
+	at org.eclipse.jdt.internal.junit.runner.TestExecution.run(TestExecution.java:38)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:459)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.runTests(RemoteTestRunner.java:678)
+	at org.eclipse.jdt.internal.junit.runner.RemoteTestRunner.run(RemoteTestRunner.java:382)
+	at org.eclipse.pde.internal.junit.runtime.RemotePluginTestRunner.main(RemotePluginTestRunner.java:66)
+	at org.eclipse.pde.internal.junit.runtime.PlatformUITestHarness.lambda$0(PlatformUITestHarness.java:43)
+	at org.eclipse.swt.widgets.RunnableLock.run(RunnableLock.java:35)
+	at org.eclipse.swt.widgets.Synchronizer.runAsyncMessages(Synchronizer.java:182)
+	at org.eclipse.swt.widgets.Display.runAsyncMessages(Display.java:4536)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:4154)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$4.run(PartRenderingEngine.java:1121)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1022)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:150)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:693)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:336)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:610)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:148)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:138)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.runApp(NonUIThreadTestApplication.java:52)
+	at org.eclipse.pde.internal.junit.runtime.UITestApplication.runApp(UITestApplication.java:43)
+	at org.eclipse.pde.internal.junit.runtime.NonUIThreadTestApplication.start(NonUIThreadTestApplication.java:46)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:388)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:243)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:673)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:610)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1519)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1492)
+LOG: 1500032642251 GRaViTY convert project: 12_iTrust21.0_tmp_blob
+LOG: 1500032642251 MoDisco discover project: 12_iTrust21.0_tmp_blob
+LOG: 1500032652152 MoDisco discover project - done 9901ms
+LOG: 1500032652152 MoDisco preprocessing
+LOG: 1500032652906 MoDisco preprocessing - done 754ms
+LOG: 1500032652906 eMoflon TGG fwd trafo
+LOG: 1500032744188 eMoflon TGG fwd trafo - done 91282ms
+LOG: 1500032744188 GRaViTY convert project - done 101937ms
+LOG: 1500032744262 Hulk Anti-Pattern Detection
+LOG: 1500032744262 Hulk Number of outgoing invocations
+LOG: 1500032744282 Hulk Number of outgoing invocations - done 20ms
+LOG: 1500032744282 Hulk Incomming Invocation custom
+LOG: 1500032744301 Hulk Incomming Invocation custom - done 19ms
+LOG: 1500032744301 Hulk Relation between Incoming and Outgoing Invocations
+LOG: 1500032744312 Hulk Relation between Incoming and Outgoing Invocations - done 11ms
+LOG: 1500032744312 Hulk Controller Class Smell
+LOG: 1500032744791 Hulk Controller Class Smell - done 479ms
+LOG: 1500032744791 Hulk Number of distinct fields accessed by each method
+LOG: 1500032744817 Hulk Number of distinct fields accessed by each method - done 26ms
+LOG: 1500032744817 Hulk Number of Methods
+LOG: 1500032744828 Hulk Number of Methods - done 11ms
+LOG: 1500032744828 Hulk Number of fields
+LOG: 1500032744839 Hulk Number of fields - done 11ms
+LOG: 1500032744839 Hulk Calculate LCOM5 on PG
+LOG: 1500032744852 Hulk Calculate LCOM5 on PG - done 13ms
+LOG: 1500032744852 Hulk Low Cohesion Smell
+LOG: 1500032749806 Hulk Low Cohesion Smell - done 4954ms
+LOG: 1500032749806 Hulk Number of Members
+LOG: 1500032749815 Hulk Number of Members - done 9ms
+LOG: 1500032749815 Hulk Large Class Smell
+LOG: 1500032750825 Hulk Large Class Smell - done 1010ms
+LOG: 1500032750825 Hulk Large Class or Low Cohesion Smell
+LOG: 1500032750831 Hulk Large Class or Low Cohesion Smell - done 6ms
+LOG: 1500032750831 Hulk God Class [Anti-Pattern]
+LOG: 1500032750834 Hulk God Class [Anti-Pattern] - done 3ms
+LOG: 1500032750834 Hulk Number of Getters
+LOG: 1500032750848 Hulk Number of Getters - done 14ms
+LOG: 1500032750848 Hulk Number of setter Methods
+LOG: 1500032750863 Hulk Number of setter Methods - done 15ms
+LOG: 1500032750863 Hulk Relation between Methods and Getters/Setters
+LOG: 1500032750880 Hulk Relation between Methods and Getters/Setters - done 17ms
+LOG: 1500032750880 Hulk Getter/Setter Smell
+LOG: 1500032750926 Hulk Getter/Setter Smell - done 46ms
+LOG: 1500032750926 Hulk Data Class Smell
+LOG: 1500032752373 Hulk Data Class Smell - done 1447ms
+LOG: 1500032752373 Hulk Data Class Accessor Smell
+LOG: 1500032752415 Hulk Data Class Accessor Smell - done 42ms
+LOG: 1500032752415 Hulk The Blob [Anti-Pattern]
+LOG: 1500032752736 Hulk The Blob [Anti-Pattern] - done 321ms
+LOG: 1500032752736 Hulk Calculate the Method accesses from Blob to DataClass
+LOG: 1500032753181 Hulk Calculate the Method accesses from Blob to DataClass - done 445ms
+LOG: 1500032753181 Hulk Connected Members
+LOG: 1500032753186 Hulk Connected Members - done 5ms
+LOG: 1500032753186 Hulk Member Cluster Accesses
+LOG: 1500032753195 Hulk Member Cluster Accesses - done 9ms
+LOG: 1500032753195 Hulk Alternative Resolve Blob [Anti-Pattern]
+LOG: 1500032755084 Hulk Alternative Resolve Blob [Anti-Pattern] - done 1889ms
+LOG: 1500032755084 Hulk Anti-Pattern Detection - done 10822ms
+LOG: > SourceMeter for Java 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+LOG: > Java version: 1.8.0_131
+LOG: > Executing tasks. (Multithread:4)
+LOG: >   [2017-07-14 13:45:55] Starting task: DirectoryBasedAnalysisTask
+LOG: >   [2017-07-14 13:46:33] Task ended: DirectoryBasedAnalysisTask Result:OK
+LOG: >   [2017-07-14 13:46:33] Starting task: JANFilterTask
+LOG: >   [2017-07-14 13:46:34] Task ended: JANFilterTask Result:OK
+LOG: >   [2017-07-14 13:46:34] Starting task: JAN2limTask
+LOG: >   [2017-07-14 13:46:48] Task ended: JAN2limTask Result:OK
+LOG: >   [2017-07-14 13:46:48] Starting task: ProfileTask
+LOG: >   [2017-07-14 13:46:48] Starting task: DcfTask
+LOG: >   [2017-07-14 13:46:48] Starting task: Lim2metricsTask
+LOG: >   [2017-07-14 13:46:48] Task ended: ProfileTask Result:OK
+LOG: >   [2017-07-14 13:46:50] Task ended: Lim2metricsTask Result:OK
+LOG: >   [2017-07-14 13:47:11] Task ended: DcfTask Result:OK
+LOG: >   [2017-07-14 13:47:11] Starting task: FaultHunterTask
+LOG: >   [2017-07-14 13:47:11] Starting task: PMD2GraphTask
+LOG: >   [2017-07-14 13:47:11] Starting task: VulnerabilityHunterTask
+LOG: >   [2017-07-14 13:47:11] Starting task: AndroidHunterTask
+LOG: >   [2017-07-14 13:47:12] Task ended: VulnerabilityHunterTask Result:OK
+LOG: >   [2017-07-14 13:47:12] Task ended: FaultHunterTask Result:OK
+LOG: >   [2017-07-14 13:47:14] Task ended: PMD2GraphTask Result:OK
+LOG: >   [2017-07-14 13:47:14] Task ended: AndroidHunterTask Result:OK
+LOG: >   [2017-07-14 13:47:14] Starting task: GraphMergeTask
+LOG: >   [2017-07-14 13:47:17] Task ended: GraphMergeTask Result:OK
+LOG: >   [2017-07-14 13:47:17] Starting task: MetricHunterTask
+LOG: >   [2017-07-14 13:47:23] Task ended: MetricHunterTask Result:OK
+LOG: >   [2017-07-14 13:47:23] Starting task: AddLicenceTask
+LOG: >   [2017-07-14 13:47:24] Task ended: AddLicenceTask Result:OK
+LOG: >   [2017-07-14 13:47:24] Starting task: GraphDumpTask
+LOG: >   [2017-07-14 13:47:28] Task ended: GraphDumpTask Result:OK
+LOG: boolean isFamilyMemberSmoker(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<AllergyBean> getAllergies() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: boolean doesFamilyMemberHaveDiabetes(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: Email makeEmail() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<HealthRecord> getAllHealthRecords() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: PatientBean getPatient() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: boolean doesFamilyMemberHaveHighCholesterol(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<ProcedureBean> getProcedures(long) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<OfficeVisitBean> getAllOfficeVisits() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<RiskChecker> getDiseasesAtRisk() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<FamilyMemberBean> getFamily() [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: boolean doesFamilyMemberHaveCancer(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: String getFamilyMemberCOD(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: boolean doesFamilyMemberHaveHighBP(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: boolean doesFamilyMemberHaveHeartDisease(FamilyMemberBean) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: String updateAllergies(long, String) [in EditPHRAction [in EditPHRAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<HCPDiagnosisBean> getHCPByDiagnosis(String) [in MyDiagnosisAction [in MyDiagnosisAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<PrescriptionBean> getPrescriptionsByHCPAndICD(long, String) [in MyDiagnosisAction [in MyDiagnosisAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: List<DiagnosisBean> getDiagnoses() [in MyDiagnosisAction [in MyDiagnosisAction.java [in edu.ncsu.csc.itrust.action [in src [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void assertPrescription2(PrescriptionReportBean) [in GetPrescriptionsTest [in GetPrescriptionsTest.java [in edu.ncsu.csc.itrust.unit.dao.officevisit [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void assertPrescription(PrescriptionReportBean) [in GetPrescriptionsTest [in GetPrescriptionsTest.java [in edu.ncsu.csc.itrust.unit.dao.officevisit [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPrescriptions() [in GetPrescriptionsTest [in GetPrescriptionsTest.java [in edu.ncsu.csc.itrust.unit.dao.officevisit [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateRecordsRelease() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDBException() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRecordsRelease() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetRecordsReleaseByID() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllHealthRecordsByHospital() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllHealthRecordsByPid() [in RecordsReleaseDAOTest [in RecordsReleaseDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.recordsrelease [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveWardRoom() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddWardRoom() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateWardRoom() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetWardRoomsByStatus() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testgetAllWardsByHCP() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetWardRoom() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetHospitalByWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateWardRoomOccupant() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testgetAllWardRoomsByWardID() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAssignHCPToWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveWard2() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testgetAllHCPsAssignedToWard() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testgetAllWardsByHospitalID() [in WardDAOTest [in WardDAOTest.java [in edu.ncsu.csc.itrust.unit.dao [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesFromNameAscending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateRead() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesFromNameDescending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterMessages() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testLinkedToReferral() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessages() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddMessage() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPersonnelName() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetCCdMessages() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesTimeAscending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesFromTimeAscending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientName() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesNameDescending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMyMessagesNameAscending() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetUnreadCount() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testThrowsExceptions() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllMySentMessages() [in ViewMyMessagesActionTest [in ViewMyMessagesActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptyFoodDiaryAsHCP() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingFoodDiaryAsPatient() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactoryGetDiaryTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFoodDiaryBadDatesTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEnd() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptyFoodDiaryAsPatient() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEndTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactoryGetBoundedDiaryTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNonDesignatedNutritionistTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNonDesignatedNutritionist() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFoodDiaryBadDates() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewFoodDiaryOfOtherPatient() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNonDesignatedNutritionistBounded() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactoryGetDiary() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingFoodDiaryWithEntriesAsNutritionist() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testBoundedFoodDiary() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactoryGetBoundedDiary() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewFoodDiaryOfOtherPatientBoundedTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNonDesignatedNutritionistBoundedTotals() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewFoodDiaryOfOtherPatientBounded() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingFoodDiaryWithEntriesAsNonNutritionistHCP() [in ViewFoodEntryActionTest [in ViewFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSubmitReceived() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewReceivedProcedures() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabProc() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabProcedure() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSubmitResults() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewTestingProcedures() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetToTesting() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSubmitResultsEvilFactory() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetHCPName() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateProcedure() [in LabProcLTActionTest [in LabProcLTActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExpiredPrescriptionException2() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetCurrentPrescriptions() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetDiagnosesException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testCheckPatientExistsException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRepresentsException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveRepresentativeException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExpiredPrescriptionException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUndeclareHCPException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetRepresentedException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetNameException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetDeclaredHCPsException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRepException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testCheckDeclaredHCPException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditPatientException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDeclareHCPException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddEmptyPatientException() [in PatientDAOExceptionTest [in PatientDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.patient [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testCalculateAgeInMonthsAtOfficeVisit() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientName() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetHeadCircZScore() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllPatientHealthRecords() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientID() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetHeightZScore() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetBmiZScore() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetWeightZScore() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPercentile() [in ViewHealthRecordsHistoryActionTest [in ViewHealthRecordsHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralByID() [in ViewPatientReferralsActionTest [in ViewPatientReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateReferral() [in ViewPatientReferralsActionTest [in ViewPatientReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetOVDate() [in ViewPatientReferralsActionTest [in ViewPatientReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralsForPatientUnread() [in ViewPatientReferralsActionTest [in ViewPatientReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralsStringSortDirection() [in ViewPatientReferralsActionTest [in ViewPatientReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveAppt() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactory() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAppt() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditAppt() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetName() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditApptConflict() [in EditApptActionTest [in EditApptActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNonExistent() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testConstructNormal() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientLogged() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditCOD() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testInvalidDates() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditRepresentatives() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testWrongFormat() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDeactivateActivate() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testIsDependent() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetDependent() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNull() [in EditPatientActionTest [in EditPatientActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddToEmptyRecordSimpleBaby() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddToEmptyRecordSimple() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testTotalCholesterol() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientAgeBaby() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddToEmptyRecordSimpleYouth() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoveHealthRecord() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testPatientNameNull() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddHealthRecordEvil() [in EditHealthHistoryActionTest [in EditHealthHistoryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPersonnel() [in AddEditViewOphthalmologyScheduleOVActionTest [in AddEditViewOphthalmologyScheduleOVActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testErrors() [in AddEditViewOphthalmologyScheduleOVActionTest [in AddEditViewOphthalmologyScheduleOVActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddOphthalmologyOV() [in AddEditViewOphthalmologyScheduleOVActionTest [in AddEditViewOphthalmologyScheduleOVActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddOphthalmologySurgery() [in AddEditViewOphthalmologySurgeryActionTest [in AddEditViewOphthalmologySurgeryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testErrors() [in AddEditViewOphthalmologySurgeryActionTest [in AddEditViewOphthalmologySurgeryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddEditEntry() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditInvalidServings() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactory() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testOtherUsersEntry() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditExistingEntry() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditNoEntry() [in EditSleepEntryActionTest [in EditSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testBoundedDiaryTotalsOtherPatient() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testBoundedDiaryOtherPatient() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEndTotals() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingExerciseDiaryWithEntriesAsNonTrainerHCP() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingExerciseDiaryWithEntriesAsTrainer() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptyExerciseDiaryAsPatient() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewExerciseDiaryDateRange() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseDiaryBadFactory() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseDiaryBadDates() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseDiaryBadFactoryBoundedDatesTotals() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptyExerciseDiaryAsHCP() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseDiaryBadFactoryBoundedDates() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseDiaryBadFactoryTotals() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewExerciseDiaryOfOtherPatient() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingExerciseDiaryAsPatient() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEnd() [in ViewExerciseEntryActionTest [in ViewExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNullOrEmptyExerciseName() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseEntryFutureDate() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testExerciseEntryInvalidDateFormat() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumHoursPositive() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddExerciseEntryToNonEmptyDiary() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumCaloriesNotNegative() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testInvalidExerciseType() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddNewExerciseEntryToEmptyDiary() [in AddExerciseEntryActionTest [in AddExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testErrors() [in AddEditViewOphthalmologyOVActionTest [in AddEditViewOphthalmologyOVActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddOphthalmologyOV() [in AddEditViewOphthalmologyOVActionTest [in AddEditViewOphthalmologyOVActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRemoveBill() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetBillID() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetInsuranceBills() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetDeniedNum() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetBillWithOVId() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetUnpaidBills() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditBill() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetApprovedNum() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddBill() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPendingNum() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetBills() [in BillingDAOTest [in BillingDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.billing [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllPatientReleaseRequests() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientName() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetRepresented() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactory() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetHospitalName() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllPatientHospitals() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRecordsRelease() [in RequestRecordsReleaseActionTest [in RequestRecordsReleaseActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddEditEntry() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testOtherUsersEntry() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditInvalidServings() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditExistingEntry() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditNoEntry() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactory() [in EditFoodEntryActionTest [in EditFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewSleepDiaryDateRange() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSleepDiaryBadFactoryBoundedDates() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testBoundedDiaryTotalsOtherPatient() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSleepDiaryBadDates() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewSleepDiaryOfOtherPatient() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSleepDiaryBadFactoryTotals() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEnd() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSleepDiaryBadFactory() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingSleepDiaryAsPatient() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptySleepDiaryAsPatient() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testBoundedDiaryOtherPatient() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSleepDiaryBadFactoryBoundedDatesTotals() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testStartAfterEndTotals() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingEmptySleepDiaryAsHCP() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewingSleepDiaryWithEntriesAsHCP() [in ViewSleepEntryActionTest [in ViewSleepEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDeleteLabProcedure() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabProcedure() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabTechQueueSizeByPriority() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabTechName() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabProcedures() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddLabProcedure() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabProcedureCodes() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditLabProcedure() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabTechs() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabTechQueueSize() [in EditLabProceduresActionTest [in EditLabProceduresActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditNoEntry() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEvilFactory() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testOtherUsersEntry() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditInvalidServings() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testEditExistingEntry() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddEditEntry() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in EditExerciseEntryActionTest [in EditExerciseEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralsForReceivingHCP() [in ViewReceivingReferralsActionTest [in ViewReceivingReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetOVDate() [in ViewReceivingReferralsActionTest [in ViewReceivingReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralByID() [in ViewReceivingReferralsActionTest [in ViewReceivingReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdateReferral() [in ViewReceivingReferralsActionTest [in ViewReceivingReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReferralsForReceivingHCPUnread() [in ViewReceivingReferralsActionTest [in ViewReceivingReferralsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByLastNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterBySiblingFirstName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testToString() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByChildLastName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentLastNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByFirstName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByStateNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByPhoneNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByChildFirstName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByGender() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByCityNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByUpperAgeNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByCity1() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICCity() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByZip2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFilterType() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByStreetAddrNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentFirstName2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByStreetAddr2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentFirstName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByEmerContactNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByGenderNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByLastName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByEmerContactName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByContactEmailNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICPhone() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterBySiblingLastNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByZipNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByContactEmail() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByStreetAddr3() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByInvalidLowerAge() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFilterValue() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByContactPhoneNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterTypeFromString() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByExcludeDeactivated() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentLastName2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByFirstNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByCity2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICID() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentLastName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICAddress2() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByOnlyDeactivated() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterBySiblingFirstNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByMID() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByPhone() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByState() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByZip() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByStreetAddr1() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterBySiblingLastName() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByLowerAge() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICAddress3() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByChildFirstNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFilterTypeString() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByParentFirstNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByLowerAgeNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByInvalidUpperAge() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICState() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByChildLastNameNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByInsuranceZip() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByInsuranceZipNoResult() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFilterByICAddress1() [in DemographicReportFilterTest [in DemographicReportFilterTest.java [in edu.ncsu.csc.itrust.unit.report [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumSodiumNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFoodEntryInvalidDateFormat() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNullOrEmptyFoodName() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumCaloriesNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFoodEntryFutureDate() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumGramsProteinNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddNewFoodEntryToEmptyDiary() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumGramsCarbsNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumSugarNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testInvalidMealType() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumGramsFatNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddFoodEntryToNonEmptyDiary() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumServingsPositive() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNumGramsFiberNotNegative() [in AddFoodEntryActionTest [in AddFoodEntryActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsNoZip() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsHospitalAnySpecialty() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsHospitalAnySpecialty2() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsHeartSpecialtyAndHospital() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsBadHospitalID() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResults1() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsHeartSpecialty() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSurveyResultsNothing() [in SurveyResultsTest [in SurveyResultsTest.java [in edu.ncsu.csc.itrust.unit.dao.surveyresults [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testUpdate() [in LOINCDAOTest [in LOINCDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.LOINC [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddLOINC() [in LOINCDAOTest [in LOINCDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.LOINC [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllLOINC() [in LOINCDAOTest [in LOINCDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.LOINC [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetSecurityQuestionAnswer() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testResetPasswordException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetSecurityAnswer() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testIsDependent() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRecordResetPasswordFailure() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddUserException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetUserRoleException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetUserNameException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRecordLoginFailureException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testLoginFailuresException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetDependency() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testCheckUserExistsException() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetSecurityQuestion() [in AuthDAOExceptionTest [in AuthDAOExceptionTest.java [in edu.ncsu.csc.itrust.unit.dao.auth [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReportRequests() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDoesFamilyMemberHaveDiabetes() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testIsSurveyCompleted() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatient() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewNonExistantRecords() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllergies() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFamily() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetOfficeVisit() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientAgeInMonths() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFamilyHealthRecords() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetEmailHistory() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllHealthRecords() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testIsFamilyMemberSmoker() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetViewed() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetProcedures() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFamilyHistory() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDoesFamilyMemberHaveHighCholesterol() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetRepresenting() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDoesFamilyMemberHaveCancer() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPersonnel() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetRepresented() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDoesFamilyMemberHaveHeartDisease() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFamilyMemberCOD() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRepresentPatient() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetSpecificLabs() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetLabs() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetAllOfficeVisits() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testDoesFamilyMemberHaveHighBP() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testViewMyRecords() [in ViewMyRecordsActionTest [in ViewMyRecordsActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRequestJustification() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNotNumbers() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientFirstName() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientHospitalAddress() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoReleaseHospitalID() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testFalseDigitalSignature() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAllCorrect() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientLastName() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientHospitalName() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientEmail() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testNoRecipientPhone() [in RecordsReleaseBeanValidatorTest [in RecordsReleaseBeanValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetSpecificReport4CheckDetails() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetSpecificReport3CheckDetails() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testSetViewedFailure() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testInsertReportFailureNullMIDs() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReportsUnknownRequeter() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddThenRetrieveReport() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReportsCheckListPatient() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReportsCheckListRequester() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetReportsNullReportID() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddThenSetViewed() [in ReportRequestDAOTest [in ReportRequestDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.reportrequest [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetConflictForAppointment() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetApptType() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetPatientConflictForAppointment() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAppointmentConflict() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAppointment() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAppointmentPatientConflict() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in ApptDAOTest [in ApptDAOTest.java [in edu.ncsu.csc.itrust.unit.dao.appointment [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringDataBloodPressureOnlyUAP() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringDataBloodPressureOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddBadRemoteMonitoringData() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringData() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringDataUAP() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringExternalDataOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddBadRemoteMonitoringWeightData() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddBadRemoteMonitoringPedometerReadingData() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringWeightDataOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testRepresentativeReportStatus() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringDataGlucoseOnlyUAP() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringPedometerReadingDataOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringDataGlucoseOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void setUp() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddRemoteMonitoringHeightWeightDataOnly() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testAddBadRemoteMonitoringGlucoseLevelData() [in AddRemoteMonitoringDataActionTest [in AddRemoteMonitoringDataActionTest.java [in edu.ncsu.csc.itrust.unit.action [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetDiagnosedVisitNeeders() [in GetVisitRemindersTest [in GetVisitRemindersTest.java [in edu.ncsu.csc.itrust.unit.dao.visitreminders [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFluShotDelinquentsEmpty() [in GetVisitRemindersTest [in GetVisitRemindersTest.java [in edu.ncsu.csc.itrust.unit.dao.visitreminders [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFluShotDelinquentsEmptyList() [in GetVisitRemindersTest [in GetVisitRemindersTest.java [in edu.ncsu.csc.itrust.unit.dao.visitreminders [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetFluShotDelinquents() [in GetVisitRemindersTest [in GetVisitRemindersTest.java [in edu.ncsu.csc.itrust.unit.dao.visitreminders [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testGetDiagnosedVisitNeedersEmpty() [in GetVisitRemindersTest [in GetVisitRemindersTest.java [in edu.ncsu.csc.itrust.unit.dao.visitreminders [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testPatientAllCorrect() [in PatientValidatorTest [in PatientValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testCauseOfDeathValidation() [in PatientValidatorTest [in PatientValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]
+LOG: void testPatientAllErrors() [in PatientValidatorTest [in PatientValidatorTest.java [in edu.ncsu.csc.itrust.unit.validate.bean [in test [in 12_iTrust21.0_tmp_blob]]]]]

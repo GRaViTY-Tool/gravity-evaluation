@@ -1,0 +1,133 @@
+/*
+ * HumanResource.java
+ *
+ * Created on 27. Mai 2003, 22:19
+ */
+
+package net.sourceforge.ganttproject.resource;
+
+import java.util.ArrayList;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreeNode;
+
+import net.sourceforge.ganttproject.GanttProject;
+import net.sourceforge.ganttproject.GanttTree;
+import net.sourceforge.ganttproject.roles.Role;
+import net.sourceforge.ganttproject.task.ResourceAssignment;
+import net.sourceforge.ganttproject.task.Task;
+
+/**
+ *
+ * @author  barmeier
+ */
+public class HumanResource extends ProjectResource {
+    
+    private String phone="";
+    private String email="";
+    private int function;
+    private Role myRole;
+
+    
+    HumanResource () {
+        this.name="";
+        this.id=-1;     //has to be assigned from the managr when resource is added
+    }
+    
+    /** Creates a new instance of HumanResource */
+    HumanResource(String name, int id) {
+        this.name=name;
+        this.id=id;
+    }
+    
+    public void setMail (String email) {
+        this.email = email;
+    }
+    
+    public String getMail() {
+        return email;
+    }
+    
+    public void setPhone (String phone) {
+        this.phone = phone;
+    }
+    
+    public String getPhone() {
+        return phone;
+    }
+    
+//    public void setFunction (int function) {
+//        this.function=function;
+//    }
+    
+//    public int getFunction () {
+//        return myRole==null ? 0 : myRole.getID();
+//    }
+
+    public void setRole(Role role) {
+        myRole = role;
+    }
+    
+    public Role getRole() {
+        return myRole;
+    }
+
+	/** Write the tasks */
+	private static String writeTasks(GanttTree tree) {	
+		StringBuffer out = new StringBuffer();
+		ArrayList lot=tree.getAllTasks();
+		for(int i=0, k=lot.size(); i < k; i++) {
+	  DefaultMutableTreeNode node = (DefaultMutableTreeNode)lot.get(i);
+			Task t = (Task) (node).getUserObject();
+	        
+	  int depth = 0;
+	  TreeNode up = node;
+	   while ((up = up.getParent()) != null && up != tree.getRoot()) {
+	      depth += 1;
+	   }
+	
+			if(t!=t.getManager().getRootTask()) {
+				out.append("\t\t<task depth=\""+depth+"\">\n");
+				out.append("\t\t\t<name>" + correct(t.getName())  + "</name>\n");
+				out.append("\t\t\t<begin>" + t.getStart()  + "</begin>\n");
+				out.append("\t\t\t<end>" + t.getEnd()  + "</end>\n");
+				out.append("\t\t\t<milestone>" + (t.isMilestone() ? "true" : "false")  + "</milestone>\n");
+				out.append("\t\t\t<progress>" + t.getCompletionPercentage()  + "</progress>\n");
+				// list all assigned users
+	            StringBuffer usersS = new StringBuffer();
+	            ResourceAssignment[] assignments = t.getAssignments();
+				if (assignments.length>0) {
+				    usersS.append(assignments[0].getResource().getName());
+	            }
+				for(int j=1;j<assignments.length;j++) {
+					usersS.append(", " + assignments[j].getResource().getName());
+	            }
+				out.append("\t\t\t<assigned-to>" + correct(usersS.toString())  + "</assigned-to>\n");
+				out.append("\t\t\t<notes><![CDATA[" + ((t.getNotes() == null || t.getNotes().length() == 0) ? " " : t.getNotes())  + "]]></notes>\n");
+				out.append("\t\t</task>\n");				    
+			}
+		}
+		return out.toString();
+	}
+
+	/** Write the resources */
+		private static String writeResources(GanttProject appli)
+		{
+			StringBuffer out = new StringBuffer();				
+			
+			HumanResourceManager resMan=(HumanResourceManager) appli.getHumanResourceManager();
+	        ArrayList lor=resMan.getResources();
+			
+	//		String []_function=RoleManager.Access.getInstance().getRoleNames();
+			for(int i=0, j=lor.size(); i < j; i++) {
+				HumanResource p = (HumanResource)lor.get(i);
+				out.append("\t\t<resource>\n");
+				out.append("\t\t\t<name>" + correct(p.toString()) + "</name>\n");
+				out.append("\t\t\t<role>" + correct(p.getRole().getName()) + "</role>\n");
+				out.append("\t\t\t<mail>" + (p.getMail()==null || p.getMail().length() == 0 ? " " : correct(p.getMail())) + "</mail>\n");
+				out.append("\t\t\t<phone>" + (p.getPhone()==null || p.getPhone().length() == 0 ? " " : correct(p.getPhone())) + "</phone>\n");
+				out.append("\t\t</resource>\n");
+			}
+			return out.toString();
+		}
+}

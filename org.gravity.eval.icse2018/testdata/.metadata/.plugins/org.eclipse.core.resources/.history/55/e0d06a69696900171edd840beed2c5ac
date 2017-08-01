@@ -1,0 +1,158 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import java.util.List;
+
+import junit.framework.TestCase;
+
+import org.junit.Test;
+
+import edu.ncsu.csc.itrust.action.ViewFoodEntryAction;
+import edu.ncsu.csc.itrust.beans.FoodEntryBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.exception.FormValidationException;
+import edu.ncsu.csc.itrust.exception.ITrustException;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.EvilDAOFactory;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+
+/**
+ * Tests for viewing a patient's food diary
+ *
+ */
+public class ViewFoodEntryActionTest extends TestCase {
+	private ViewFoodEntryAction action;
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDataGenerator gen;
+	
+	/**
+	 * Clears all of the tables, gets the standard data, 
+	 * and includes the data for use cases 68 and 69
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		gen = new TestDataGenerator();
+		gen.clearAllTables();
+		gen.standardData();	
+	}
+	
+	/**
+	 * Clears all of the tables
+	 */
+	@Override
+	protected void tearDown() throws Exception {
+		gen.clearAllTables();
+	}
+	/**
+	 * Ensures a patient can still view his food diary even when it is empty.
+	 */
+	@Test
+	public void testViewingEmptyFoodDiaryAsPatient() {
+		action = new ViewFoodEntryAction(factory, 333);
+		try {
+			List<FoodEntryBean> foodDiary = action.getDiary(333);
+			assertEquals(0, foodDiary.size());
+		} catch (ITrustException e) {
+			fail(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Ensure patients can't view the food diary of other patients.
+	 */
+	@Test
+	public void testViewFoodDiaryOfOtherPatient() {
+		action = new ViewFoodEntryAction(factory, 333);
+		try {
+			action.getDiary(334);
+			fail("You should not be able to view other patient's food diary.");
+		} catch (ITrustException e) {
+			assertEquals("You do not have permission to view the Food Diary!",
+					e.getMessage());
+		}
+	}
+	
+	/**
+	 * Ensure patients can't view the bounded food diary of other patients.
+	 */
+	@Test
+	public void testViewFoodDiaryOfOtherPatientBounded() {
+		action = new ViewFoodEntryAction(factory, 333);
+		try {
+			action.getBoundedDiary("12/12/2014", "12/12/2014", 334);
+			fail("You should not be able to view other patient's food diary.");
+		} catch (ITrustException e) {
+			assertEquals("You do not have permission to view the Food Diary!",
+					e.getMessage());
+		} catch (FormValidationException d) {
+			fail("Not your food diary");
+		}
+	}
+	
+	/**
+	 * Ensure patients can't view the bounded food diary of other patients.
+	 */
+	@Test
+	public void testViewFoodDiaryOfOtherPatientBoundedTotals() {
+		action = new ViewFoodEntryAction(factory, 333);
+		try {
+			action.getBoundedDiaryTotals("12/12/2014", "12/12/2014", 334);
+			fail("You should not be able to view other patient's food diary.");
+		} catch (ITrustException e) {
+			assertEquals("You do not have permission to view the Food Diary!",
+					e.getMessage());
+		} catch (FormValidationException d) {
+			fail("Not your food diary");
+		}
+	}
+	
+	/**
+	 * Test bounded diary totals with bad dates
+	 */
+	@Test
+	public void testFoodDiaryBadDatesTotals() {
+		action = new ViewFoodEntryAction(factory, 1);
+		try {
+			action.getBoundedDiaryTotals("", "", 1);
+			fail("Bad dates");
+		} catch (FormValidationException e) {
+			assertEquals("This form has not been validated correctly. "
+					+ "The following field are not properly "
+					+ "filled in: [Enter dates in MM/dd/yyyy]", 
+					e.getMessage());
+		} catch (ITrustException d) {
+			fail("Wanted bad dates");
+		}
+	}
+	
+	/**
+	 * Try to view it as a nutritionist that isn't designated
+	 */
+	@Test
+	public void testNonDesignatedNutritionistBounded() {
+		action = new ViewFoodEntryAction(factory, 9000000071L);
+		try {
+			action.getBoundedDiary("02/02/2014", "02/02/2014", 1);
+			fail("Not his designated nutritionist");
+		} catch (ITrustException e) {
+			assertEquals("You do not have permission to view the Food Diary!",
+					e.getMessage());
+		} catch (FormValidationException d) {
+			fail(d.getMessage());
+		}
+	}
+	
+	/**
+	 * Test with evil factory
+	 */
+	@Test
+	public void testEvilFactoryGetDiaryTotals() {
+		EvilDAOFactory evil = new EvilDAOFactory();
+		action = new ViewFoodEntryAction(evil, 1);
+		try {
+			action.getDiaryTotals(1);
+			fail("Working with evil factory");
+		} catch (ITrustException d) {
+			assertEquals("Error retrieving Food Diary", d.getMessage());
+		}
+	}
+}

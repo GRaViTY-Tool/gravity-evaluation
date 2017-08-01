@@ -1,0 +1,3 @@
+eclipse.preferences.version=1
+org.moflon.ide.ui.preferences.ReachabilityEnabled=true
+org.moflon.ide.ui.preferences.ValidationTimeoutMillis=30000

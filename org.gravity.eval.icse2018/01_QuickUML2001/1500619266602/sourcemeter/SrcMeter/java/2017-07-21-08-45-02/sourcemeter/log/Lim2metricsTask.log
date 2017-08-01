@@ -1,0 +1,11 @@
+[2017-07-21 08:45:11] Start:Lim2metricsTask
+LIM2Metrics 8.1.0 - Java (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+Saving graph to /home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/1500619266602/sourcemeter/SrcMeter/java/2017-07-21-08-45-02/sourcemeter/graph/SrcMeter-metrics.graph
+Exporting rul
+
+Statistics:
+	Calculation time         :       0.06s
+	Export time              :       0.00s
+	Total time               :       0.12s
+	Peak memory usage        :      31.66MB
+[2017-07-21 08:45:11] End:Lim2metricsTask Result:OK

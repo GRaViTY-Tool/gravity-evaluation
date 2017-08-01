@@ -1,0 +1,19 @@
+package edu.ncsu.csc.itrust.unit.bean;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.beans.LabProcedureBean;
+
+public class LabProcedureBeanTest  extends TestCase{
+	LabProcedureBean l;
+	public void testViewedByPatient() throws Exception {
+		// In order to set the LP as viewed by patient, the status must be completed.
+		LabProcedureBean lp = new LabProcedureBean();
+		lp.setStatus(LabProcedureBean.In_Transit);
+		assertEquals(false, lp.isViewedByPatient());
+		lp.setViewedByPatient(true);
+		assertEquals(false, lp.isViewedByPatient());
+		lp.setStatus(LabProcedureBean.Completed);
+		lp.setViewedByPatient(true);
+		assertEquals(true, lp.isViewedByPatient());
+	}
+}

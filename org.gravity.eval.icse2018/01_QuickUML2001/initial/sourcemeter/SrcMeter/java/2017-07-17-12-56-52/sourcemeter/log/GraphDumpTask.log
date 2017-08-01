@@ -1,0 +1,6 @@
+[2017-07-17 12:57:01] Start:GraphDumpTask
+GraphDumpTool 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
+Loading: /home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/initial/sourcemeter/SrcMeter/java/2017-07-17-12-56-52/SrcMeter.graph
+Creating csv dump ...
+Creating xml dump ...
+[2017-07-17 12:57:01] End:GraphDumpTask Result:OK

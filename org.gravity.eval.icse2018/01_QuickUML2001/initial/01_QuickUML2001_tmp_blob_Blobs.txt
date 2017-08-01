@@ -1,0 +1,4 @@
+Detected Blob APs on 01_QuickUML2001_tmp_blob:
+quj.MethodEditorPanel
+quj.MemberEditorPanel
+quj.ItemEditor

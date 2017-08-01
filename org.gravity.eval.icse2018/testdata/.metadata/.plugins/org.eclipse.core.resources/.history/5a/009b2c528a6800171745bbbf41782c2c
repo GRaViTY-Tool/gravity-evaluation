@@ -1,0 +1,49 @@
+package edu.ncsu.csc.itrust.unit.action;
+
+import edu.ncsu.csc.itrust.action.AddExerciseEntryAction;
+import edu.ncsu.csc.itrust.action.EditExerciseEntryAction;
+import edu.ncsu.csc.itrust.action.ViewExerciseEntryAction;
+import edu.ncsu.csc.itrust.beans.ExerciseEntryBean;
+import edu.ncsu.csc.itrust.dao.DAOFactory;
+import edu.ncsu.csc.itrust.unit.datagenerators.TestDataGenerator;
+import edu.ncsu.csc.itrust.unit.testutils.TestDAOFactory;
+import junit.framework.TestCase;
+
+/**
+ * Tests different abilities for editing a exercise entry.
+ *
+ */
+public class EditExerciseEntryActionTest extends TestCase {
+	
+	private EditExerciseEntryAction action;
+	private ViewExerciseEntryAction viewAction;
+	private DAOFactory factory = TestDAOFactory.getTestInstance();
+	private TestDataGenerator gen;
+	private ExerciseEntryBean exerciseBean;
+	private AddExerciseEntryAction addAction;
+	
+	@Override
+	protected void setUp() throws Exception {
+		gen = new TestDataGenerator();
+		gen.clearAllTables();
+		gen.standardData();
+		exerciseBean = new ExerciseEntryBean();
+		exerciseBean.setStrDate("12/12/2012");
+		exerciseBean.setExerciseType("Weight Training");
+		exerciseBean.setStrName("Bench Press");
+		exerciseBean.setCaloriesBurned(50);
+		exerciseBean.setHoursWorked(1);
+		exerciseBean.setNumSets(3);
+		exerciseBean.setNumReps(10);
+		exerciseBean.setPatientID(1);
+	}
+	
+	/**
+	 * Clears all of the tables.
+	 */
+	protected void tearDown() throws Exception {
+		gen.clearAllTables();
+	}
+	
+
+}

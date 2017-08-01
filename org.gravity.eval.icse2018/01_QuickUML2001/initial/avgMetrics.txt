@@ -1,0 +1,2 @@
+avg lcom5 = 1.75
+avg CBO = 2.9

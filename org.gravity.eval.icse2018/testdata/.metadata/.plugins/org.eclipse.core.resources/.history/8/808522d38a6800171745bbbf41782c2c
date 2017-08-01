@@ -1,0 +1,704 @@
+package tests.net.sf.jabref.util;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.List;
+import java.util.TimeZone;
+
+import junit.framework.TestCase;
+import net.sf.jabref.BibtexEntry;
+import net.sf.jabref.JabRefPreferences;
+import net.sf.jabref.imports.BibtexParser;
+import net.sf.jabref.imports.ParserResult;
+import net.sf.jabref.util.EncryptionNotSupportedException;
+import net.sf.jabref.util.XMPSchemaBibtex;
+import net.sf.jabref.util.XMPUtil;
+
+import org.jempbox.xmp.XMPMetadata;
+import org.jempbox.xmp.XMPSchema;
+import org.jempbox.xmp.XMPSchemaBasic;
+import org.jempbox.xmp.XMPSchemaDublinCore;
+import org.jempbox.xmp.XMPSchemaMediaManagement;
+import org.pdfbox.pdmodel.PDDocument;
+import org.pdfbox.pdmodel.PDDocumentCatalog;
+import org.pdfbox.pdmodel.common.PDMetadata;
+import org.pdfbox.util.XMLUtil;
+
+/**
+ * 
+ * Limitations: The test suite only handles UTF8. Not UTF16.
+ * 
+ * @author Christopher Oezbek <oezi@oezi.de>
+ */
+public class XMPUtilTest extends TestCase {
+
+	/**
+	 * Wrap bibtex-data (<bibtex:author>...) into an rdf:Description.
+	 * 
+	 * @param bibtex
+	 * @return
+	 */
+	public static String bibtexDescription(String bibtex) {
+		return "      <rdf:Description rdf:about='' xmlns:bibtex='http://jabref.sourceforge.net/bibteXMP/'>\n"
+				+ bibtex + "\n" + "      </rdf:Description>\n";
+	}
+
+	/**
+	 * Wrap bibtex-descriptions (rdf:Description) into the xpacket header.
+	 * 
+	 * @param bibtexDescriptions
+	 * @return
+	 */
+	public static String bibtexXPacket(String bibtexDescriptions) {
+
+		StringBuffer xmp = new StringBuffer();
+
+		xmp.append("<?xpacket begin='﻿' id='W5M0MpCehiHzreSzNTczkc9d'?>\n");
+		xmp.append("  <x:xmpmeta xmlns:x='adobe:ns:meta/'>\n");
+		xmp
+				.append("    <rdf:RDF xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#' xmlns:iX='http://ns.adobe.com/iX/1.0/' xmlns:rdfs='http://www.w3.org/2000/01/rdf-schema#'>\n");
+
+		xmp.append(bibtexDescriptions);
+
+		xmp.append("    </rdf:RDF>\n");
+		xmp.append("  </x:xmpmeta>\n");
+		xmp.append("<?xpacket end='r'?>");
+
+		return xmp.toString();
+	}
+
+	/**
+	 * Write a manually constructed xmp-string to file
+	 * 
+	 * @param xmpString
+	 * @throws Exception
+	 */
+	public void writeManually(File tempFile, String xmpString) throws Exception {
+
+		PDDocument document = null;
+
+		try {
+			document = PDDocument.load(tempFile.getAbsoluteFile());
+			if (document.isEncrypted()) {
+				System.err
+						.println("Error: Cannot add metadata to encrypted document.");
+				System.exit(1);
+			}
+			PDDocumentCatalog catalog = document.getDocumentCatalog();
+
+			// Convert to UTF8 and make available for metadata.
+			ByteArrayOutputStream bs = new ByteArrayOutputStream();
+			OutputStreamWriter os = new OutputStreamWriter(bs, "UTF8");
+			os.write(xmpString);
+			os.close();
+			ByteArrayInputStream in = new ByteArrayInputStream(bs.toByteArray());
+
+			PDMetadata metadataStream = new PDMetadata(document, in, false);
+			catalog.setMetadata(metadataStream);
+
+			document.save(tempFile.getAbsolutePath());
+
+		} finally {
+			if (document != null)
+				document.close();
+		}
+	}
+
+	/* TEST DATA */
+	public String t1BibtexString() {
+		return "@article{canh05,\n"
+				+ "  author = {Crowston, K. and Annabi, H. and Howison, J. and Masango, C.},\n"
+				+ "  title = {Effective work practices for floss development: A model and propositions},\n"
+				+ "  booktitle = {Hawaii International Conference On System Sciences (HICSS)},\n"
+				+ "  year = {2005},\n" + "  owner = {oezbek},\n"
+				+ "  timestamp = {2006.05.29},\n"
+				+ "  url = {http://james.howison.name/publications.html}}\n";
+	}
+
+	public BibtexEntry t1BibtexEntry() throws IOException {
+		return bibtexString2BibtexEntry(t1BibtexString());
+	}
+
+	public String t2XMP() {
+		return "<rdf:Description rdf:about='' xmlns:bibtex='http://jabref.sourceforge.net/bibteXMP/' "
+				+ "bibtex:title='�pt�mz�t��n' "
+				+ "bibtex:bibtexkey='OezbekC06' "
+				+ "bibtex:entrytype='INCOLLECTION' "
+				+ "bibtex:year='2003' "
+				+ "bibtex:booktitle='Proceedings of the of the 25th International Conference on \n Software-Engineering (Portland, Oregon)' "
+				+ ">\n"
+				+ "<bibtex:pdf>YeKis03 - Towards.pdf</bibtex:pdf>\n"
+				+ "</rdf:Description>\n";
+	}
+
+	public String t2BibtexString() throws IOException {
+		return bibtexEntry2BibtexString(t2BibtexEntry());
+	}
+
+	public String t3BibtexString() throws IOException {
+		return bibtexEntry2BibtexString(t3BibtexEntry());
+	}
+
+	public String t3XMP() {
+		return bibtexDescription("<bibtex:title>Hypersonic ultra-sound</bibtex:title>\n"
+				+ "<bibtex:author><rdf:Seq>\n"
+				+ "  <rdf:li>Kelly Clarkson</rdf:li>"
+				+ "  <rdf:li>Ozzy Osbourne</rdf:li>"
+				+ "</rdf:Seq></bibtex:author>"
+				+ "<bibtex:editor><rdf:Seq>"
+				+ "  <rdf:li>Huey Duck</rdf:li>"
+				+ "  <rdf:li>Dewey Duck</rdf:li>"
+				+ "  <rdf:li>Louie Duck</rdf:li>"
+				+ "</rdf:Seq></bibtex:editor>"
+				+ "<bibtex:bibtexkey>Clarkson06</bibtex:bibtexkey>"
+				+ "<bibtex:journal>International Journal of High Fidelity</bibtex:journal>"
+				+ "<bibtex:booktitle>Catch-22</bibtex:booktitle>"
+				+ "<bibtex:pdf>YeKis03 - Towards.pdf</bibtex:pdf>"
+				+ "<bibtex:keywords>peanut,butter,jelly</bibtex:keywords>"
+				+ "<bibtex:entrytype>Inproceedings</bibtex:entrytype>"
+				+ "<bibtex:year>1982</bibtex:year>"
+				+ "<bibtex:month>#jul#</bibtex:month>"
+				+ "<bibtex:abstract>The success of the Linux operating system has demonstrated the viability of an alternative form of software development � open source software � that challenges traditional assumptions about software markets. Understanding what drives open source developers to participate in open source projects is crucial for assessing the impact of open source software. This article identifies two broad types of motivations that account for their participation in open source projects. The first category includes internal factors such as intrinsic motivation and altruism, and the second category focuses on external rewards such as expected future returns and personal needs. This article also reports the results of a survey administered to open source programmers.</bibtex:abstract>");
+	}
+
+	/**
+	 * The PDF file that basically all operations are done upon.
+	 */
+	File pdfFile;
+
+	JabRefPreferences prefs;
+
+	boolean use;
+
+	String[] privacyFilters;
+
+	public static String readManually(File tempFile) throws IOException {
+
+		PDDocument document = null;
+
+		try {
+			document = PDDocument.load(tempFile.getAbsoluteFile());
+			if (document.isEncrypted()) {
+				System.err
+						.println("Error: Cannot add metadata to encrypted document.");
+				System.exit(1);
+			}
+			PDDocumentCatalog catalog = document.getDocumentCatalog();
+			PDMetadata meta = catalog.getMetadata();
+
+			if (meta == null) {
+				return null;
+			} else {
+				// PDMetadata.getInputStreamAsString() does not work
+
+				// Convert to UTF8 and make available for metadata.
+				InputStreamReader is = new InputStreamReader(meta
+						.createInputStream(), "UTF8");
+				return slurp(is).trim(); // Trim to kill padding end-newline.
+			}
+		} finally {
+			if (document != null)
+				document.close();
+		}
+	}
+
+	/**
+	 * Test whether the helper function work correctly.
+	 * 
+	 * @throws Exception
+	 */
+	public void testWriteReadManually() throws Exception {
+
+		String bibtex = "<bibtex:year>2003</bibtex:year>\n"
+				+ "<bibtex:title>�pt�mz�t��n</bibtex:title>\n"
+				+ "<bibtex:bibtexkey>OezbekC06</bibtex:bibtexkey>\n";
+
+		writeManually(pdfFile, bibtexXPacket(bibtexDescription(bibtex)));
+		assertEquals(bibtexXPacket(bibtexDescription(bibtex)),
+				readManually(pdfFile));
+
+		bibtex = "<bibtex:author><rdf:Seq>\n"
+				+ "  <rdf:li>Kelly Clarkson</rdf:li>"
+				+ "  <rdf:li>Ozzy Osbourne</rdf:li>"
+				+ "</rdf:Seq></bibtex:author>" + "<bibtex:editor><rdf:Seq>"
+				+ "  <rdf:li>Huey Duck</rdf:li>"
+				+ "  <rdf:li>Dewey Duck</rdf:li>"
+				+ "  <rdf:li>Louie Duck</rdf:li>"
+				+ "</rdf:Seq></bibtex:editor>"
+				+ "<bibtex:bibtexkey>Clarkson06</bibtex:bibtexkey>";
+
+		writeManually(pdfFile, bibtexXPacket(bibtexDescription(bibtex)));
+		assertEquals(bibtexXPacket(bibtexDescription(bibtex)),
+				readManually(pdfFile));
+	}
+
+	/**
+	 * Test whether XMP.readFile can deal with text-properties that are not
+	 * element-nodes, but attribute-nodes
+	 * 
+	 * @throws Exception
+	 */
+	public void testAttributeRead() throws Exception {
+
+		// test 1 has attributes
+		String bibtex = t2XMP();
+
+		writeManually(pdfFile, bibtexXPacket(bibtex));
+
+		List<BibtexEntry> l = XMPUtil.readXMP(pdfFile.getAbsoluteFile());
+		assertEquals(1, l.size());
+		BibtexEntry e = l.get(0);
+
+		assertEquals(t2BibtexEntry(), e);
+	}
+
+	public void testEmpty() throws Exception {
+
+		assertEquals(null, XMPUtil.readXMP(pdfFile));
+
+	}
+
+	/**
+	 * Tests whether writing BibTex.xmp will preserve existing XMP-descriptions.
+	 * 
+	 * @throws Exception
+	 *             (indicating an failure)
+	 */
+	@SuppressWarnings("unchecked")
+	public void testSimpleUpdate() throws Exception {
+
+		String s = " <rdf:Description rdf:about=''"
+				+ "  xmlns:xmp='http://ns.adobe.com/xap/1.0/'>"
+				+ "  <xmp:CreatorTool>Acrobat PDFMaker 7.0.7</xmp:CreatorTool>"
+				+ "  <xmp:ModifyDate>2006-08-07T18:50:24+02:00</xmp:ModifyDate>"
+				+ "  <xmp:CreateDate>2006-08-07T14:44:24+02:00</xmp:CreateDate>"
+				+ "  <xmp:MetadataDate>2006-08-07T18:50:24+02:00</xmp:MetadataDate>"
+				+ " </rdf:Description>"
+				+ ""
+				+ " <rdf:Description rdf:about=''"
+				+ "  xmlns:xapMM='http://ns.adobe.com/xap/1.0/mm/'>"
+				+ "  <xapMM:DocumentID>uuid:843cd67d-495e-4c1e-a4cd-64178f6b3299</xapMM:DocumentID>"
+				+ "  <xapMM:InstanceID>uuid:1e56b4c0-6782-440d-ba76-d2b3d87547d1</xapMM:InstanceID>"
+				+ "  <xapMM:VersionID>" + "   <rdf:Seq>"
+				+ "    <rdf:li>17</rdf:li>" + "   </rdf:Seq>"
+				+ "  </xapMM:VersionID>" + " </rdf:Description>" + ""
+				+ " <rdf:Description rdf:about=''"
+				+ "  xmlns:dc='http://purl.org/dc/elements/1.1/'>"
+				+ "  <dc:format>application/pdf</dc:format>"
+				+ "</rdf:Description>";
+
+		writeManually(pdfFile, bibtexXPacket(s));
+
+		// Nothing there yet, but should not crash
+		assertNull(XMPUtil.readXMP(pdfFile));
+
+		s = " <rdf:Description rdf:about=''"
+				+ "  xmlns:xmp='http://ns.adobe.com/xap/1.0/'>"
+				+ "  <xmp:CreatorTool>Acrobat PDFMaker 7.0.7</xmp:CreatorTool>"
+				+ "  <xmp:ModifyDate>2006-08-07T18:50:24+02:00</xmp:ModifyDate>"
+				+ "  <xmp:CreateDate>2006-08-07T14:44:24+02:00</xmp:CreateDate>"
+				+ "  <xmp:MetadataDate>2006-08-07T18:50:24+02:00</xmp:MetadataDate>"
+				+ " </rdf:Description>"
+				+ ""
+				+ " <rdf:Description rdf:about=''"
+				+ "  xmlns:xapMM='http://ns.adobe.com/xap/1.0/mm/'>"
+				+ "  <xapMM:DocumentID>uuid:843cd67d-495e-4c1e-a4cd-64178f6b3299</xapMM:DocumentID>"
+				+ "  <xapMM:InstanceID>uuid:1e56b4c0-6782-440d-ba76-d2b3d87547d1</xapMM:InstanceID>"
+				+ "  <xapMM:VersionID>" + "   <rdf:Seq>"
+				+ "    <rdf:li>17</rdf:li>" + "   </rdf:Seq>"
+				+ "  </xapMM:VersionID>" + " </rdf:Description>" + ""
+				+ " <rdf:Description rdf:about=''"
+				+ "  xmlns:dc='http://purl.org/dc/elements/1.1/'>"
+				+ "  <dc:format>application/pdf</dc:format>" + "  <dc:title>"
+				+ "   <rdf:Alt>"
+				+ "    <rdf:li xml:lang='x-default'>Questionnaire.pdf</rdf:li>"
+				+ "   </rdf:Alt>" + "  </dc:title>" + "" + "</rdf:Description>";
+
+		writeManually(pdfFile, bibtexXPacket(s));
+
+		// Title is Questionnaire.pdf so the DublinCore fallback should hit
+		// in...
+		assertEquals(1, XMPUtil.readXMP(pdfFile).size());
+
+		{
+			// Now write new packet and check if it was correctly written
+			XMPUtil.writeXMP(pdfFile, t1BibtexEntry(), null);
+
+			List<BibtexEntry> l = XMPUtil.readXMP(pdfFile.getAbsoluteFile());
+			assertEquals(1, l.size());
+			BibtexEntry e = l.get(0);
+
+			assertEquals(t1BibtexEntry(), e);
+
+			// This is what we really want to test: Is the rest of the
+			// descriptions still there?
+
+			PDDocument document = null;
+			try {
+				document = PDDocument.load(pdfFile.getAbsoluteFile());
+				if (document.isEncrypted()) {
+					throw new IOException(
+							"Error: Cannot read metadata from encrypted document.");
+				}
+				PDDocumentCatalog catalog = document.getDocumentCatalog();
+				PDMetadata metaRaw = catalog.getMetadata();
+
+				XMPMetadata meta;
+				if (metaRaw != null) {
+					meta = new XMPMetadata(XMLUtil.parse(metaRaw
+							.createInputStream()));
+				} else {
+					meta = new XMPMetadata();
+				}
+				meta.addXMLNSMapping(XMPSchemaBibtex.NAMESPACE,
+						XMPSchemaBibtex.class);
+
+				List<XMPSchema> schemas = meta.getSchemas();
+
+				assertEquals(4, schemas.size());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaBibtex.NAMESPACE);
+				assertEquals(1, schemas.size());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaDublinCore.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaDublinCore dc = (XMPSchemaDublinCore) schemas.get(0);
+				assertEquals("application/pdf", dc.getFormat());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaBasic.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaBasic bs = (XMPSchemaBasic) schemas.get(0);
+				assertEquals("Acrobat PDFMaker 7.0.7", bs.getCreatorTool());
+
+				Calendar c = Calendar.getInstance();
+				c.clear();
+				c.set(Calendar.YEAR, 2006);
+				c.set(Calendar.MONTH, Calendar.AUGUST);
+				c.set(Calendar.DATE, 7);
+				c.set(Calendar.HOUR, 14);
+				c.set(Calendar.MINUTE, 44);
+				c.set(Calendar.SECOND, 24);
+				c.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+
+				Calendar other = bs.getCreateDate();
+
+				assertEquals(c.get(Calendar.YEAR), other.get(Calendar.YEAR));
+				assertEquals(c.get(Calendar.MONTH), other.get(Calendar.MONTH));
+				assertEquals(c.get(Calendar.DATE), other.get(Calendar.DATE));
+				assertEquals(c.get(Calendar.HOUR), other.get(Calendar.HOUR));
+				assertEquals(c.get(Calendar.MINUTE), other.get(Calendar.MINUTE));
+				assertEquals(c.get(Calendar.SECOND), other.get(Calendar.SECOND));
+				assertTrue(c.getTimeZone().hasSameRules(other.getTimeZone()));
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaMediaManagement.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaMediaManagement mm = (XMPSchemaMediaManagement) schemas
+						.get(0);
+				assertEquals("17", mm.getSequenceList("xapMM:VersionID").get(0));
+
+			} finally {
+				if (document != null) {
+					document.close();
+				}
+			}
+		}
+
+		{ // Now alter the Bibtex entry, write it and do all the checks again
+			BibtexEntry toSet = t1BibtexEntry();
+			toSet.setField("author", "Pokemon!");
+
+			XMPUtil.writeXMP(pdfFile, toSet, null);
+
+			List l = XMPUtil.readXMP(pdfFile.getAbsoluteFile());
+			assertEquals(1, l.size());
+			BibtexEntry e = (BibtexEntry) l.get(0);
+
+			assertEquals(toSet, e);
+
+			// This is what we really want to test: Is the rest of the
+			// descriptions still there?
+
+			PDDocument document = null;
+			try {
+				document = PDDocument.load(pdfFile.getAbsoluteFile());
+				if (document.isEncrypted()) {
+					throw new IOException(
+							"Error: Cannot read metadata from encrypted document.");
+				}
+				PDDocumentCatalog catalog = document.getDocumentCatalog();
+				PDMetadata metaRaw = catalog.getMetadata();
+
+				XMPMetadata meta;
+				if (metaRaw != null) {
+					meta = new XMPMetadata(XMLUtil.parse(metaRaw
+							.createInputStream()));
+				} else {
+					meta = new XMPMetadata();
+				}
+				meta.addXMLNSMapping(XMPSchemaBibtex.NAMESPACE,
+						XMPSchemaBibtex.class);
+
+				List schemas = meta.getSchemas();
+
+				assertEquals(4, schemas.size());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaBibtex.NAMESPACE);
+				assertEquals(1, schemas.size());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaDublinCore.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaDublinCore dc = (XMPSchemaDublinCore) schemas.get(0);
+				assertEquals("application/pdf", dc.getFormat());
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaBasic.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaBasic bs = (XMPSchemaBasic) schemas.get(0);
+				assertEquals("Acrobat PDFMaker 7.0.7", bs.getCreatorTool());
+
+				Calendar c = Calendar.getInstance();
+				c.clear();
+				c.set(Calendar.YEAR, 2006);
+				c.set(Calendar.MONTH, 7);
+				c.set(Calendar.DATE, 7);
+				c.set(Calendar.HOUR, 14);
+				c.set(Calendar.MINUTE, 44);
+				c.set(Calendar.SECOND, 24);
+				c.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+
+				Calendar other = bs.getCreateDate();
+
+				assertEquals(c.get(Calendar.YEAR), other.get(Calendar.YEAR));
+				assertEquals(c.get(Calendar.MONTH), other.get(Calendar.MONTH));
+				assertEquals(c.get(Calendar.DATE), other.get(Calendar.DATE));
+				assertEquals(c.get(Calendar.HOUR), other.get(Calendar.HOUR));
+				assertEquals(c.get(Calendar.MINUTE), other.get(Calendar.MINUTE));
+				assertEquals(c.get(Calendar.SECOND), other.get(Calendar.SECOND));
+				assertTrue(c.getTimeZone().hasSameRules(other.getTimeZone()));
+
+				schemas = meta
+						.getSchemasByNamespaceURI(XMPSchemaMediaManagement.NAMESPACE);
+				assertEquals(1, schemas.size());
+				XMPSchemaMediaManagement mm = (XMPSchemaMediaManagement) schemas
+						.get(0);
+				assertEquals("17", mm.getSequenceList("xapMM:VersionID").get(0));
+
+			} finally {
+				if (document != null) {
+					document.close();
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public void testReadRawXMP() throws Exception {
+
+		ParserResult result = BibtexParser
+				.parse(new StringReader(
+						"@article{canh05,"
+								+ "  author = {Crowston, K. and Annabi, H. and Howison, J. and Masango, C.},\n"
+								+ "  title = {Effective work practices for floss development: A model and propositions},\n"
+								+ "  booktitle = {Hawaii International Conference On System Sciences (HICSS)},\n"
+								+ "  year = {2005},\n"
+								+ "  owner = {oezbek},\n"
+								+ "  timestamp = {2006.05.29},\n"
+								+ "  url = {http://james.howison.name/publications.html}}"));
+
+		Collection c = result.getDatabase().getEntries();
+		assertEquals(1, c.size());
+
+		BibtexEntry e = (BibtexEntry) c.iterator().next();
+
+		XMPUtil.writeXMP(pdfFile, e, null);
+
+		XMPMetadata metadata = XMPUtil.readRawXMP(pdfFile);
+
+		List<XMPSchema> schemas = metadata.getSchemas();
+		assertEquals(2, schemas.size());
+		schemas = metadata.getSchemasByNamespaceURI(XMPSchemaBibtex.NAMESPACE);
+		assertEquals(1, schemas.size());
+		XMPSchemaBibtex bib = (XMPSchemaBibtex) schemas.get(0);
+
+		List<String> authors = bib.getSequenceList("author");
+		assertEquals(4, authors.size());
+		assertEquals("K. Crowston", authors.get(0));
+		assertEquals("H. Annabi", authors.get(1));
+		assertEquals("J. Howison", authors.get(2));
+		assertEquals("C. Masango", authors.get(3));
+
+		assertEquals("Article", bib.getTextProperty("entrytype"));
+		assertEquals(
+				"Effective work practices for floss development: A model and propositions",
+				bib.getTextProperty("title"));
+		assertEquals(
+				"Hawaii International Conference On System Sciences (HICSS)",
+				bib.getTextProperty("booktitle"));
+		assertEquals("2005", bib.getTextProperty("year"));
+		assertEquals("oezbek", bib.getTextProperty("owner"));
+		assertEquals("http://james.howison.name/publications.html", bib
+				.getTextProperty("url"));
+
+	}
+
+	/**
+	 * Test whether the command-line client works correctly with writing a
+	 * single entry
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	public void testCommandLineSingleBib() throws Exception {
+
+		// First check conversion from .bib to .xmp
+		File tempBib = File.createTempFile("JabRef", ".bib");
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(tempBib);
+			fileWriter.write(t1BibtexString());
+			fileWriter.close();
+
+			ByteArrayOutputStream s = new ByteArrayOutputStream();
+			PrintStream oldOut = System.out;
+			System.setOut(new PrintStream(s));
+			XMPUtil.main(new String[] { tempBib.getAbsolutePath() });
+			System.setOut(oldOut);
+			s.close();
+			String xmp = s.toString();
+
+			writeManually(pdfFile, xmp);
+
+			List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+			assertEquals(1, l.size());
+			assertEquals(t1BibtexEntry(), l.get(0));
+
+		} finally {
+			if (fileWriter != null)
+				fileWriter.close();
+			if (tempBib != null)
+				tempBib.delete();
+		}
+	}
+
+	/**
+	 * Test whether the command-line client can pick one of several entries from
+	 * a bibtex file
+	 * 
+	 * @throws Exception
+	 * 
+	 */
+	public void testCommandLineByKey() throws Exception {
+
+		File tempBib = File.createTempFile("JabRef", ".bib");
+		FileWriter fileWriter = null;
+		try {
+			fileWriter = new FileWriter(tempBib);
+			fileWriter.write(t1BibtexString());
+			fileWriter.write(t2BibtexString());
+			fileWriter.close();
+
+			{ // First try canh05
+				ByteArrayOutputStream s = new ByteArrayOutputStream();
+				PrintStream oldOut = System.out;
+				System.setOut(new PrintStream(s));
+				XMPUtil.main(new String[] { "canh05",
+						tempBib.getAbsolutePath(), pdfFile.getAbsolutePath() });
+				System.setOut(oldOut);
+				s.close();
+
+				// PDF should be annotated:
+				List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+				assertEquals(1, l.size());
+				assertEquals(t1BibtexEntry(), l.get(0));
+			}
+			{ // Now try OezbekC06
+				ByteArrayOutputStream s = new ByteArrayOutputStream();
+				PrintStream oldOut = System.out;
+				System.setOut(new PrintStream(s));
+				XMPUtil.main(new String[] { "OezbekC06",
+						tempBib.getAbsolutePath(), pdfFile.getAbsolutePath() });
+				System.setOut(oldOut);
+				s.close();
+				// PDF should be annotated:
+				List<BibtexEntry> l = XMPUtil.readXMP(pdfFile);
+				assertEquals(1, l.size());
+				assertEquals(t2BibtexEntry(), l.get(0));
+			}
+		} finally {
+			if (fileWriter != null)
+				fileWriter.close();
+
+			if (tempBib != null)
+				tempBib.delete();
+		}
+	}
+
+	/**
+	 * Test that we cannot use encrypted PDFs.
+	 */
+	public void testEncryption() throws Exception {
+
+		// // PDF was created using:
+		//
+		// PDDocument pdf = null;
+		// try {
+		// pdf = new PDDocument();
+		// pdf.addPage(new PDPage()); // Need page to open in Acrobat
+		// pdf.encrypt("hello", "world");
+		// pdf.save("d:/download/encrypted.pdf");
+		// } finally {
+		// if (pdf != null)
+		// pdf.close();
+		// }
+		//			
+
+		try {
+			XMPUtil.readXMP("src/tests/encrypted.pdf");
+			fail();
+		} catch (EncryptionNotSupportedException e) {
+		}
+
+		try {
+			XMPUtil.writeXMP("src/tests/encrypted.pdf", t1BibtexEntry(), null);
+			fail();
+		} catch (EncryptionNotSupportedException e) {
+		}
+	}
+
+	/**
+	 * Read the contents of a reader as one string
+	 * 
+	 * @param reader
+	 * @return
+	 * @throws IOException
+	 */
+	public static String slurp(Reader reader) throws IOException {
+		char[] chars = new char[4092];
+		StringBuffer totalBuffer = new StringBuffer();
+		int bytesRead;
+		while ((bytesRead = reader.read(chars)) != -1) {
+			if (bytesRead == 4092) {
+				totalBuffer.append(chars);
+			} else {
+				totalBuffer.append(new String(chars, 0, bytesRead));
+			}
+		}
+		return totalBuffer.toString();
+	}
+}

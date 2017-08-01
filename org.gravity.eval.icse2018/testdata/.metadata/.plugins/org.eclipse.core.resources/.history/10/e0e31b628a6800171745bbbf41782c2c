@@ -1,0 +1,30 @@
+package edu.ncsu.csc.itrust.unit.validate.bean;
+
+import junit.framework.TestCase;
+import edu.ncsu.csc.itrust.beans.forms.RecordsReleaseForm;
+import edu.ncsu.csc.itrust.exception.FormValidationException;
+import edu.ncsu.csc.itrust.validate.RecordsReleaseFormValidator;
+
+public class RecordsReleaseBeanValidatorTest extends TestCase {
+	private RecordsReleaseFormValidator validator = new RecordsReleaseFormValidator();
+	
+	public void testNoRecipientPhone(){
+		RecordsReleaseForm rr = new RecordsReleaseForm();
+		rr.setReleaseHospitalID("1");
+		rr.setRecipientHospitalName("New Hospital");
+		rr.setRecipientHospitalAddress("123 Fake Street");
+		rr.setRecipientFirstName("BillyBob");
+		rr.setRecipientLastName("Joe");
+		rr.setRecipientPhone("");
+		rr.setRecipientEmail("bbjoe@yahoo.com");
+		rr.setRequestJustification("Just for kicks n' giggles");
+		rr.setDigitalSignature(true);
+		try {
+			validator.validate(rr);
+			fail("Should have thrown exception");
+		} catch (FormValidationException e) {
+			//good
+		}
+	}
+	
+}

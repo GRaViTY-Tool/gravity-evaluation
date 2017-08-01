@@ -1,0 +1,121 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.nutch.metadata;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+/**
+ * JUnit based tests of class {@link org.apache.nutch.metadata.Metadata}.
+ */
+public class TestMetadata extends TestCase {
+
+  private static final String CONTENTTYPE = "contenttype";
+
+  public TestMetadata(String testName) {
+    super(testName);
+  }
+
+  public static Test suite() {
+    return new TestSuite(TestMetadata.class);
+  }
+
+  public static void main(String[] args) {
+    TestRunner.run(suite());
+  }
+  
+  /** Test for the <code>set(String, String)</code> method. */
+  public void testSet() {
+    String[] values = null;
+    Metadata meta = new Metadata();
+
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(0, values.length);
+
+    meta.set(CONTENTTYPE, "value1");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(1, values.length);
+    assertEquals("value1", values[0]);
+
+    meta.set(CONTENTTYPE, "value2");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(1, values.length);
+    assertEquals("value2", values[0]);
+
+    meta.set(CONTENTTYPE, "new value 1");
+    meta.add("contenttype", "new value 2");
+    values = meta.getValues(CONTENTTYPE);
+    assertEquals(2, values.length);
+    assertEquals("new value 1", values[0]);
+    assertEquals("new value 2", values[1]);
+  }
+
+  /** Test for <code>isMultiValued()</code> method. */
+  public void testIsMultiValued() {
+    Metadata meta = new Metadata();
+    assertFalse(meta.isMultiValued("key"));
+    meta.add("key", "value1");
+    assertFalse(meta.isMultiValued("key"));
+    meta.add("key", "value2");
+    assertTrue(meta.isMultiValued("key"));
+  }
+
+  /** Test for <code>names</code> method. */
+  public void testNames() {
+    String[] names = null;
+    Metadata meta = new Metadata();
+    names = meta.names();
+    assertEquals(0, names.length);
+
+    meta.add("name-one", "value");
+    names = meta.names();
+    assertEquals(1, names.length);
+    assertEquals("name-one", names[0]);
+    meta.add("name-two", "value");
+    names = meta.names();
+    assertEquals(2, names.length);
+  }
+
+  /** Test for <code>equals(Object)</code> method. */
+  public void testObject() {
+    Metadata meta1 = new Metadata();
+    Metadata meta2 = new Metadata();
+    assertFalse(meta1.equals(null));
+    assertFalse(meta1.equals("String"));
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-one", "value-1.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-one", "value-1.2");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.1");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.1");
+    assertTrue(meta1.equals(meta2));
+    meta1.add("name-two", "value-2.2");
+    assertFalse(meta1.equals(meta2));
+    meta2.add("name-two", "value-2.x");
+    assertFalse(meta1.equals(meta2));
+  }
+
+}
+

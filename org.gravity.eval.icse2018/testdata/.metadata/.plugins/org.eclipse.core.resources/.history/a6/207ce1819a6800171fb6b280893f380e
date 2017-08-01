@@ -1,0 +1,260 @@
+/*
+ * EditPane.java - Text area and buffer switcher
+ * :tabSize=8:indentSize=8:noTabs=false:
+ * :folding=explicit:collapseFolds=1:
+ *
+ * Copyright (C) 2000, 2001 Slava Pestov
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ */
+
+package org.gjt.sp.jedit;
+
+//{{{ Imports
+import javax.swing.event.*;
+import javax.swing.*;
+import java.awt.*;
+import org.gjt.sp.jedit.gui.*;
+import org.gjt.sp.jedit.msg.*;
+import org.gjt.sp.jedit.syntax.*;
+import org.gjt.sp.jedit.textarea.*;
+import org.gjt.sp.util.Log;
+//}}}
+
+/**
+ * A panel containing a text area. Each edit pane can edit one buffer at
+ * a time.
+ * @author Slava Pestov
+ * @version $Id: EditPane.java,v 1.22 2002/03/17 03:05:24 spestov Exp $
+ */
+public class EditPane extends JPanel implements EBComponent
+{
+	//{{{ getView() method
+	/**
+	 * Returns the view containing this edit pane.
+	 * @since jEdit 2.5pre2
+	 */
+	public View getView()
+	{
+		return view;
+	} //}}}
+
+	//{{{ getBuffer() method
+	/**
+	 * Returns the current buffer.
+	 * @since jEdit 2.5pre2
+	 */
+	public Buffer getBuffer()
+	{
+		return buffer;
+	} //}}}
+
+	//{{{ prevBuffer() method
+	/**
+	 * Selects the previous buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void prevBuffer()
+	{
+		Buffer buffer = this.buffer.getPrev();
+		if(buffer == null)
+			setBuffer(jEdit.getLastBuffer());
+		else
+			setBuffer(buffer);
+	} //}}}
+
+	//{{{ nextBuffer() method
+	/**
+	 * Selects the next buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void nextBuffer()
+	{
+		Buffer buffer = this.buffer.getNext();
+		if(buffer == null)
+			setBuffer(jEdit.getFirstBuffer());
+		else
+			setBuffer(buffer);
+	} //}}}
+
+	//{{{ recentBuffer() method
+	/**
+	 * Selects the most recently edited buffer.
+	 * @since jEdit 2.7pre2
+	 */
+	public void recentBuffer()
+	{
+		if(recentBuffer != null)
+			setBuffer(recentBuffer);
+		else
+			getToolkit().beep();
+	} //}}}
+
+	//{{{ focusOnTextArea() method
+	/**
+	 * Sets the focus onto the text area.
+	 * @since jEdit 2.5pre2
+	 */
+	public void focusOnTextArea()
+	{
+		textArea.grabFocus();
+		// trying to work around buggy focus handling in some
+		// Java versions
+//		if(!textArea.hasFocus())
+//		{
+//			textArea.processFocusEvent(new FocusEvent(textArea,
+//				FocusEvent.FOCUS_GAINED));
+//		}
+	} //}}}
+
+	//{{{ getTextArea() method
+	/**
+	 * Returns the view's text area.
+	 * @since jEdit 2.5pre2
+	 */
+	public JEditTextArea getTextArea()
+	{
+		return textArea;
+	} //}}}
+
+	//{{{ saveCaretInfo() method
+	/**
+	 * Saves the caret information to the current buffer.
+	 * @since jEdit 2.5pre2
+	 */
+	public void saveCaretInfo()
+	{
+		buffer.setIntegerProperty(Buffer.CARET,
+			textArea.getCaretPosition());
+
+		/*Selection[] selection = textArea.getSelection();
+		if(selection != null)
+			buffer.setProperty(Buffer.SELECTION,selection);*/
+
+		buffer.setIntegerProperty(Buffer.SCROLL_VERT,
+			textArea.getFirstPhysicalLine());
+		buffer.setIntegerProperty(Buffer.SCROLL_HORIZ,
+			textArea.getHorizontalOffset());
+	} //}}}
+
+	//{{{ loadCaretInfo() method
+	/**
+	 * Loads the caret information from the current buffer.
+	 * @since jEdit 2.5pre2
+	 */
+	public void loadCaretInfo()
+	{
+		Integer caret = (Integer)buffer.getProperty(Buffer.CARET);
+		//Selection[] selection = (Selection[])buffer.getProperty(Buffer.SELECTION);
+
+		Integer firstLine = (Integer)buffer.getProperty(Buffer.SCROLL_VERT);
+		Integer horizontalOffset = (Integer)buffer.getProperty(Buffer.SCROLL_HORIZ);
+
+		if(caret != null)
+		{
+			textArea.setCaretPosition(Math.min(caret.intValue(),
+				buffer.getLength()));
+		}
+
+		/*if(selection != null)
+			textArea.setSelection(selection);*/
+
+		if(firstLine != null)
+			textArea.setFirstLine(textArea.physicalToVirtual(firstLine.intValue()));
+
+		if(horizontalOffset != null)
+			textArea.setHorizontalOffset(horizontalOffset.intValue());
+
+		/* Silly bug workaround #8694. If you look at the above code,
+		 * note that we restore the saved caret position first, then
+		 * scroll to the saved location. However, the caret changing
+		 * can itself result in scrolling to a different location than
+		 * what was saved; and since moveCaretPosition() calls
+		 * updateBracketHighlight(), the bracket highlight's out of
+		 * bounds calculation will rely on a different set of physical
+		 * first/last lines than what we will end up with eventually.
+		 * Instead of confusing the user with status messages that
+		 * appear at random when switching buffers, we simply hide the
+		 * message altogether. */
+		view.getStatus().setMessage(null);
+	} //}}}
+
+	//{{{ handleMessage() method
+	public void handleMessage(EBMessage msg)
+	{
+		if(msg instanceof PropertiesChanged)
+		{
+			propertiesChanged();
+			loadBufferSwitcher();
+		}
+		else if(msg instanceof BufferUpdate)
+			handleBufferUpdate((BufferUpdate)msg);
+	} //}}}
+
+	//{{{ getMinimumSize() method
+	/**
+	 * Returns 0,0 for split pane compatibility.
+	 */
+	public final Dimension getMinimumSize()
+	{
+		return new Dimension(0,0);
+	} //}}}
+
+	//{{{ Package-private members
+
+	//{{{ EditPane constructor
+	EditPane(View view, Buffer buffer)
+	{
+		super(new BorderLayout());
+
+		init = true;
+
+		this.view = view;
+
+		EditBus.addToBus(this);
+
+		textArea = new JEditTextArea(view);
+
+		add(BorderLayout.CENTER,textArea);
+
+		propertiesChanged();
+
+		if(buffer == null)
+			setBuffer(jEdit.getFirstBuffer());
+		else
+			setBuffer(buffer);
+
+		loadBufferSwitcher();
+
+		init = false;
+	} //}}}
+
+	
+
+	//}}}
+
+	//{{{ Private members
+
+	//{{{ Instance variables
+	private boolean init;
+	private View view;
+	private Buffer buffer;
+	private Buffer recentBuffer;
+	private BufferSwitcher bufferSwitcher;
+	private JEditTextArea textArea;
+	//}}}
+
+	//}}}
+}

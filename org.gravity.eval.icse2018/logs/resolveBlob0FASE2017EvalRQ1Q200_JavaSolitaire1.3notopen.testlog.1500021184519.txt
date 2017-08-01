@@ -1,0 +1,34 @@
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.egit.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 10:33:05.660LOG: 
+LOG: !MESSAGELOG:  LOG: Remove repository mapping of Git mapped resource for which project or mapped git repository has disappeared: 'RepositoryMapping[<empty> -> '../../.git', absolute path: '/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/.git' ]'LOG: 
+LOG: !STACKLOG:  LOG: 0LOG: 
+LOG: java.io.FileNotFoundException: 
+	at org.eclipse.egit.core.project.GitProjectData.logAndUnmapGoneMappedResource(GitProjectData.java:720)
+	at org.eclipse.egit.core.project.GitProjectData.map(GitProjectData.java:683)
+	at org.eclipse.egit.core.project.GitProjectData.remapAll(GitProjectData.java:647)
+	at org.eclipse.egit.core.project.GitProjectData.load(GitProjectData.java:630)
+	at org.eclipse.egit.core.project.GitProjectData.get(GitProjectData.java:218)
+	at org.eclipse.egit.core.GitProvider.getData(GitProvider.java:106)
+	at org.eclipse.egit.core.project.RepositoryMapping.getProjectData(RepositoryMapping.java:361)
+	at org.eclipse.egit.core.project.RepositoryMapping.findMapping(RepositoryMapping.java:377)
+	at org.eclipse.egit.core.project.RepositoryMapping.getMapping(RepositoryMapping.java:334)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.visitConnect(Activator.java:554)
+	at org.eclipse.egit.core.Activator$CheckProjectsToShare.run(Activator.java:531)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+LOG: 
+LOG: !ENTRYLOG:  LOG: org.eclipse.pde.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 10:33:05.903LOG: 
+LOG: !MESSAGELOG:  LOG: The current target platform contains errors, open Window > Preferences > Plug-in Development > Target Platform for details.LOG: 
+LOG: !STACKLOG:  LOG: 1LOG: 
+LOG: org.eclipse.core.runtime.CoreException: Problems occurred while resolving the target contents
+	at org.eclipse.pde.internal.core.PluginModelManager.getExternalBundles(PluginModelManager.java:637)
+	at org.eclipse.pde.internal.core.PluginModelManager.initializeTable(PluginModelManager.java:543)
+	at org.eclipse.pde.internal.core.PluginModelManager.targetReloaded(PluginModelManager.java:471)
+	at org.eclipse.pde.internal.core.RequiredPluginsInitializer$1.run(RequiredPluginsInitializer.java:31)
+	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:55)
+Contains: Configuration directory does not exist: /home/speldszus/workspace/gravity_linux/.metadata/.plugins/org.eclipse.pde.core/EditTestdataFASE2017/
+LOG: !SUBENTRYLOG:  LOG: 1LOG:  LOG: org.eclipse.pde.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 10:33:05.904LOG: 
+LOG: !MESSAGELOG:  LOG: Problems occurred while resolving the target contentsLOG: 
+LOG: !SUBENTRYLOG:  LOG: 2LOG:  LOG: org.eclipse.pde.coreLOG:  LOG: 4LOG:  LOG: 0LOG:  LOG: 2017-07-14 10:33:05.905LOG: 
+LOG: !MESSAGELOG:  LOG: Configuration directory does not exist: /home/speldszus/workspace/gravity_linux/.metadata/.plugins/org.eclipse.pde.core/EditTestdataFASE2017/LOG: 
+LOG: 1500021190468 GRaViTY convert project: 00_JavaSolitaire1.3_tmp_blob
+LOG: 1500021190469 MoDisco discover project: 00_JavaSolitaire1.3_tmp_blob
