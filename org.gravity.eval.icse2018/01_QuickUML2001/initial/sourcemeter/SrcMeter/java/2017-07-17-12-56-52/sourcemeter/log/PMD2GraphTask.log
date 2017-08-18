@@ -1,6 +1,0 @@
-[2017-07-17 12:57:01] Start:PMD2GraphTask
-PMD2Graph 8.1.0 (build 8717#45019  Linux64) - (C) 2001-2016 FrontEndART Ltd.
-Loading LIM ASG file "/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/initial/sourcemeter/SrcMeter/java/2017-07-17-12-56-52/sourcemeter/asg/SrcMeter.lim"
-Loading filter file "/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/initial/sourcemeter/SrcMeter/java/2017-07-17-12-56-52/sourcemeter/asg/SrcMeter.flim"
-Loading xml file "/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/initial/sourcemeter/SrcMeter/java/2017-07-17-12-56-52/sourcemeter/temp/SrcMeter-PMD.xml"
-[2017-07-17 12:57:01] End:PMD2GraphTask Result:OK

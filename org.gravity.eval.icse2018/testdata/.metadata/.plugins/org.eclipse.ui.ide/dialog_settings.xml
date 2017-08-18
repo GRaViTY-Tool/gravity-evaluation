@@ -211,16 +211,17 @@
 		<item value="org.eclipse.xtext.xbase.lib:2.10.0.v201605250459"/>
 		<item value="org.eclipse.xtext.xbase:2.10.0.v201605250459"/>
 		<item value="org.eclipse.xtext.xtext.ui:2.10.0.v201605250459"/>
-		<item value="org.moflon.gt.mosl.feature:2.30.0.201704132021"/>
-		<item value="org.moflon.ide.feature:2.30.0.201704132021"/>
-		<item value="org.moflon.ide.visualization.feature:2.30.0.201704132021"/>
-		<item value="org.moflon.tgg.mosl.feature:2.30.0.201704132021"/>
+		<item value="org.moflon.gt.mosl.feature:2.31.0.201707200910"/>
+		<item value="org.moflon.ide.feature:2.31.0.201707200910"/>
+		<item value="org.moflon.ide.visualization.feature:2.31.0.201707200910"/>
+		<item value="org.moflon.tgg.mosl.feature:2.31.0.201707200910"/>
 	</list>
 	<section name="ExternalProjectImportWizard">
 		<item value="false" key="WizardProjectsImportPage.STORE_NESTED_PROJECTS"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_COPY_PROJECT_ID"/>
 		<item value="false" key="WizardProjectsImportPage.STORE_ARCHIVE_SELECTED"/>
 		<list key="WizardProjectsImportPage.STORE_DIRECTORIES">
+			<item value="/home/speldszus/Documents/git/gravity-gitlab/GRaViTY_Examples/JSSE_OpenJDK8"/>
 			<item value="/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/testdata"/>
 			<item value="/home/speldszus/Documents/git/gravity-gitlab/GRaViTY_Examples"/>
 		</list>

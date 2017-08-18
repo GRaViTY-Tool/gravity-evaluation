@@ -4,12 +4,14 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,6 +21,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -26,6 +30,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
 import org.eclipse.jdt.core.IMember;
@@ -51,6 +56,7 @@ import org.gravity.eclipse.converter.IPGConverter;
 import org.gravity.eval.icse2018.helper.JavaHelper;
 import org.gravity.eval.icse2018.util.EclipseProjectUtil;
 import org.gravity.eval.icse2018.util.sourcemeter.MetricCalculator;
+import org.gravity.eval.icse2018.util.sourcemeter.SourceMeterStatus;
 import org.gravity.eval.icse2018.util.sourcemeter.SourcemeterMetricKeys;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
@@ -94,38 +100,27 @@ import momotFiles.SearchTypeGraph;
 
 public class Eval {
 
-	private IJavaProject java_project_copy;
+	private boolean enableMetricRecording;
+	private Hashtable<String, String> hulkConfigTable;
+	private int blobs;
 
-	public void run(IJavaProject project, String apSuffix, boolean enableMetricRecording) throws FileNotFoundException, IOException {
+	public void run(IJavaProject project, String apSuffix, boolean enableMetricRecording)
+			throws FileNotFoundException, IOException {
 		NullProgressMonitor monitor = new NullProgressMonitor();
+		this.enableMetricRecording = enableMetricRecording;
 
 		long currentTimeMillis = System.currentTimeMillis();
-
-		java_project_copy = EclipseProjectUtil.copyJavaProject(project,
-				project.getProject().getName() + "_" + apSuffix + "_" + currentTimeMillis);
-		if (java_project_copy == null) {
-			fail();
-		}
-		Hashtable<String, IType> types = null;
-		try {
-			types = JavaHelper.getTypesForProject(java_project_copy);
-		} catch (JavaModelException e1) {
-			fail();
-		}
 
 		File project_folder = new File(project.getProject().getName());
 		File folder = new File(project_folder, Long.toString(currentTimeMillis));
 		folder.mkdirs();
 		File initial = new File(project_folder, "initial");
 
-		HAntiPatternDetection hulk = HulkFactory.eINSTANCE.createHAntiPatternResolving();
-		HulkDetector hulkDetector = new HulkDetector(hulk, HulkDetector.getDefaultThresholds());
 		File pgFile = new File(folder, "pg.xmi");
-		Set<EClass> selection = new HashSet<>();
-		selection.add(org.gravity.hulk.detection.antipattern.AntipatternPackage.eINSTANCE.getHBlobDetector());
-		Set<HDetector> executed_detectors = detect(selection, monitor, hulk, hulkDetector, pgFile);
+		Set<HDetector> executed_detectors = detect(project, HulkDetector.getDefaultThresholds(), pgFile, monitor);
 
 		StringBuilder hulkconfig = new StringBuilder();
+		hulkConfigTable = new Hashtable<String, String>();
 		HBlobDetector blob = null;
 		for (HDetector detector : executed_detectors) {
 			if (detector instanceof HBlobDetector) {
@@ -133,22 +128,24 @@ public class Eval {
 			}
 			if (detector instanceof HRelativeDetector) {
 				HRelativeDetector rel = (HRelativeDetector) detector;
-				hulkconfig.append(rel.getClass().getSimpleName());
+				hulkconfig.append(rel.getClass().getName().replace("Impl", "").replace(".impl", ""));
 				hulkconfig.append(' ');
 				hulkconfig.append(rel.getThreshold());
 				hulkconfig.append('\n');
+
+				hulkConfigTable.put(rel.getClass().getName().replace("Impl", "").replace(".impl", ""),
+						Double.toString(rel.getThreshold()));
 			}
 		}
+		blobs = blob.getHAnnotation().size();
 
-		MetricCalculator metrics = null;
 		if (enableMetricRecording) {
-			metrics = new MetricCalculator();
 			if (!initial.exists()) {
 				initial.mkdirs();
 				Files.write(new File(initial, "hulkConfig.csv").toPath(), hulkconfig.toString().getBytes());
-				printSourcemeterMetrics(metrics, initial);
+				printSourcemeterMetrics(project, initial);
 				printBlobs(blob, initial);
-				printAccessibilityMetric(initial, monitor);
+				printAccessibilityMetric(project, initial, monitor);
 			}
 		}
 
@@ -164,34 +161,36 @@ public class Eval {
 		search.initializeConstraints();
 		TransformationResultManager results = search.performSearch(pgFile.getAbsolutePath(), 10, folder);
 
-		refactor(monitor, types, folder, results);
+		refactor(monitor, folder, results, project, Long.toString(currentTimeMillis));
 
 		// refactor(monitor, resolver);
-
-		if (enableMetricRecording) {
-			Set<EClass> secondSelection = new HashSet<>();
-			secondSelection.add(org.gravity.hulk.detection.antipattern.AntipatternPackage.eINSTANCE.getHBlobDetector());
-			executed_detectors = detect(secondSelection, monitor, hulk, hulkDetector, null);
-
-			for (HDetector detector : executed_detectors) {
-				if (detector instanceof HBlobDetector) {
-					blob = (HBlobDetector) detector;
-				}
-			}
-
-			printSourcemeterMetrics(metrics, folder);
-			printBlobs(blob, folder);
-			printAccessibilityMetric(folder, monitor);
-		}
 	}
 
-	private void refactor(NullProgressMonitor monitor, Hashtable<String, IType> types, File folder,
-			TransformationResultManager results) throws FileNotFoundException {
+	private void refactor(NullProgressMonitor monitor, File folder, TransformationResultManager results,
+			IJavaProject project, String suffix) throws FileNotFoundException {
 		for (List<NondominatedPopulation> r : results.getResults().values()) {
 			for (NondominatedPopulation nPop : r) {
 				int sol = 0;
 				for (Solution solution : nPop) {
-					try (PrintWriter writer = new PrintWriter(new File(folder, "move_" + (sol++)))) {
+					IJavaProject java_project_copy = EclipseProjectUtil.copyJavaProject(project,
+							project.getProject().getName() + "_" + suffix + "_" + sol);
+					if (java_project_copy == null) {
+						fail();
+					}
+					Hashtable<String, IType> types = null;
+					try {
+						types = JavaHelper.getTypesForProject(java_project_copy);
+					} catch (JavaModelException e1) {
+						fail();
+					}
+
+					boolean success = true;
+					StringBuilder todo = new StringBuilder();
+					int refactorings = 0;
+					
+					File solutionFolder = new File(folder, Integer.toString(sol));
+					solutionFolder.mkdirs();
+					try (PrintWriter writer = new PrintWriter(new File(solutionFolder, "move_" + (sol++)))) {
 						for (int i = 0; i < solution.getNumberOfVariables(); i++) {
 							Variable var = solution.getVariable(i);
 							TMethodSignature sig;
@@ -212,19 +211,90 @@ public class Eval {
 								continue;
 							}
 
+							refactorings++;
+
 							try {
-								writer.print(src.getFullyQualifiedName() + "." + sig.getSignatureString() + " -> "
-										+ trg.getFullyQualifiedName());
-								if (!moveMethod(src, trg, sig, monitor, types, java_project_copy)) {
+								String refactoring = src.getFullyQualifiedName() + "." + sig.getSignatureString()
+										+ " -> " + trg.getFullyQualifiedName();
+								writer.print(refactoring);
+								if (moveMethod(java_project_copy, src, trg, sig, monitor, types)) {
+									writer.println(": automatically moved");
+								} else {
 									System.err.println("Couldn't move: " + src.getFullyQualifiedName() + "."
 											+ sig.getSignatureString() + " to class " + trg.getFullyQualifiedName());
 									writer.println();
-								} else {
-									writer.println(": automatically moved");
+									todo.append(refactoring);
+									todo.append('\n');
+									success = false;
 								}
 							} catch (JavaModelException e) {
 								e.printStackTrace();
 							}
+						}
+					}
+
+					if (success) {
+						if (enableMetricRecording) {
+							try {
+								if (IMarker.SEVERITY_ERROR == project.getUnderlyingResource().findMaxProblemSeverity(
+										IJavaModelMarker.BUILDPATH_PROBLEM_MARKER, true, IResource.DEPTH_INFINITE)
+										|| IMarker.SEVERITY_ERROR == project.getUnderlyingResource()
+												.findMaxProblemSeverity(IJavaModelMarker.JAVA_MODEL_PROBLEM_MARKER,
+														true, IResource.DEPTH_INFINITE)) {
+
+									try {
+										Files.write(new File(solutionFolder, "FAIL").toPath(),
+												("The java project has build errors\nblobs="+blobs+"\nrefactorings="+refactorings).getBytes());
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								} else {
+									Set<EClass> secondSelection = new HashSet<>();
+									secondSelection
+											.add(org.gravity.hulk.detection.antipattern.AntipatternPackage.eINSTANCE
+													.getHBlobDetector());
+									Set<HDetector> executed_detectors = detect(java_project_copy, hulkConfigTable,
+											new File(solutionFolder, "pg.xmi"), monitor);
+
+									HBlobDetector blob = null;
+									for (HDetector detector : executed_detectors) {
+										if (detector instanceof HBlobDetector) {
+											blob = (HBlobDetector) detector;
+										}
+									}
+
+									Hashtable<String, String> sourcemeter = printSourcemeterMetrics(java_project_copy, solutionFolder);
+									printBlobs(blob, solutionFolder);
+									Hashtable<String, String> accessibility = printAccessibilityMetric(java_project_copy, solutionFolder, monitor);
+									
+									try (PrintWriter printer = new PrintWriter(new File(solutionFolder, "stats.csv"))) {
+										printer.print(java_project_copy.getProject().getName());
+										printer.print(' ');
+										printer.print(Integer.toString(refactorings));
+										printer.print(' ');
+										printer.print(sourcemeter.get("lcom"));
+										printer.print(' ');
+										printer.print(sourcemeter.get("cbo"));							
+										printer.print(' ');
+										printer.print(Integer.toString(blobs-blob.getHAnnotation().size()));							
+										printer.print(' ');
+										printer.print(accessibility.get("igam"));
+										printer.println();
+									} catch (Exception e) {
+									}
+								}
+							} catch (CoreException e) {
+								e.printStackTrace();
+							}
+						}
+					} else {
+						try {
+							java_project_copy.getProject().getFile("TODO.txt")
+									.create(new ByteArrayInputStream(todo.toString().getBytes()), true, monitor);
+							Files.write(new File(solutionFolder, "FAIL").toPath(),
+									("Not all refactorings have been performed sucessfully\nblobs="+blobs+"\nrefactorings="+refactorings).getBytes());
+						} catch (IOException | CoreException e) {
+							e.printStackTrace();
 						}
 					}
 				}
@@ -232,19 +302,7 @@ public class Eval {
 		}
 	}
 
-	public void printAccessibilityMetric(File folder, NullProgressMonitor monitor) {
-		try {
-			Analysis accessAnalysis = AnalysisFactory.analyzer(java_project_copy, AnalysisMode.ACCESS_QUIET);
-			accessAnalysis.run(monitor);
-			ResultFormatter formatter = accessAnalysis.getResults().get(0).getFormatter();
-			Files.write(new File(folder, "accessMetrics.txt").toPath(),
-					("igat = " + formatter.igat() + " igam = " + formatter.igam()).getBytes());
-		} catch (AnalysisException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void refactor(NullProgressMonitor monitor, HAlternativeBlobresolver resolver) {
+	private void refactor(NullProgressMonitor monitor, HAlternativeBlobresolver resolver, IJavaProject project) {
 		LinkedList<HRefactoring> moves = new LinkedList<>();
 		for (HAnnotation hAnnotation : resolver.getHAnnotation()) {
 			if (hAnnotation instanceof HBlobResolveAnnotation) {
@@ -253,7 +311,7 @@ public class Eval {
 		}
 
 		try {
-			Hashtable<String, IType> types = JavaHelper.getTypesForProject(this.java_project_copy);
+			Hashtable<String, IType> types = JavaHelper.getTypesForProject(project);
 
 			for (HRefactoring move : moves) {
 				if (move instanceof HMoveMembers) {
@@ -261,12 +319,11 @@ public class Eval {
 					for (HMoveMember moveMember : moveMembers.getHMoveMembers()) {
 						if (moveMember instanceof HMoveMethod) {
 							TClass tTargetClass = moveMembers.getTargetClass();
-							TClass TSourceClass = moveMembers.getSourceClass();
+							TClass tSourceClass = moveMembers.getSourceClass();
 
 							TMethodDefinition tMethod = (TMethodDefinition) ((HMoveMethod) moveMember).getTAnnotated();
 
-							moveMethod(TSourceClass, tTargetClass, tMethod.getSignature(), monitor, types,
-									java_project_copy);
+							moveMethod(project, tSourceClass, tTargetClass, tMethod.getSignature(), monitor, types);
 						}
 					}
 				}
@@ -277,9 +334,8 @@ public class Eval {
 		}
 	}
 
-	private boolean moveMethod(TClass tSourceClass, TClass tTargetClass, TMethodSignature tMethod,
-			NullProgressMonitor monitor, Hashtable<String, IType> types, IJavaProject project)
-			throws JavaModelException {
+	private boolean moveMethod(IJavaProject project, TClass tSourceClass, TClass tTargetClass, TMethodSignature tMethod,
+			NullProgressMonitor monitor, Hashtable<String, IType> types) throws JavaModelException {
 		if (tSourceClass.isTLib() || tTargetClass.isTLib()) {
 			System.err.println("Source or target class is library.");
 			return false;
@@ -308,7 +364,7 @@ public class Eval {
 					}
 					if (equal) {
 						System.out.println(m);
-						return move2(monitor, trg, m);
+						return move2(project, monitor, trg, m);
 					} else {
 						return false;
 					}
@@ -319,24 +375,7 @@ public class Eval {
 	}
 
 	@SuppressWarnings("restriction")
-	private boolean move2(NullProgressMonitor monitor, IType trg, IMethod method) {
-		// MoveInstanceMethodProcessor processorMM = new
-		// MoveInstanceMethodProcessor(method,null);
-		// try {
-		// if(!processorMM.isApplicable()){
-		// return;
-		// }
-		// } catch (CoreException e) {
-		// e.printStackTrace();
-		// }
-		// processorMM.setMethodName(method.getElementName());
-		// processorMM.setTargetName(method.getDeclaringType().toString());
-		// IVariableBinding[] candidateTargets =
-		// processorMM.getCandidateTargets();
-		// IVariableBinding[] targets= processorMM.getPossibleTargets();
-		//
-		// processorMM.setTarget(targets[0]);
-
+	private boolean move2(IJavaProject project, NullProgressMonitor monitor, IType trg, IMethod method) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_INPUT, method.getHandleIdentifier());
 		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_NAME, method.getElementName());
@@ -350,8 +389,8 @@ public class Eval {
 
 		MoveMethodDescriptor refactoringDescriptor = (MoveMethodDescriptor) RefactoringCore
 				.getRefactoringContribution(IJavaRefactorings.MOVE_METHOD)
-				.createDescriptor(IJavaRefactorings.MOVE_METHOD, java_project_copy.getProject().getName(),
-						"move method", "", map, RefactoringDescriptor.MULTI_CHANGE);
+				.createDescriptor(IJavaRefactorings.MOVE_METHOD, project.getProject().getName(), "move method", "", map,
+						RefactoringDescriptor.MULTI_CHANGE);
 		RefactoringStatus status = new RefactoringStatus();
 		try {
 			MoveRefactoring refactoring = (MoveRefactoring) refactoringDescriptor.createRefactoring(status);
@@ -374,16 +413,15 @@ public class Eval {
 			return true;
 
 		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return false;
 	}
 
-	private void move1(NullProgressMonitor monitor, IType trg, IMethod m) throws CoreException {
+	private void move1(IJavaProject project, NullProgressMonitor monitor, IType trg, IMethod m) throws CoreException {
 		MoveDescriptor moveDescriptor = new MoveDescriptor();
 		moveDescriptor.setMoveMembers(new IMember[] { m });
 		moveDescriptor.setDestination(trg);
-		moveDescriptor.setProject(java_project_copy.getProject().getName());
+		moveDescriptor.setProject(project.getProject().getName());
 		RefactoringStatus status = moveDescriptor.validateDescriptor();
 		if (status.isOK()) {
 			RefactoringContext refactoringContext = moveDescriptor.createRefactoringContext(status);
@@ -402,30 +440,54 @@ public class Eval {
 		}
 	}
 
-	private void printSourcemeterMetrics(MetricCalculator metrics, File folder) {
-		metrics.calculateMetrics(java_project_copy.getProject().getLocation().toFile(),
-				new File(folder, "sourcemeter"));
-		Hashtable<String, String> lcom5 = metrics.getMetrics(SourcemeterMetricKeys.LCOM5);
-		double avgLCOM5 = 0;
-		for (String value : lcom5.values()) {
-			avgLCOM5 += Double.valueOf(value);
-		}
-		avgLCOM5 = avgLCOM5 / lcom5.size();
-		Hashtable<String, String> cbo = metrics.getMetrics(SourcemeterMetricKeys.CBO);
-		double avgCBO = 0;
-		for (String value : cbo.values()) {
-			avgCBO += Double.valueOf(value);
-		}
-		avgCBO = avgCBO / cbo.size();
+	Hashtable<String, String> printAccessibilityMetric(IJavaProject project, File folder, NullProgressMonitor monitor) {
+		Hashtable<String, String> results = new Hashtable<String, String>();
 		try {
-			Files.write(new File(folder, "avgMetrics.txt").toPath(),
-					("avg lcom5 = " + avgLCOM5 + "\navg CBO = " + avgCBO).getBytes());
-		} catch (IOException e) {
+			Analysis accessAnalysis = AnalysisFactory.analyzer(Arrays.asList(project), AnalysisMode.ACCESS_QUIET);
+			accessAnalysis.run(monitor);
+			ResultFormatter formatter = accessAnalysis.getResults().get(0).getFormatter();
+			Files.write(new File(folder, "accessMetrics.txt").toPath(),
+					("igat = " + formatter.igat() + " igam = " + formatter.igam()).getBytes());
+			
+			results.put("igat", formatter.igat());
+			results.put("igam", formatter.igam());
+		} catch (AnalysisException | IOException e) {
 			e.printStackTrace();
 		}
+		return results;
 	}
 
-	private void printBlobs(HBlobDetector blob, File folder) {
+	Hashtable<String, String> printSourcemeterMetrics(IJavaProject project, File folder) {
+		Hashtable<String, String> results = new Hashtable<String, String>();
+		MetricCalculator metrics = new MetricCalculator();
+		SourceMeterStatus status = metrics.calculateMetrics(project.getProject().getLocation().toFile(),
+				new File(folder, "sourcemeter"));
+		if (SourceMeterStatus.OK.equals(status)) {
+			Hashtable<String, String> lcom5 = metrics.getMetrics(SourcemeterMetricKeys.LCOM5);
+			double avgLCOM5 = 0;
+			for (String value : lcom5.values()) {
+				avgLCOM5 += Double.valueOf(value);
+			}
+			avgLCOM5 = avgLCOM5 / lcom5.size();
+			results.put("lcom", Double.toString(avgLCOM5));
+			Hashtable<String, String> cbo = metrics.getMetrics(SourcemeterMetricKeys.CBO);
+			double avgCBO = 0;
+			for (String value : cbo.values()) {
+				avgCBO += Double.valueOf(value);
+			}
+			avgCBO = avgCBO / cbo.size();
+			results.put("cbo", Double.toString(avgCBO));
+			try {
+				Files.write(new File(folder, "avgMetrics.txt").toPath(),
+						("avg lcom5 = " + avgLCOM5 + "\navg CBO = " + avgCBO).getBytes());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return results;
+	}
+
+	void printBlobs(HBlobDetector blob, File folder) {
 		String programName = blob.getHAntiPatternHandling().getApg().getPg().getTName();
 		File out = new File(folder, programName + "_Blobs.txt");
 		try (FileOutputStream fileOut = new FileOutputStream(out);
@@ -443,23 +505,30 @@ public class Eval {
 		}
 	}
 
-	protected Set<HDetector> detect(Set<EClass> selection, NullProgressMonitor monitor, HAntiPatternDetection hulk,
-			HulkDetector hulkDetector, File file) throws FileNotFoundException, IOException {
-		IPath project_location = java_project_copy.getProject().getLocation();
-		IPGConverter converter = GravityActivator.getDefault().getNewConverter(java_project_copy.getProject());
+	protected Set<HDetector> detect(IJavaProject project, Hashtable<String, String> thresholds, File file,
+			NullProgressMonitor monitor) {
+		IPath project_location = project.getProject().getLocation();
+		IPGConverter converter = GravityActivator.getDefault().getNewConverter(project.getProject());
 
 		long start = System.currentTimeMillis();
-		boolean success = converter.convertProject(java_project_copy, Collections.emptySet(), monitor);
+		boolean success = converter.convertProject(project, Collections.emptySet(), monitor);
 		long createPgInMS = System.currentTimeMillis() - start;
 		if (!success || converter.getPG() == null) {
-			fail("Creating PG from project failed: " + java_project_copy.getProject().getName());
+			fail("Creating PG from project failed: " + project.getProject().getName());
 		}
 
+		HAntiPatternDetection hulk = HulkFactory.eINSTANCE.createHAntiPatternResolving();
+		HulkDetector hulkDetector = new HulkDetector(hulk, thresholds);
+		Set<EClass> selection = new HashSet<>();
+		selection.add(org.gravity.hulk.detection.antipattern.AntipatternPackage.eINSTANCE.getHBlobDetector());
 		if (file != null) {
-
-			Files.write(new File(file.getParentFile(), "timeHulkInMS.txt").toPath(),
-					Long.toString(createPgInMS).getBytes());
-			converter.getPG().eResource().save(new FileOutputStream(file), Collections.EMPTY_MAP);
+			try {
+				Files.write(new File(file.getParentFile(), "timeHulkInMS.txt").toPath(),
+						Long.toString(createPgInMS).getBytes());
+				converter.getPG().eResource().save(new FileOutputStream(file), Collections.EMPTY_MAP);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 
 		HAntiPatternGraph apg = AntipatterngraphFactory.eINSTANCE.createHAntiPatternGraph();

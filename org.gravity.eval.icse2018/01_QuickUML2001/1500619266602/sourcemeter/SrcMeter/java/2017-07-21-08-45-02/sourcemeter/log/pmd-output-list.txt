@@ -1,1 +1,0 @@
-/home/speldszus/Documents/git/gravity-evaluation/org.gravity.eval.fase2017/01_QuickUML2001/1500619266602/sourcemeter/SrcMeter/java/2017-07-21-08-45-02/sourcemeter/temp/SrcMeter-PMD.xml

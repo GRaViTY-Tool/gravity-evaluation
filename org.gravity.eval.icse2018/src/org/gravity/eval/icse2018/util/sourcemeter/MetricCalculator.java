@@ -31,7 +31,10 @@ public class MetricCalculator {
 				"-projectBaseDir=" + program_location.toString(), //$NON-NLS-1$
 				"-resultsDir=" + out_location.toString() }; //$NON-NLS-1$
 		
-		run(this.env_variable_name, params);
+		SourceMeterStatus status = run(this.env_variable_name, params);
+		if(!SourceMeterStatus.OK.equals(status)){
+			return status;
+		}
 
 		File[] java_folder = new File(src_meter_folder, "java").listFiles(); //$NON-NLS-1$
 		if (java_folder.length > 0) {
@@ -76,6 +79,10 @@ public class MetricCalculator {
 			return SourceMeterStatus.NOT_INSTALLED;
 		}
 		if(!new File(src_meter).exists()){
+			System.err.println("Sourcemeter is not installed at the specified location!");
+			JOptionPane.showMessageDialog(null,
+					"Sourcemeter is not installed at the specified location! Set the environment variable \""
+							+ env_variable_name + "\" to the path of the \"SourceMeterJava\" file.");
 			return SourceMeterStatus.NOT_INSTALLED;
 		}
 
