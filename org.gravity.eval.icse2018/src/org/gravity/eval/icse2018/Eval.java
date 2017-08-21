@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -33,20 +32,16 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.ILocalVariable;
-import org.eclipse.jdt.core.IMember;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.Signature;
 import org.eclipse.jdt.core.dom.IVariableBinding;
 import org.eclipse.jdt.core.refactoring.IJavaRefactorings;
-import org.eclipse.jdt.core.refactoring.descriptors.MoveDescriptor;
 import org.eclipse.jdt.core.refactoring.descriptors.MoveMethodDescriptor;
 import org.eclipse.jdt.internal.corext.refactoring.JavaRefactoringDescriptorUtil;
 import org.eclipse.jdt.internal.corext.refactoring.structure.MoveInstanceMethodProcessor;
 import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.Refactoring;
-import org.eclipse.ltk.core.refactoring.RefactoringContext;
 import org.eclipse.ltk.core.refactoring.RefactoringCore;
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -68,15 +63,8 @@ import org.gravity.hulk.antipatterngraph.antipattern.HBlobAntiPattern;
 import org.gravity.hulk.detection.HRelativeDetector;
 import org.gravity.hulk.detection.HulkDetector;
 import org.gravity.hulk.detection.antipattern.HBlobDetector;
-import org.gravity.hulk.refactoringgraph.HBlobResolveAnnotation;
-import org.gravity.hulk.refactoringgraph.refactorings.HMoveMember;
-import org.gravity.hulk.refactoringgraph.refactorings.HMoveMembers;
-import org.gravity.hulk.refactoringgraph.refactorings.HMoveMethod;
-import org.gravity.hulk.refactoringgraph.refactorings.HRefactoring;
-import org.gravity.hulk.resolve.antipattern.HAlternativeBlobresolver;
 import org.gravity.typegraph.basic.TAbstractType;
 import org.gravity.typegraph.basic.TClass;
-import org.gravity.typegraph.basic.TMethodDefinition;
 import org.gravity.typegraph.basic.TMethodSignature;
 import org.gravity.typegraph.basic.TParameter;
 import org.gravity.typegraph.basic.TParameterList;
@@ -302,38 +290,6 @@ public class Eval {
 		}
 	}
 
-	private void refactor(NullProgressMonitor monitor, HAlternativeBlobresolver resolver, IJavaProject project) {
-		LinkedList<HRefactoring> moves = new LinkedList<>();
-		for (HAnnotation hAnnotation : resolver.getHAnnotation()) {
-			if (hAnnotation instanceof HBlobResolveAnnotation) {
-				moves.addAll(((HBlobResolveAnnotation) hAnnotation).getHRefactorings());
-			}
-		}
-
-		try {
-			Hashtable<String, IType> types = JavaHelper.getTypesForProject(project);
-
-			for (HRefactoring move : moves) {
-				if (move instanceof HMoveMembers) {
-					HMoveMembers moveMembers = (HMoveMembers) move;
-					for (HMoveMember moveMember : moveMembers.getHMoveMembers()) {
-						if (moveMember instanceof HMoveMethod) {
-							TClass tTargetClass = moveMembers.getTargetClass();
-							TClass tSourceClass = moveMembers.getSourceClass();
-
-							TMethodDefinition tMethod = (TMethodDefinition) ((HMoveMethod) moveMember).getTAnnotated();
-
-							moveMethod(project, tSourceClass, tTargetClass, tMethod.getSignature(), monitor, types);
-						}
-					}
-				}
-			}
-
-		} catch (CoreException e) {
-			e.printStackTrace();
-		}
-	}
-
 	private boolean moveMethod(IJavaProject project, TClass tSourceClass, TClass tTargetClass, TMethodSignature tMethod,
 			NullProgressMonitor monitor, Hashtable<String, IType> types) throws JavaModelException {
 		if (tSourceClass.isTLib() || tTargetClass.isTLib()) {
@@ -399,7 +355,7 @@ public class Eval {
 			boolean detected = false;
 			for (IVariableBinding possibleTrg : processor.getPossibleTargets()) {
 				String qualifiedName = possibleTrg.getType().getQualifiedName();
-				if (trg.getFullyQualifiedName().equals(possibleTrg.getType().getQualifiedName())) {
+				if (trg.getFullyQualifiedName().equals(qualifiedName)) {
 					processor.setTarget(possibleTrg);
 					detected = true;
 					break;
@@ -415,29 +371,6 @@ public class Eval {
 		} catch (Exception e) {
 		}
 		return false;
-	}
-
-	private void move1(IJavaProject project, NullProgressMonitor monitor, IType trg, IMethod m) throws CoreException {
-		MoveDescriptor moveDescriptor = new MoveDescriptor();
-		moveDescriptor.setMoveMembers(new IMember[] { m });
-		moveDescriptor.setDestination(trg);
-		moveDescriptor.setProject(project.getProject().getName());
-		RefactoringStatus status = moveDescriptor.validateDescriptor();
-		if (status.isOK()) {
-			RefactoringContext refactoringContext = moveDescriptor.createRefactoringContext(status);
-			Refactoring refactoring = refactoringContext.getRefactoring();
-			RefactoringStatus checkInitialConditions = refactoring.checkAllConditions(monitor);
-			if (status.isOK()) {
-				Change change = refactoring.createChange(monitor);
-				change.perform(monitor);
-			}
-			// PerformRefactoringOperation perform = new
-			// PerformRefactoringOperation(refactoringContext,
-			// CheckConditionsOperation.ALL_CONDITIONS);
-			// perform.run(monitor);
-		} else {
-			System.err.println("Not in OK Status");
-		}
 	}
 
 	Hashtable<String, String> printAccessibilityMetric(IJavaProject project, File folder, NullProgressMonitor monitor) {

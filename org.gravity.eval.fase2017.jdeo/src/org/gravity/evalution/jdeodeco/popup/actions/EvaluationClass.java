@@ -1,30 +1,22 @@
 package org.gravity.evalution.jdeodeco.popup.actions;
 
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
-import java.io.FileWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.print.CancelablePrintJob;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
-import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
@@ -102,8 +94,8 @@ public class EvaluationClass implements IObjectActionDelegate {
 				for(ExtractClassCandidateGroup eccg : candidateRefactoringTable){
 					ArrayList<ExtractClassCandidateRefactoring> candidates = eccg.getCandidates();
 					for(ExtractClassCandidateRefactoring c : candidates){
-						if(min > c.getEntityPlacement()){
-							min = c.getEntityPlacement();
+						if(min > c.getUserRate()){
+							min = c.getUserRate();
 							extract = c.getExtractedEntities();
 						}
 					}

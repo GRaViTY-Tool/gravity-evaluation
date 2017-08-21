@@ -19,4 +19,8 @@ Require-Bundle: org.junit,
  org.gravity.modisco,
  org.eclipse.gmt.modisco.java.generation,
  org.eclipse.emf.common,
- org.eclipse.emf.ecore
+ org.eclipse.emf.ecore,
+ org.gravity.hulk.refactoringgraph,
+ org.eclipse.jdt.core.manipulation,
+ org.eclipse.jdt.ui,
+ org.eclipse.ltk.core.refactoring
