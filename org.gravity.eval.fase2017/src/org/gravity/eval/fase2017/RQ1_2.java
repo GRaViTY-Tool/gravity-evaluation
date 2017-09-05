@@ -5,12 +5,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
@@ -23,27 +20,12 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.ILocalVariable;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.refactoring.IJavaRefactorings;
-import org.eclipse.jdt.core.refactoring.descriptors.MoveMethodDescriptor;
-import org.eclipse.jdt.internal.corext.refactoring.JavaRefactoringDescriptorUtil;
-import org.eclipse.jdt.internal.corext.refactoring.structure.MoveInstanceMethodProcessor;
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.RefactoringCore;
-import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.ltk.core.refactoring.participants.MoveRefactoring;
 import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.converter.IPGConverter;
+import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
 import org.gravity.eval.fase2017.util.EclipseProjectUtil;
 import org.gravity.eval.fase2017.util.ToFileLogger;
-import org.gravity.eval.fase2017.tools.JavaHelper;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -58,11 +40,9 @@ import org.gravity.hulk.refactoringgraph.refactorings.HMoveMethod;
 import org.gravity.hulk.refactoringgraph.refactorings.HRefactoring;
 import org.gravity.hulk.resolve.antipattern.AntipatternPackage;
 import org.gravity.hulk.resolve.antipattern.HAlternativeBlobresolver;
+import org.gravity.refactorings.ui.EclipseMoveMethodRefactoring;
 import org.gravity.typegraph.basic.TClass;
 import org.gravity.typegraph.basic.TMethodDefinition;
-import org.gravity.typegraph.basic.TMethodSignature;
-import org.gravity.typegraph.basic.TParameter;
-import org.gravity.typegraph.basic.TParameterList;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -131,7 +111,12 @@ public class RQ1_2 {
 		System.out.println(t0 + " Init Model");
 
 		IPath project_location = java_project_copy.getProject().getLocation();
-		IPGConverter converter = GravityActivator.getDefault().getNewConverter(java_project_copy.getProject());
+		IPGConverter converter;
+		try {
+			converter = GravityActivator.getDefault().getNewConverter(java_project_copy.getProject());
+		} catch (NoConverterRegisteredException e) {
+			return false;
+		}
 
 		boolean success = converter.convertProject(java_project_copy, Collections.emptySet(), monitor);
 		if (!success || converter.getPG() == null) {
@@ -209,8 +194,7 @@ public class RQ1_2 {
 		}
 
 		try {
-			Hashtable<String, IType> types = JavaHelper.getTypesForProject(project);
-
+			EclipseMoveMethodRefactoring refactor = new EclipseMoveMethodRefactoring(java_project_copy);
 			for (HRefactoring move : moves) {
 				if (move instanceof HMoveMembers) {
 					HMoveMembers moveMembers = (HMoveMembers) move;
@@ -221,7 +205,7 @@ public class RQ1_2 {
 
 							TMethodDefinition tMethod = (TMethodDefinition) ((HMoveMethod) moveMember).getTAnnotated();
 
-							moveMethod(project, tSourceClass, tTargetClass, tMethod.getSignature(), monitor, types);
+							refactor.moveMethod(tSourceClass, tTargetClass, tMethod.getSignature(), monitor);
 						}
 					}
 				}
@@ -231,89 +215,6 @@ public class RQ1_2 {
 			e.printStackTrace();
 		}
 
-	}
-
-	private boolean moveMethod(IJavaProject project, TClass tSourceClass, TClass tTargetClass, TMethodSignature tMethod,
-			NullProgressMonitor monitor, Hashtable<String, IType> types) throws JavaModelException {
-		if (tSourceClass.isTLib() || tTargetClass.isTLib()) {
-			System.err.println("Source or target class is library.");
-			return false;
-		}
-
-		if (types == null) {
-			types = JavaHelper.getTypesForProject(project);
-		}
-
-		IType src = types.get(tSourceClass.getFullyQualifiedName());
-		IType trg = types.get(tTargetClass.getFullyQualifiedName());
-
-		TParameterList tParamList = tMethod.getParamList();
-		String tName = tMethod.getMethod().getTName();
-		for (IMethod m : src.getMethods()) {
-			if (m.getElementName().equals(tName)) {
-				if (m.getNumberOfParameters() == tParamList.getEntries().size()) {
-					boolean equal = true;
-					TParameter tParam = tParamList.getFirst();
-					for (ILocalVariable param : m.getParameters()) {
-						if (!(equal = tParam.getType().getFullyQualifiedName()
-								.endsWith(Signature.toString(param.getTypeSignature())))) {
-							break;
-						}
-						tParam = tParam.getNext();
-					}
-					if (equal) {
-						System.out.println(m);
-						return move2(project, monitor, trg, m);
-					} else {
-						return false;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	@SuppressWarnings("restriction")
-	private boolean move2(IJavaProject project, NullProgressMonitor monitor, IType trg, IMethod method) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_INPUT, method.getHandleIdentifier());
-		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_NAME, method.getElementName());
-		map.put("deprecate", "false");
-		map.put("remove", "true");
-		map.put("inline", "true");
-		map.put("getter", "true");
-		map.put("setter", "true");
-		map.put("targetName", trg.getElementName());
-		map.put("targetIndex", "0");
-
-		MoveMethodDescriptor refactoringDescriptor = (MoveMethodDescriptor) RefactoringCore
-				.getRefactoringContribution(IJavaRefactorings.MOVE_METHOD)
-				.createDescriptor(IJavaRefactorings.MOVE_METHOD, project.getProject().getName(), "move method", "", map,
-						RefactoringDescriptor.MULTI_CHANGE);
-		RefactoringStatus status = new RefactoringStatus();
-		try {
-			MoveRefactoring refactoring = (MoveRefactoring) refactoringDescriptor.createRefactoring(status);
-			refactoring.checkAllConditions(monitor);
-			MoveInstanceMethodProcessor processor = (MoveInstanceMethodProcessor) refactoring.getProcessor();
-			boolean detected = false;
-			for (IVariableBinding possibleTrg : processor.getPossibleTargets()) {
-				String qualifiedName = possibleTrg.getType().getQualifiedName();
-				if (trg.getFullyQualifiedName().equals(qualifiedName)) {
-					processor.setTarget(possibleTrg);
-					detected = true;
-					break;
-				}
-			}
-			if (!detected) {
-				return false;
-			}
-			Change change = refactoring.createChange(monitor);
-			change.perform(monitor);
-			return true;
-
-		} catch (Exception e) {
-		}
-		return false;
 	}
 
 }
