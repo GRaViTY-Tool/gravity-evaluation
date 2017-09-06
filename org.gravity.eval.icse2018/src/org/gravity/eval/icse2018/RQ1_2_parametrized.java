@@ -1,7 +1,5 @@
 package org.gravity.eval.icse2018;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -65,7 +63,7 @@ public class RQ1_2_parametrized {
 	}
 
 	@Test
-	public void resolveBlob() throws FileNotFoundException, IOException {
+	public void resolveBlob() throws Exception {
 		new Eval().run(project, AP_SUFFIX, ENABLE_METRIC_RECORDING);
 	}
 

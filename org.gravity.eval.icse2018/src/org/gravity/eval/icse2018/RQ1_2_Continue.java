@@ -21,14 +21,17 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
+import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.detection.antipattern.HBlobDetector;
+import org.gravity.metrics.sourcemeter.MetricPrinter;
+import org.gravity.metrics.sourcemeter.SourcemeterMetricKeys;
 import org.junit.Test;
 
 public class RQ1_2_Continue {
 
 	@Test
-	public void calculateMissing() {
+	public void calculateMissing() throws NoConverterRegisteredException {
 		File base = new File("./");
 		try {
 			Files.walk(base.toPath()).filter(path -> {
@@ -102,7 +105,7 @@ public class RQ1_2_Continue {
 										}
 									}
 
-									Hashtable<String, String> sourcemeter = eval.printSourcemeterMetrics(project,
+									Hashtable<String, String> sourcemeter = MetricPrinter.printSourcemeterMetrics(project.getProject(),
 											runFolder.toFile());
 									eval.printBlobs(blob, runFolder.toFile());
 									Hashtable<String, String> accessibility = eval.printAccessibilityMetric(project,
@@ -123,9 +126,9 @@ public class RQ1_2_Continue {
 											printer.print("X");
 										}
 										printer.print(' ');
-										printer.print(sourcemeter.get("lcom"));
+										printer.print(sourcemeter.get(SourcemeterMetricKeys.LCOM5));
 										printer.print(' ');
-										printer.print(sourcemeter.get("cbo"));
+										printer.print(sourcemeter.get(SourcemeterMetricKeys.CBO));
 										printer.print(' ');
 										if (blobs > 0) {
 											printer.print(Integer.toString(blobs - blob.getHAnnotation().size()));
@@ -138,7 +141,7 @@ public class RQ1_2_Continue {
 									} catch (Exception e) {
 									}
 								}
-							} catch (CoreException e) {
+							} catch (CoreException | NoConverterRegisteredException e) {
 								e.printStackTrace();
 							}
 						}

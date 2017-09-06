@@ -13,11 +13,9 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.resources.IMarker;
@@ -31,28 +29,11 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.jdt.core.IJavaModelMarker;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.ILocalVariable;
-import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.Signature;
-import org.eclipse.jdt.core.dom.IVariableBinding;
-import org.eclipse.jdt.core.refactoring.IJavaRefactorings;
-import org.eclipse.jdt.core.refactoring.descriptors.MoveMethodDescriptor;
-import org.eclipse.jdt.internal.corext.refactoring.JavaRefactoringDescriptorUtil;
-import org.eclipse.jdt.internal.corext.refactoring.structure.MoveInstanceMethodProcessor;
-import org.eclipse.ltk.core.refactoring.Change;
-import org.eclipse.ltk.core.refactoring.RefactoringCore;
-import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
-import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.ltk.core.refactoring.participants.MoveRefactoring;
 import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.converter.IPGConverter;
-import org.gravity.eval.icse2018.helper.JavaHelper;
-import org.gravity.eval.icse2018.util.EclipseProjectUtil;
-import org.gravity.eval.icse2018.util.sourcemeter.MetricCalculator;
-import org.gravity.eval.icse2018.util.sourcemeter.SourceMeterStatus;
-import org.gravity.eval.icse2018.util.sourcemeter.SourcemeterMetricKeys;
+import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
+import org.gravity.eclipse.io.EclipseProjectUtil;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -63,11 +44,12 @@ import org.gravity.hulk.antipatterngraph.antipattern.HBlobAntiPattern;
 import org.gravity.hulk.detection.HRelativeDetector;
 import org.gravity.hulk.detection.HulkDetector;
 import org.gravity.hulk.detection.antipattern.HBlobDetector;
+import org.gravity.metrics.sourcemeter.MetricPrinter;
+import org.gravity.metrics.sourcemeter.SourcemeterMetricKeys;
+import org.gravity.refactorings.ui.EclipseMoveMethodRefactoring;
 import org.gravity.typegraph.basic.TAbstractType;
 import org.gravity.typegraph.basic.TClass;
 import org.gravity.typegraph.basic.TMethodSignature;
-import org.gravity.typegraph.basic.TParameter;
-import org.gravity.typegraph.basic.TParameterList;
 import org.moeaframework.core.NondominatedPopulation;
 import org.moeaframework.core.Solution;
 import org.moeaframework.core.Variable;
@@ -93,7 +75,7 @@ public class Eval {
 	private int blobs;
 
 	public void run(IJavaProject project, String apSuffix, boolean enableMetricRecording)
-			throws FileNotFoundException, IOException {
+			throws FileNotFoundException, IOException, NoConverterRegisteredException {
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		this.enableMetricRecording = enableMetricRecording;
 
@@ -131,7 +113,7 @@ public class Eval {
 			if (!initial.exists()) {
 				initial.mkdirs();
 				Files.write(new File(initial, "hulkConfig.csv").toPath(), hulkconfig.toString().getBytes());
-				printSourcemeterMetrics(project, initial);
+				MetricPrinter.printSourcemeterMetrics(project.getProject(), initial);
 				printBlobs(blob, initial);
 				printAccessibilityMetric(project, initial, monitor);
 			}
@@ -155,19 +137,20 @@ public class Eval {
 	}
 
 	private void refactor(NullProgressMonitor monitor, File folder, TransformationResultManager results,
-			IJavaProject project, String suffix) throws FileNotFoundException {
+			IJavaProject project, String suffix) throws FileNotFoundException, NoConverterRegisteredException {
 		for (List<NondominatedPopulation> r : results.getResults().values()) {
 			for (NondominatedPopulation nPop : r) {
 				int sol = 0;
 				for (Solution solution : nPop) {
 					IJavaProject java_project_copy = EclipseProjectUtil.copyJavaProject(project,
 							project.getProject().getName() + "_" + suffix + "_" + sol);
+
 					if (java_project_copy == null) {
 						fail();
 					}
-					Hashtable<String, IType> types = null;
+					EclipseMoveMethodRefactoring refactor = null;
 					try {
-						types = JavaHelper.getTypesForProject(java_project_copy);
+						refactor = new EclipseMoveMethodRefactoring(java_project_copy);
 					} catch (JavaModelException e1) {
 						fail();
 					}
@@ -175,7 +158,7 @@ public class Eval {
 					boolean success = true;
 					StringBuilder todo = new StringBuilder();
 					int refactorings = 0;
-					
+
 					File solutionFolder = new File(folder, Integer.toString(sol));
 					solutionFolder.mkdirs();
 					try (PrintWriter writer = new PrintWriter(new File(solutionFolder, "move_" + (sol++)))) {
@@ -205,7 +188,7 @@ public class Eval {
 								String refactoring = src.getFullyQualifiedName() + "." + sig.getSignatureString()
 										+ " -> " + trg.getFullyQualifiedName();
 								writer.print(refactoring);
-								if (moveMethod(java_project_copy, src, trg, sig, monitor, types)) {
+								if (refactor.moveMethod(src, trg, sig, monitor)) {
 									writer.println(": automatically moved");
 								} else {
 									System.err.println("Couldn't move: " + src.getFullyQualifiedName() + "."
@@ -232,7 +215,8 @@ public class Eval {
 
 									try {
 										Files.write(new File(solutionFolder, "FAIL").toPath(),
-												("The java project has build errors\nblobs="+blobs+"\nrefactorings="+refactorings).getBytes());
+												("The java project has build errors\nblobs=" + blobs + "\nrefactorings="
+														+ refactorings).getBytes());
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
@@ -250,21 +234,22 @@ public class Eval {
 											blob = (HBlobDetector) detector;
 										}
 									}
-
-									Hashtable<String, String> sourcemeter = printSourcemeterMetrics(java_project_copy, solutionFolder);
+									Hashtable<String, String> sourcemeter = MetricPrinter.printSourcemeterMetrics(java_project_copy.getProject(),
+											solutionFolder);
 									printBlobs(blob, solutionFolder);
-									Hashtable<String, String> accessibility = printAccessibilityMetric(java_project_copy, solutionFolder, monitor);
-									
+									Hashtable<String, String> accessibility = printAccessibilityMetric(
+											java_project_copy, solutionFolder, monitor);
+
 									try (PrintWriter printer = new PrintWriter(new File(solutionFolder, "stats.csv"))) {
 										printer.print(java_project_copy.getProject().getName());
 										printer.print(' ');
 										printer.print(Integer.toString(refactorings));
 										printer.print(' ');
-										printer.print(sourcemeter.get("lcom"));
+										printer.print(sourcemeter.get(SourcemeterMetricKeys.LCOM5));
 										printer.print(' ');
-										printer.print(sourcemeter.get("cbo"));							
+										printer.print(sourcemeter.get(SourcemeterMetricKeys.CBO));
 										printer.print(' ');
-										printer.print(Integer.toString(blobs-blob.getHAnnotation().size()));							
+										printer.print(Integer.toString(blobs - blob.getHAnnotation().size()));
 										printer.print(' ');
 										printer.print(accessibility.get("igam"));
 										printer.println();
@@ -280,7 +265,8 @@ public class Eval {
 							java_project_copy.getProject().getFile("TODO.txt")
 									.create(new ByteArrayInputStream(todo.toString().getBytes()), true, monitor);
 							Files.write(new File(solutionFolder, "FAIL").toPath(),
-									("Not all refactorings have been performed sucessfully\nblobs="+blobs+"\nrefactorings="+refactorings).getBytes());
+									("Not all refactorings have been performed sucessfully\nblobs=" + blobs
+											+ "\nrefactorings=" + refactorings).getBytes());
 						} catch (IOException | CoreException e) {
 							e.printStackTrace();
 						}
@@ -288,89 +274,6 @@ public class Eval {
 				}
 			}
 		}
-	}
-
-	private boolean moveMethod(IJavaProject project, TClass tSourceClass, TClass tTargetClass, TMethodSignature tMethod,
-			NullProgressMonitor monitor, Hashtable<String, IType> types) throws JavaModelException {
-		if (tSourceClass.isTLib() || tTargetClass.isTLib()) {
-			System.err.println("Source or target class is library.");
-			return false;
-		}
-
-		if (types == null) {
-			types = JavaHelper.getTypesForProject(project);
-		}
-
-		IType src = types.get(tSourceClass.getFullyQualifiedName());
-		IType trg = types.get(tTargetClass.getFullyQualifiedName());
-
-		TParameterList tParamList = tMethod.getParamList();
-		String tName = tMethod.getMethod().getTName();
-		for (IMethod m : src.getMethods()) {
-			if (m.getElementName().equals(tName)) {
-				if (m.getNumberOfParameters() == tParamList.getEntries().size()) {
-					boolean equal = true;
-					TParameter tParam = tParamList.getFirst();
-					for (ILocalVariable param : m.getParameters()) {
-						if (!(equal = tParam.getType().getFullyQualifiedName()
-								.endsWith(Signature.toString(param.getTypeSignature())))) {
-							break;
-						}
-						tParam = tParam.getNext();
-					}
-					if (equal) {
-						System.out.println(m);
-						return move2(project, monitor, trg, m);
-					} else {
-						return false;
-					}
-				}
-			}
-		}
-		return false;
-	}
-
-	@SuppressWarnings("restriction")
-	private boolean move2(IJavaProject project, NullProgressMonitor monitor, IType trg, IMethod method) {
-		Map<String, String> map = new HashMap<String, String>();
-		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_INPUT, method.getHandleIdentifier());
-		map.put(JavaRefactoringDescriptorUtil.ATTRIBUTE_NAME, method.getElementName());
-		map.put("deprecate", "false");
-		map.put("remove", "true");
-		map.put("inline", "true");
-		map.put("getter", "true");
-		map.put("setter", "true");
-		map.put("targetName", trg.getElementName());
-		map.put("targetIndex", "0");
-
-		MoveMethodDescriptor refactoringDescriptor = (MoveMethodDescriptor) RefactoringCore
-				.getRefactoringContribution(IJavaRefactorings.MOVE_METHOD)
-				.createDescriptor(IJavaRefactorings.MOVE_METHOD, project.getProject().getName(), "move method", "", map,
-						RefactoringDescriptor.MULTI_CHANGE);
-		RefactoringStatus status = new RefactoringStatus();
-		try {
-			MoveRefactoring refactoring = (MoveRefactoring) refactoringDescriptor.createRefactoring(status);
-			refactoring.checkAllConditions(monitor);
-			MoveInstanceMethodProcessor processor = (MoveInstanceMethodProcessor) refactoring.getProcessor();
-			boolean detected = false;
-			for (IVariableBinding possibleTrg : processor.getPossibleTargets()) {
-				String qualifiedName = possibleTrg.getType().getQualifiedName();
-				if (trg.getFullyQualifiedName().equals(qualifiedName)) {
-					processor.setTarget(possibleTrg);
-					detected = true;
-					break;
-				}
-			}
-			if (!detected) {
-				return false;
-			}
-			Change change = refactoring.createChange(monitor);
-			change.perform(monitor);
-			return true;
-
-		} catch (Exception e) {
-		}
-		return false;
 	}
 
 	Hashtable<String, String> printAccessibilityMetric(IJavaProject project, File folder, NullProgressMonitor monitor) {
@@ -381,41 +284,11 @@ public class Eval {
 			ResultFormatter formatter = accessAnalysis.getResults().get(0).getFormatter();
 			Files.write(new File(folder, "accessMetrics.txt").toPath(),
 					("igat = " + formatter.igat() + " igam = " + formatter.igam()).getBytes());
-			
+
 			results.put("igat", formatter.igat());
 			results.put("igam", formatter.igam());
 		} catch (AnalysisException | IOException e) {
 			e.printStackTrace();
-		}
-		return results;
-	}
-
-	Hashtable<String, String> printSourcemeterMetrics(IJavaProject project, File folder) {
-		Hashtable<String, String> results = new Hashtable<String, String>();
-		MetricCalculator metrics = new MetricCalculator();
-		SourceMeterStatus status = metrics.calculateMetrics(project.getProject().getLocation().toFile(),
-				new File(folder, "sourcemeter"));
-		if (SourceMeterStatus.OK.equals(status)) {
-			Hashtable<String, String> lcom5 = metrics.getMetrics(SourcemeterMetricKeys.LCOM5);
-			double avgLCOM5 = 0;
-			for (String value : lcom5.values()) {
-				avgLCOM5 += Double.valueOf(value);
-			}
-			avgLCOM5 = avgLCOM5 / lcom5.size();
-			results.put("lcom", Double.toString(avgLCOM5));
-			Hashtable<String, String> cbo = metrics.getMetrics(SourcemeterMetricKeys.CBO);
-			double avgCBO = 0;
-			for (String value : cbo.values()) {
-				avgCBO += Double.valueOf(value);
-			}
-			avgCBO = avgCBO / cbo.size();
-			results.put("cbo", Double.toString(avgCBO));
-			try {
-				Files.write(new File(folder, "avgMetrics.txt").toPath(),
-						("avg lcom5 = " + avgLCOM5 + "\navg CBO = " + avgCBO).getBytes());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 		return results;
 	}
@@ -439,7 +312,7 @@ public class Eval {
 	}
 
 	protected Set<HDetector> detect(IJavaProject project, Hashtable<String, String> thresholds, File file,
-			NullProgressMonitor monitor) {
+			NullProgressMonitor monitor) throws NoConverterRegisteredException {
 		IPath project_location = project.getProject().getLocation();
 		IPGConverter converter = GravityActivator.getDefault().getNewConverter(project.getProject());
 

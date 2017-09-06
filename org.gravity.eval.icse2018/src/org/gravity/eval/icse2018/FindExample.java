@@ -31,8 +31,9 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.MoveRefactoring;
 import org.gravity.eclipse.GravityActivator;
+import org.gravity.eclipse.JavaHelper;
 import org.gravity.eclipse.converter.IPGConverter;
-import org.gravity.eval.icse2018.helper.JavaHelper;
+import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -54,7 +55,7 @@ import org.moflon.core.dfs.DFSGraph;
 public class FindExample {
 
 	@Test
-	public void clalcBlos() {
+	public void clalcBlos() throws NoConverterRegisteredException {
 		Hashtable<String, String> defaultThresholds = HulkDetector.getDefaultThresholds();
 
 		Hashtable<String, String> newThresholds = detectBlobs(defaultThresholds,
@@ -68,7 +69,7 @@ public class FindExample {
 	}
 
 	@Test
-	public void searchPG() {
+	public void searchPG() throws NoConverterRegisteredException {
 
 		 try (PrintWriter printer = new PrintWriter(new
 		 File("possibleExamplePG.txt"))) {
@@ -153,7 +154,7 @@ public class FindExample {
 		 }
 	}
 
-	private Hashtable<String, String> detectBlobs(Hashtable<String, String> defaultThresholds, IProject iProject) {
+	private Hashtable<String, String> detectBlobs(Hashtable<String, String> defaultThresholds, IProject iProject) throws NoConverterRegisteredException {
 		IJavaProject iJavaProject = JavaCore.create(iProject);
 		IPGConverter converter = GravityActivator.getDefault().getConverter(iProject);
 		converter.convertProject(iJavaProject, new NullProgressMonitor());
