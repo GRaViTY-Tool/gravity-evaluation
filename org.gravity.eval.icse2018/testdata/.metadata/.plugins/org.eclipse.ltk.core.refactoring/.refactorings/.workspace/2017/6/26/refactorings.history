@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Delete resource &apos;00_JavaSolitaire1.3_tmp_blob&apos;" deleteContents="true" description="Delete resource &apos;00_JavaSolitaire1.3_tmp_blob&apos;" element1="/00_JavaSolitaire1.3_tmp_blob" flags="7" id="org.eclipse.ltk.core.refactoring.delete.resources" resources="1" stamp="1498819768268"/>
-</session>
