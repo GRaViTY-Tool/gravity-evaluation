@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fase2018
+Bundle-SymbolicName: org.gravity.eval.fase2018
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit,
+ org.eclipse.emf.ecore,
+ org.gravity.typegraph.basic,
+ org.goblin.movemethod,
+ at.ac.tuwien.big.momot.core,
+ org.eclipse.emf.henshin.interpreter;bundle-version="1.4.0",
+ org.gravity.hulk,
+ org.gravity.hulk.antipatterngraph
