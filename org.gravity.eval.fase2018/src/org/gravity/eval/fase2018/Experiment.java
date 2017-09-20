@@ -36,7 +36,10 @@ import org.gravity.hulk.HulkFactory;
 import org.gravity.hulk.antipatterngraph.HAnnotation;
 import org.gravity.hulk.antipatterngraph.HAntiPatternGraph;
 import org.gravity.hulk.antipatterngraph.HMetric;
+import org.gravity.hulk.antipatterngraph.antipattern.HBlobAntiPattern;
 import org.gravity.hulk.antipatterngraph.impl.AntipatterngraphFactoryImpl;
+import org.gravity.hulk.antipatterngraph.metrics.HLCOM5Metric;
+import org.gravity.hulk.antipatterngraph.metrics.HTotalCouplingMetric;
 import org.gravity.hulk.detection.HulkDetector;
 import org.gravity.hulk.detection.antipattern.AntipatternPackage;
 import org.gravity.hulk.detection.antipattern.HBlobDetector;
@@ -185,8 +188,12 @@ public class Experiment {
 		outputFolder.mkdirs();
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp2.csv"), true)) {
+			VisibilityReducer.reduce(pg);
+			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
+			double reduced = visibilityCalculator.calculate(pg);
+
 			s.append("version;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
-			s.append("initial;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + visibility + ';' + members
+			s.append("initial;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + reduced + ';' + members
 					+ '\n');
 
 			File model = new File(outputFolder, pg.getTName() + ".xmi");
@@ -197,8 +204,6 @@ public class Experiment {
 			search.initializeFitnessFunctions();
 			search.initializeConstraints();
 			TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
-
-			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
@@ -313,7 +318,7 @@ public class Experiment {
 								s.append(Double.toString(obj[i]));
 							}
 						}
-						s.append(';' + Double.toString(members) + '\n');
+						s.append(";" + Double.toString(members) + "\n");
 					}
 				}
 
@@ -353,18 +358,30 @@ public class Experiment {
 		hulkDetector.detectSelectedAntiPattern(selection, executed, new HashSet<HDetector>());
 
 		for (HDetector next : executed) {
-			double fitness = 0;
-			for (HAnnotation metric : next.getHAnnotation()) {
-				if (metric instanceof HMetric) {
-					fitness += ((HMetric) metric).getValue();
-				}
-			}
-
 			if (next instanceof HTotalCouplingCalculator) {
+				double fitness = 0;
+				for (HAnnotation metric : next.getHAnnotation()) {
+					if (metric instanceof HTotalCouplingMetric) {
+						fitness += ((HMetric) metric).getValue();
+					}
+				}
 				values.set(METRICS.CBO.getId(), fitness);
 			} else if (next instanceof HLcom5Calculator) {
+				double fitness = 0;
+				for (HAnnotation metric : next.getHAnnotation()) {
+					if (metric instanceof HLCOM5Metric) {
+						fitness += ((HMetric) metric).getValue();
+					}
+				}
 				values.set(METRICS.LCOM.getId(), fitness);
 			} else if (next instanceof HBlobDetector) {
+				double fitness = 0;
+				for (HAnnotation metric : next.getHAnnotation()) {
+					if (metric instanceof HBlobAntiPattern) {
+						fitness++;
+						
+					}
+				}
 				values.set(METRICS.BLOBS.getId(), fitness);
 			}
 
