@@ -236,7 +236,7 @@ public class Experiment {
 						for (double obj : sol.getObjectives()) {
 							s.append(";" + obj);
 						}
-						s.append(';' + vis + ';' + Double.toString(members) + '\n');
+						s.append(";" + vis + ";" + Double.toString(members) + "\n");
 					}
 				}
 
