@@ -2,6 +2,7 @@ package org.gravity.eval.fase2018;
 
 import Repair.visibility.VisibilityReducer;
 import at.ac.tuwien.big.momot.TransformationResultManager;
+import at.ac.tuwien.big.momot.problem.solution.variable.RuleApplicationVariable;
 import momotFiles.SearchParameters;
 import momotFiles.SearchTypeGraph;
 
@@ -47,6 +48,8 @@ import org.gravity.hulk.detection.metrics.HLcom5Calculator;
 import org.gravity.hulk.detection.metrics.HTotalCouplingCalculator;
 import org.gravity.hulk.detection.metrics.MetricsPackage;
 import org.gravity.typegraph.basic.TAbstractType;
+import org.gravity.typegraph.basic.TClass;
+import org.gravity.typegraph.basic.TPackage;
 import org.gravity.typegraph.basic.TypeGraph;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -54,6 +57,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.moeaframework.core.NondominatedPopulation;
 import org.moeaframework.core.Solution;
+import org.moeaframework.core.Variable;
 
 import FitnessCalculators.VisibilityCalculator;
 
@@ -139,20 +143,23 @@ public class Experiment {
 		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp1.csv"), true)) {
-			s.append("version;refactorings;coupling;lcom;blobs;visibility;members\n");
-			s.append("initial;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
-			s.append("reduced;0;" + cbo + ";" + lcom + ";" + blobs + ";" + before + ';' + members + '\n');
+			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
+			s.append("reduced;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + before + ';' + members + '\n');
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
+						
+						int interpackageMoves = getNumInterPackageMoves(sol);
+						
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
 						fileName += ".xmi";
 
-						s.append(fileName);
+						s.append(fileName+";"+interpackageMoves);
 						double[] obj = sol.getObjectives();
 						for (int i = 0; i < 5; i++) {
 							s.append(';');
@@ -192,8 +199,8 @@ public class Experiment {
 			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 			double reduced = visibilityCalculator.calculate(pg);
 
-			s.append("version;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
-			s.append("initial;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + reduced + ';' + members
+			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + reduced + ';' + members
 					+ '\n');
 
 			File model = new File(outputFolder, pg.getTName() + ".xmi");
@@ -208,6 +215,8 @@ public class Experiment {
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
+						int interpackageMoves = getNumInterPackageMoves(sol);
+						
 						File file = new File(outputFolder, "models");
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
@@ -237,7 +246,7 @@ public class Experiment {
 						VisibilityReducer.reduce(solPG);
 						double vis = visibilityCalculator.calculate(solPG);
 
-						s.append(fileName);
+						s.append(fileName+";"+interpackageMoves);
 						for (double obj : sol.getObjectives()) {
 							s.append(";" + obj);
 						}
@@ -298,19 +307,21 @@ public class Experiment {
 		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp4.csv"), true)) {
-			s.append("version;refactorings;coupling;lcom;blobs;visibility;members\n");
-			s.append("initial;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
+			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
+						int interpackageMoves = getNumInterPackageMoves(sol);
+						
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
 						fileName += ".xmi";
 
-						s.append(fileName);
+						s.append(fileName+";"+interpackageMoves);
 						double[] obj = sol.getObjectives();
 						for (int i = 0; i < 5; i++) {
 							s.append(';');
@@ -326,6 +337,32 @@ public class Experiment {
 		}
 		
 		unload(rs);
+	}
+
+	private int getNumInterPackageMoves(Solution sol) {
+		int interpackageMoves = 0;
+		try {
+		for(int i = 0; i < sol.getNumberOfVariables(); i++) {
+			Variable var = sol.getVariable(i);
+			if (var instanceof RuleApplicationVariable) {
+				TClass src = (TClass) ((RuleApplicationVariable) var).getParameterValue("sourceClass");
+				TClass trg = (TClass) ((RuleApplicationVariable) var).getParameterValue("targetClass");
+				
+				TPackage cur = trg.getPackage();
+				while(cur != null) {
+					if(cur == src.getPackage()) {
+						interpackageMoves++;
+						break;
+					}
+					cur = cur.getParent();
+				}
+			}
+		}
+		}
+		catch(Throwable e) {
+			e.printStackTrace();
+		}
+		return interpackageMoves;
 	}
 
 	private static void unload(ResourceSetImpl rs) {
