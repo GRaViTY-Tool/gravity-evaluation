@@ -3,6 +3,7 @@ package org.gravity.eval.fase2018;
 import Repair.visibility.VisibilityReducer;
 import at.ac.tuwien.big.momot.TransformationResultManager;
 import at.ac.tuwien.big.momot.problem.solution.variable.RuleApplicationVariable;
+import at.ac.tuwien.big.momot.problem.solution.variable.UnitApplicationVariable;
 import momotFiles.SearchParameters;
 import momotFiles.SearchTypeGraph;
 
@@ -31,6 +32,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.henshin.interpreter.UnitApplication;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -104,10 +106,10 @@ public class Experiment {
 			TypeGraph pg = (TypeGraph) r.getContents().get(0);
 			List<Double> metrics = calcMetrics(pg);
 
-			param.add(new Object[] {pg.getTName(), f, time, metrics.get(METRICS.CBO.getId()), metrics.get(METRICS.LCOM.getId()),
-					metrics.get(METRICS.BLOBS.getId()), metrics.get(METRICS.VISIBILITY.getId()),
-					metrics.get(METRICS.MEMBERS.getId()) });
-			
+			param.add(new Object[] { pg.getTName(), f, time, metrics.get(METRICS.CBO.getId()),
+					metrics.get(METRICS.LCOM.getId()), metrics.get(METRICS.BLOBS.getId()),
+					metrics.get(METRICS.VISIBILITY.getId()), metrics.get(METRICS.MEMBERS.getId()) });
+
 			unload(rs);
 		}
 		return param;
@@ -124,7 +126,7 @@ public class Experiment {
 		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-		
+
 		VisibilityReducer.reduce(pg);
 
 		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
@@ -150,16 +152,16 @@ public class Experiment {
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
-						
+
 						int interpackageMoves = getNumInterPackageMoves(sol);
-						
+
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
 						fileName += ".xmi";
 
-						s.append(fileName+";"+interpackageMoves);
+						s.append(fileName + ";" + interpackageMoves);
 						double[] obj = sol.getObjectives();
 						for (int i = 0; i < 5; i++) {
 							s.append(';');
@@ -173,7 +175,7 @@ public class Experiment {
 
 			}
 		}
-		
+
 		unload(rs);
 	}
 
@@ -188,7 +190,7 @@ public class Experiment {
 		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-		
+
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp2");
 		outputFolder.mkdirs();
 
@@ -216,7 +218,7 @@ public class Experiment {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
 						int interpackageMoves = getNumInterPackageMoves(sol);
-						
+
 						File file = new File(outputFolder, "models");
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
@@ -246,7 +248,7 @@ public class Experiment {
 						VisibilityReducer.reduce(solPG);
 						double vis = visibilityCalculator.calculate(solPG);
 
-						s.append(fileName+";"+interpackageMoves);
+						s.append(fileName + ";" + interpackageMoves);
 						for (double obj : sol.getObjectives()) {
 							s.append(";" + obj);
 						}
@@ -256,7 +258,7 @@ public class Experiment {
 
 			}
 		}
-		
+
 		unload(rs);
 	}
 
@@ -273,12 +275,12 @@ public class Experiment {
 		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-		
+
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp3");
 		outputFolder.mkdirs();
 
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
-		
+
 		unload(rs);
 	}
 
@@ -293,7 +295,7 @@ public class Experiment {
 		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-		
+
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp4");
 		outputFolder.mkdirs();
 
@@ -314,14 +316,14 @@ public class Experiment {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
 						int interpackageMoves = getNumInterPackageMoves(sol);
-						
+
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
 						fileName += ".xmi";
 
-						s.append(fileName+";"+interpackageMoves);
+						s.append(fileName + ";" + interpackageMoves);
 						double[] obj = sol.getObjectives();
 						for (int i = 0; i < 5; i++) {
 							s.append(';');
@@ -335,38 +337,39 @@ public class Experiment {
 
 			}
 		}
-		
+
 		unload(rs);
 	}
 
 	private int getNumInterPackageMoves(Solution sol) {
 		int interpackageMoves = 0;
 		try {
-		for(int i = 0; i < sol.getNumberOfVariables(); i++) {
-			Variable var = sol.getVariable(i);
-			if (var instanceof RuleApplicationVariable) {
-				TClass src = (TClass) ((RuleApplicationVariable) var).getParameterValue("sourceClass");
-				TClass trg = (TClass) ((RuleApplicationVariable) var).getParameterValue("targetClass");
-				
-				TPackage cur = trg.getPackage();
-				while(cur != null) {
-					if(cur == src.getPackage()) {
-						interpackageMoves++;
-						break;
+			for (int i = 0; i < sol.getNumberOfVariables(); i++) {
+				Variable var = sol.getVariable(i);
+				if (var instanceof UnitApplicationVariable) {
+					TClass src = (TClass) ((UnitApplicationVariable) var).getParameterValue("sourceClass");
+					TClass trg = (TClass) ((UnitApplicationVariable) var).getParameterValue("targetClass");
+
+					TPackage cur = trg.getPackage();
+					if (cur != src.getPackage()) {
+						while (cur != null) {
+							if (cur == src.getPackage()) {
+								interpackageMoves++;
+								break;
+							}
+							cur = cur.getParent();
+						}
 					}
-					cur = cur.getParent();
 				}
 			}
-		}
-		}
-		catch(Throwable e) {
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 		return interpackageMoves;
 	}
 
 	private static void unload(ResourceSetImpl rs) {
-		for(Resource r : rs.getResources()) {
+		for (Resource r : rs.getResources()) {
 			r.unload();
 		}
 		rs.getResources().clear();
@@ -375,7 +378,7 @@ public class Experiment {
 
 	private static List<Double> calcMetrics(TypeGraph pg) {
 		List<Double> values = new ArrayList<>(5);
-		for(int i = 0; i < 5; i++) {
+		for (int i = 0; i < 5; i++) {
 			values.add(null);
 		}
 
@@ -416,7 +419,7 @@ public class Experiment {
 				for (HAnnotation metric : next.getHAnnotation()) {
 					if (metric instanceof HBlobAntiPattern) {
 						fitness++;
-						
+
 					}
 				}
 				values.set(METRICS.BLOBS.getId(), fitness);
