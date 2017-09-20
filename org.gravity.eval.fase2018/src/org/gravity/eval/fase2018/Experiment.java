@@ -57,14 +57,14 @@ import FitnessCalculators.VisibilityCalculator;
 @RunWith(Parameterized.class)
 public class Experiment {
 
-	private TypeGraph pg;
+	private File file;
 	private String time;
 
 	private double cbo, lcom, blobs, visibility, members;
 
-	public Experiment(String name, TypeGraph pg, String time, double cbo, double lcom, double blobs, double visibility,
+	public Experiment(String name, File file, String time, double cbo, double lcom, double blobs, double visibility,
 			double members) {
-		this.pg = pg;
+		this.file = file;
 		this.time = time;
 		this.cbo = cbo;
 		this.lcom = lcom;
@@ -96,7 +96,7 @@ public class Experiment {
 			TypeGraph pg = (TypeGraph) r.getContents().get(0);
 			List<Double> metrics = calcMetrics(pg);
 
-			param.add(new Object[] {pg.getTName(), pg, time, metrics.get(METRICS.CBO.getId()), metrics.get(METRICS.LCOM.getId()),
+			param.add(new Object[] {pg.getTName(), f, time, metrics.get(METRICS.CBO.getId()), metrics.get(METRICS.LCOM.getId()),
 					metrics.get(METRICS.BLOBS.getId()), metrics.get(METRICS.VISIBILITY.getId()),
 					metrics.get(METRICS.MEMBERS.getId()) });
 		}
@@ -110,6 +110,10 @@ public class Experiment {
 	 */
 	@Test
 	public void exp1() throws IOException {
+		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		r.load(Collections.EMPTY_MAP);
+		TypeGraph pg = (TypeGraph) r.getContents().get(0);
+		
 		VisibilityReducer.reduce(pg);
 
 		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
@@ -164,6 +168,10 @@ public class Experiment {
 	 */
 	@Test
 	public void exp2() throws IOException {
+		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		r.load(Collections.EMPTY_MAP);
+		TypeGraph pg = (TypeGraph) r.getContents().get(0);
+		
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp2");
 		outputFolder.mkdirs();
 
@@ -238,6 +246,10 @@ public class Experiment {
 	public void exp3() throws IOException {
 		fail("Not implemented yet");
 
+		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		r.load(Collections.EMPTY_MAP);
+		TypeGraph pg = (TypeGraph) r.getContents().get(0);
+		
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp3");
 		outputFolder.mkdirs();
 
@@ -251,6 +263,10 @@ public class Experiment {
 	 */
 	@Test
 	public void exp4() throws IOException {
+		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		r.load(Collections.EMPTY_MAP);
+		TypeGraph pg = (TypeGraph) r.getContents().get(0);
+		
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp4");
 		outputFolder.mkdirs();
 
