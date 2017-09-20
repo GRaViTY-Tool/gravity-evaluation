@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -42,13 +41,14 @@ public class Experiment {
 	private String name;
 	private String time;
 	
-	public Experiment(String name) {
+	public Experiment(String name, String time) {
 		this.name = name;
-		this.time = new SimpleDateFormat("yyyy-MM-dd_kk-mm-ss").format(new Date(System.currentTimeMillis()));
+		this.time = time;
 	}
 	
-	@Parameters(name="{index}:{0}")
+	@Parameters(name="{index}: {0}")
 	public static Collection<String[]> params(){
+		String time = new SimpleDateFormat("yyyy-MM-dd_kk-mm-ss").format(new Date(System.currentTimeMillis()));
 		LinkedList<String[]> param = new LinkedList<String[]>();
 		File[] files = new File("input").listFiles(new FilenameFilter() {
 			
@@ -58,7 +58,7 @@ public class Experiment {
 			}
 		});
 		for(File f : files) {
-			param.add(new String[] {f.getName()});
+			param.add(new String[] {f.getName(), time});
 		}
 		return param;
 	}
