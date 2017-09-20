@@ -11,6 +11,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.Collections;
@@ -153,6 +156,11 @@ public class Experiment {
 						}
 						fileName += ".xmi";
 						file = new File(file, fileName);
+						if(!file.exists()) {
+							Files.write(new File(outputFolder, "errors.log").toPath(), ("Exp2: Result model file \""+file+"\" not found.").getBytes(), StandardOpenOption.CREATE,StandardOpenOption.APPEND);
+							continue;
+						}
+						
 						Resource res = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath() ));
 						res.load(Collections.EMPTY_MAP);
 
