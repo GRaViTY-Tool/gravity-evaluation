@@ -85,7 +85,8 @@ public class Experiment {
 			}
 		});
 		for (File f : files) {
-			Resource r = new ResourceSetImpl().createResource(URI.createFileURI(f.getAbsolutePath()));
+			ResourceSetImpl rs = new ResourceSetImpl();
+			Resource r = rs.createResource(URI.createFileURI(f.getAbsolutePath()));
 			try {
 				r.load(Collections.EMPTY_MAP);
 			} catch (IOException e) {
@@ -99,6 +100,8 @@ public class Experiment {
 			param.add(new Object[] {pg.getTName(), f, time, metrics.get(METRICS.CBO.getId()), metrics.get(METRICS.LCOM.getId()),
 					metrics.get(METRICS.BLOBS.getId()), metrics.get(METRICS.VISIBILITY.getId()),
 					metrics.get(METRICS.MEMBERS.getId()) });
+			
+			unload(rs);
 		}
 		return param;
 	}
@@ -110,7 +113,8 @@ public class Experiment {
 	 */
 	@Test
 	public void exp1() throws IOException {
-		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		ResourceSetImpl rs = new ResourceSetImpl();
+		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
 		
@@ -159,6 +163,8 @@ public class Experiment {
 
 			}
 		}
+		
+		unload(rs);
 	}
 
 	/**
@@ -168,7 +174,8 @@ public class Experiment {
 	 */
 	@Test
 	public void exp2() throws IOException {
-		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		ResourceSetImpl rs = new ResourceSetImpl();
+		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
 		
@@ -210,7 +217,7 @@ public class Experiment {
 							continue;
 						}
 
-						Resource res = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 						res.load(Collections.EMPTY_MAP);
 
 						TypeGraph solPG = null;
@@ -235,6 +242,8 @@ public class Experiment {
 
 			}
 		}
+		
+		unload(rs);
 	}
 
 	/**
@@ -246,7 +255,8 @@ public class Experiment {
 	public void exp3() throws IOException {
 		fail("Not implemented yet");
 
-		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		ResourceSetImpl rs = new ResourceSetImpl();
+		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
 		
@@ -254,6 +264,8 @@ public class Experiment {
 		outputFolder.mkdirs();
 
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
+		
+		unload(rs);
 	}
 
 	/**
@@ -263,7 +275,8 @@ public class Experiment {
 	 */
 	@Test
 	public void exp4() throws IOException {
-		Resource r = new ResourceSetImpl().createResource(URI.createFileURI(file.getAbsolutePath()));
+		ResourceSetImpl rs = new ResourceSetImpl();
+		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
 		TypeGraph pg = (TypeGraph) r.getContents().get(0);
 		
@@ -306,6 +319,16 @@ public class Experiment {
 
 			}
 		}
+		
+		unload(rs);
+	}
+
+	private static void unload(ResourceSetImpl rs) {
+		for(Resource r : rs.getResources()) {
+			r.unload();
+		}
+		rs.getResources().clear();
+		rs = null;
 	}
 
 	private static List<Double> calcMetrics(TypeGraph pg) {
