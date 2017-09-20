@@ -115,7 +115,7 @@ public class Experiment {
 		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 		double before = visibilityCalculator.calculate(pg);
 
-		File outputFolder = new File(new File(new File(new File("output"), pg.getTName()), time), "exp1");
+		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp1");
 		outputFolder.mkdirs();
 
 		File model = new File(outputFolder, pg.getTName() + ".xmi");
@@ -164,7 +164,7 @@ public class Experiment {
 	 */
 	@Test
 	public void exp2() throws IOException {
-		File outputFolder = new File(new File(new File(new File("output"), pg.getTName()), time), "exp2");
+		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp2");
 		outputFolder.mkdirs();
 
 		outputFolder.mkdirs();
@@ -238,7 +238,7 @@ public class Experiment {
 	public void exp3() throws IOException {
 		fail("Not implemented yet");
 
-		File outputFolder = new File(new File(new File(new File("output"), pg.getTName()), time), "exp3");
+		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp3");
 		outputFolder.mkdirs();
 
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
@@ -251,7 +251,7 @@ public class Experiment {
 	 */
 	@Test
 	public void exp4() throws IOException {
-		File outputFolder = new File(new File(new File(new File("output"), pg.getTName()), time), "exp4");
+		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp4");
 		outputFolder.mkdirs();
 
 		File model = new File(outputFolder, pg.getTName() + ".xmi");
