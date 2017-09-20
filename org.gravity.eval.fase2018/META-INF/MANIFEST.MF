@@ -11,4 +11,5 @@ Require-Bundle: org.junit,
  at.ac.tuwien.big.momot.core,
  org.eclipse.emf.henshin.interpreter;bundle-version="1.4.0",
  org.gravity.hulk,
- org.gravity.hulk.antipatterngraph
+ org.gravity.hulk.antipatterngraph,
+ org.moflon.core.dfs;bundle-version="2.0.0"
