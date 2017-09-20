@@ -252,9 +252,14 @@ public class Experiment {
 						fileName += ".xmi";
 						
 						s.append(fileName);
-						for(double obj : sol.getObjectives()) {
-							s.append(";"+obj);
+						double[] obj = sol.getObjectives();
+						for(int i = 0 ; i < 5; i++) {
+							s.append(';');
+							if(i<obj.length) {
+								s.append(Double.toString(obj[i]));
+							}
 						}
+						s.append('\n');
 					}
 				}
 
