@@ -145,21 +145,44 @@ public class Experiment {
 		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp1.csv"), true)) {
-			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
-			s.append("reduced;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + before + ';' + members + '\n');
-
+			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;reducedVisibility;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';'+ before+ ";" + members + '\n');
+			
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
 
 						int interpackageMoves = getNumInterPackageMoves(sol);
 
+						File file = new File(outputFolder, "models");
 						String fileName = pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
 						fileName += ".xmi";
+
+						file = new File(file, fileName);
+						if (!file.exists()) {
+							Files.write(new File(outputFolder, "errors.log").toPath(),
+									("Exp2: Result model file \"" + file + "\" not found.\n").getBytes(),
+									StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+							continue;
+						}
+
+						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
+						res.load(Collections.EMPTY_MAP);
+
+						TypeGraph solPG = null;
+						EObject eObject = res.getContents().get(0);
+						if (eObject instanceof TypeGraph) {
+							solPG = (TypeGraph) eObject;
+						} else if (eObject instanceof HAntiPatternDetection) {
+							solPG = ((HAntiPatternDetection) eObject).getApg().getPg();
+
+						}
+
+						VisibilityReducer.reduce(solPG);
+						double vis = visibilityCalculator.calculate(solPG);
 
 						s.append(fileName + ";" + interpackageMoves);
 						double[] obj = sol.getObjectives();
@@ -169,7 +192,7 @@ public class Experiment {
 								s.append(Double.toString(obj[i]));
 							}
 						}
-						s.append(';' + Double.toString(members) + '\n');
+						s.append(";" + vis+ ";" + Double.toString(members) + '\n');
 					}
 				}
 
@@ -269,8 +292,6 @@ public class Experiment {
 	 */
 	@Test
 	public void exp3() throws IOException {
-		fail("Not implemented yet");
-
 		ResourceSetImpl rs = new ResourceSetImpl();
 		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 		r.load(Collections.EMPTY_MAP);
@@ -279,7 +300,66 @@ public class Experiment {
 		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp3");
 		outputFolder.mkdirs();
 
+		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
+		VisibilityReducer.reduce(pg);
+		double before = visibilityCalculator.calculate(pg);
+		
+		SearchTypeGraph search = new SearchTypeGraph();
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
+		SearchParameters.useOptimizationRepair = true;
+		search.initializeFitnessFunctions();
+		search.initializeConstraints();
+		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
+		
+		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp1.csv"), true)) {
+			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + before + ';' + members
+					+ '\n');
+
+			for (List<NondominatedPopulation> val : results.getResults().values()) {
+				for (NondominatedPopulation pop : val) {
+					for (Solution sol : pop) {
+						int interpackageMoves = getNumInterPackageMoves(sol);
+
+						File file = new File(outputFolder, "models");
+						String fileName = pg.getTName();
+						for (double obj : sol.getObjectives()) {
+							fileName += "_" + obj;
+						}
+						fileName += ".xmi";
+						file = new File(file, fileName);
+						if (!file.exists()) {
+							Files.write(new File(outputFolder, "errors.log").toPath(),
+									("Exp2: Result model file \"" + file + "\" not found.\n").getBytes(),
+									StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+							continue;
+						}
+
+						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
+						res.load(Collections.EMPTY_MAP);
+
+						TypeGraph solPG = null;
+						EObject eObject = res.getContents().get(0);
+						if (eObject instanceof TypeGraph) {
+							solPG = (TypeGraph) eObject;
+						} else if (eObject instanceof HAntiPatternDetection) {
+							solPG = ((HAntiPatternDetection) eObject).getApg().getPg();
+
+						}
+
+						VisibilityReducer.reduce(solPG);
+						double vis = visibilityCalculator.calculate(solPG);
+
+						s.append(fileName + ";" + interpackageMoves);
+						for (double obj : sol.getObjectives()) {
+							s.append(";" + obj);
+						}
+						s.append(";" + vis + ";" + Double.toString(members) + "\n");
+					}
+				}
+
+			}
+		}
 
 		unload(rs);
 	}
