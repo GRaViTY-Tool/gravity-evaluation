@@ -364,63 +364,6 @@ public class Experiment {
 		unload(rs);
 	}
 
-	/**
-	 * Experiment 4 - Visibility changes only due to refactorings
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void exp4() throws IOException {
-		ResourceSetImpl rs = new ResourceSetImpl();
-		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-		r.load(Collections.EMPTY_MAP);
-		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-
-		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp4");
-		outputFolder.mkdirs();
-
-		File model = new File(outputFolder, pg.getTName() + ".xmi");
-		pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
-
-		SearchTypeGraph search = new SearchTypeGraph();
-		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
-		search.initializeFitnessFunctions();
-		search.initializeConstraints();
-		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
-
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp4.csv"), true)) {
-			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + members + '\n');
-
-			for (List<NondominatedPopulation> val : results.getResults().values()) {
-				for (NondominatedPopulation pop : val) {
-					for (Solution sol : pop) {
-						int interpackageMoves = getNumInterPackageMoves(sol);
-
-						String fileName = pg.getTName();
-						for (double obj : sol.getObjectives()) {
-							fileName += "_" + obj;
-						}
-						fileName += ".xmi";
-
-						s.append(fileName + ";" + interpackageMoves);
-						double[] obj = sol.getObjectives();
-						for (int i = 0; i < 5; i++) {
-							s.append(';');
-							if (i < obj.length) {
-								s.append(Double.toString(obj[i]));
-							}
-						}
-						s.append(";" + Double.toString(members) + "\n");
-					}
-				}
-
-			}
-		}
-
-		unload(rs);
-	}
-
 	private int getNumInterPackageMoves(Solution sol) {
 		int interpackageMoves = 0;
 		try {
