@@ -142,12 +142,13 @@ public class Experiment {
 		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp1.csv"), true)) {
-			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;reducedVisibility;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + before + ";" + members
-					+ '\n');
+			s.append(
+					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + before + ";" + (visibility-before)+";"
+					+ members + '\n');
 
 			int j = 0;
-			double[] averages = new double[8];
+			double[] averages = new double[10];
 			Arrays.fill(averages, 0);
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
@@ -197,9 +198,12 @@ public class Experiment {
 								averages[i + 1] += obj[i];
 							}
 						}
-						s.append(";" + vis + ";" + Double.toString(members) + '\n');
-						averages[6] += vis;
-						averages[7] += members;
+						s.append(";" + (visibility - obj[4]) + ";" + vis + ";" + (visibility - vis) + ";"
+								+ Double.toString(members) + '\n');
+						averages[6] += (visibility - obj[4]);
+						averages[7] += vis;
+						averages[8] += (visibility - vis);
+						averages[9] += members;
 					}
 				}
 				s.append("average");
@@ -207,7 +211,7 @@ public class Experiment {
 					s.append(";" + (d / j));
 				}
 				s.append("\n");
-				
+
 			}
 		}
 
@@ -236,9 +240,10 @@ public class Experiment {
 			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 			double reduced = visibilityCalculator.calculate(pg);
 
-			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + reduced + ';' + members
-					+ '\n');
+			s.append(
+					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + reduced + ";"+(visibility-reduced)+";"
+					+ members + '\n');
 
 			File model = new File(outputFolder, pg.getTName() + ".xmi");
 			pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
@@ -250,7 +255,7 @@ public class Experiment {
 			TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 			int j = 0;
-			double[] averages = new double[8];
+			double[] averages = new double[10];
 			Arrays.fill(averages, 0);
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
@@ -297,9 +302,12 @@ public class Experiment {
 								averages[i + 1] += obj[i];
 							}
 						}
-						s.append(";" + vis + ";" + Double.toString(members) + '\n');
-						averages[6] += vis;
-						averages[7] += members;
+						s.append(";" + (visibility - obj[4]) + ";" + vis + ";" + (visibility - vis) + ";"
+								+ Double.toString(members) + '\n');
+						averages[6] += (visibility - obj[4]);
+						averages[7] += vis;
+						averages[8] += (visibility - vis);
+						averages[9] += members;
 					}
 				}
 				s.append("average");
@@ -340,12 +348,13 @@ public class Experiment {
 		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
-			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + before + ';' + members
-					+ '\n');
+			s.append(
+					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + before + ";" + (visibility-before)+";"
+					+ members + '\n');
 
 			int j = 0;
-			double[] averages = new double[8];
+			double[] averages = new double[10];
 			Arrays.fill(averages, 0);
 
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
@@ -392,9 +401,12 @@ public class Experiment {
 								averages[i + 1] += obj[i];
 							}
 						}
-						s.append(";" + vis + ";" + Double.toString(members) + '\n');
-						averages[6] += vis;
-						averages[7] += members;
+						s.append(";" + (visibility - obj[4]) + ";" + vis + ";" + (visibility - vis) + ";"
+								+ Double.toString(members) + '\n');
+						averages[6] += (visibility - obj[4]);
+						averages[7] += vis;
+						averages[8] += (visibility - vis);
+						averages[9] += members;
 					}
 				}
 				s.append("average");
