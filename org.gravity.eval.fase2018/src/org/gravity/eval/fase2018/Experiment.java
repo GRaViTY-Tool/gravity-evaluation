@@ -2,12 +2,9 @@ package org.gravity.eval.fase2018;
 
 import Repair.visibility.VisibilityReducer;
 import at.ac.tuwien.big.momot.TransformationResultManager;
-import at.ac.tuwien.big.momot.problem.solution.variable.RuleApplicationVariable;
 import at.ac.tuwien.big.momot.problem.solution.variable.UnitApplicationVariable;
 import momotFiles.SearchParameters;
 import momotFiles.SearchTypeGraph;
-
-import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -32,7 +29,6 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.henshin.interpreter.UnitApplication;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -144,10 +140,11 @@ public class Experiment {
 		search.initializeConstraints();
 		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp1.csv"), true)) {
+		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp1.csv"), true)) {
 			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;reducedVisibility;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';'+ before+ ";" + members + '\n');
-			
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + before + ";" + members
+					+ '\n');
+
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
@@ -192,7 +189,7 @@ public class Experiment {
 								s.append(Double.toString(obj[i]));
 							}
 						}
-						s.append(";" + vis+ ";" + Double.toString(members) + '\n');
+						s.append(";" + vis + ";" + Double.toString(members) + '\n');
 					}
 				}
 
@@ -219,7 +216,7 @@ public class Experiment {
 
 		outputFolder.mkdirs();
 
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp2.csv"), true)) {
+		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
 			VisibilityReducer.reduce(pg);
 			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 			double reduced = visibilityCalculator.calculate(pg);
@@ -303,15 +300,15 @@ public class Experiment {
 		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
 		VisibilityReducer.reduce(pg);
 		double before = visibilityCalculator.calculate(pg);
-		
+
 		SearchTypeGraph search = new SearchTypeGraph();
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
 		SearchParameters.useOptimizationRepair = true;
 		search.initializeFitnessFunctions();
 		search.initializeConstraints();
 		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
-		
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_exp1.csv"), true)) {
+
+		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
 			s.append("version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibility_reduced;members\n");
 			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + before + ';' + members
 					+ '\n');
