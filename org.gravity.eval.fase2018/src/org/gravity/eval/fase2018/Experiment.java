@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -145,9 +146,14 @@ public class Experiment {
 			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ';' + before + ";" + members
 					+ '\n');
 
+			int j = 0;
+			double[] averages = new double[8];
+			Arrays.fill(averages, 0);
+
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
+						j++;
 
 						int interpackageMoves = getNumInterPackageMoves(sol);
 
@@ -182,17 +188,26 @@ public class Experiment {
 						double vis = visibilityCalculator.calculate(solPG);
 
 						s.append(fileName + ";" + interpackageMoves);
+						averages[0] += interpackageMoves;
 						double[] obj = sol.getObjectives();
 						for (int i = 0; i < 5; i++) {
 							s.append(';');
 							if (i < obj.length) {
 								s.append(Double.toString(obj[i]));
+								averages[i + 1] += obj[i];
 							}
 						}
 						s.append(";" + vis + ";" + Double.toString(members) + '\n');
+						averages[6] += vis;
+						averages[7] += members;
 					}
 				}
-
+				s.append("average");
+				for (double d : averages) {
+					s.append(";" + (d / j));
+				}
+				s.append("\n");
+				
 			}
 		}
 
@@ -234,6 +249,10 @@ public class Experiment {
 			search.initializeConstraints();
 			TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
+			int j = 0;
+			double[] averages = new double[8];
+			Arrays.fill(averages, 0);
+
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
@@ -269,13 +288,25 @@ public class Experiment {
 						double vis = visibilityCalculator.calculate(solPG);
 
 						s.append(fileName + ";" + interpackageMoves);
-						for (double obj : sol.getObjectives()) {
-							s.append(";" + obj);
+						averages[0] += interpackageMoves;
+						double[] obj = sol.getObjectives();
+						for (int i = 0; i < 5; i++) {
+							s.append(';');
+							if (i < obj.length) {
+								s.append(Double.toString(obj[i]));
+								averages[i + 1] += obj[i];
+							}
 						}
-						s.append(";" + vis + ";" + Double.toString(members) + "\n");
+						s.append(";" + vis + ";" + Double.toString(members) + '\n');
+						averages[6] += vis;
+						averages[7] += members;
 					}
 				}
-
+				s.append("average");
+				for (double d : averages) {
+					s.append(";" + (d / j));
+				}
+				s.append("\n");
 			}
 		}
 
@@ -313,6 +344,10 @@ public class Experiment {
 			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";" + before + ';' + members
 					+ '\n');
 
+			int j = 0;
+			double[] averages = new double[8];
+			Arrays.fill(averages, 0);
+
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
@@ -348,13 +383,25 @@ public class Experiment {
 						double vis = visibilityCalculator.calculate(solPG);
 
 						s.append(fileName + ";" + interpackageMoves);
-						for (double obj : sol.getObjectives()) {
-							s.append(";" + obj);
+						averages[0] += interpackageMoves;
+						double[] obj = sol.getObjectives();
+						for (int i = 0; i < 5; i++) {
+							s.append(';');
+							if (i < obj.length) {
+								s.append(Double.toString(obj[i]));
+								averages[i + 1] += obj[i];
+							}
 						}
-						s.append(";" + vis + ";" + Double.toString(members) + "\n");
+						s.append(";" + vis + ";" + Double.toString(members) + '\n');
+						averages[6] += vis;
+						averages[7] += members;
 					}
 				}
-
+				s.append("average");
+				for (double d : averages) {
+					s.append(";" + (d / j));
+				}
+				s.append("\n");
 			}
 		}
 
