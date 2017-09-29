@@ -235,25 +235,23 @@ public class Experiment {
 
 		outputFolder.mkdirs();
 
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
-			VisibilityReducer.reduce(pg);
-			VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
-			double reduced = visibilityCalculator.calculate(pg);
+		VisibilityReducer.reduce(pg);
+		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
+		double reduced = visibilityCalculator.calculate(pg);
 
+		
+		SearchTypeGraph search = new SearchTypeGraph();
+		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
+		search.initializeFitnessFunctions();
+		search.initializeConstraints();
+		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
+
+		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
 			s.append(
 					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
 			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + reduced + ";"+(visibility-reduced)+";"
 					+ members + '\n');
-
-			File model = new File(outputFolder, pg.getTName() + ".xmi");
-			pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
-
-			SearchTypeGraph search = new SearchTypeGraph();
-			SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
-			search.initializeFitnessFunctions();
-			search.initializeConstraints();
-			TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
-
+			
 			int j = 0;
 			double[] averages = new double[10];
 			Arrays.fill(averages, 0);
@@ -340,12 +338,15 @@ public class Experiment {
 		VisibilityReducer.reduce(pg);
 		double before = visibilityCalculator.calculate(pg);
 
+		File model = new File(outputFolder, pg.getTName() + ".xmi");
+		pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
+
 		SearchTypeGraph search = new SearchTypeGraph();
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
 		SearchParameters.useOptimizationRepair = true;
 		search.initializeFitnessFunctions();
 		search.initializeConstraints();
-		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
+		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
 
 		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
 			s.append(
