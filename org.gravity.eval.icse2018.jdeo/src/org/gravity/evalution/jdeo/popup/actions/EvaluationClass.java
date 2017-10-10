@@ -1,7 +1,6 @@
-package org.gravity.evalution.jdeodeco.popup.actions;
+package org.gravity.evalution.jdeo.popup.actions;
 
 import java.io.ByteArrayInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +53,6 @@ public class EvaluationClass implements IObjectActionDelegate {
 
 		if (selection instanceof IStructuredSelection) {
 			javaProject = new HashSet<>();
-			IStructuredSelection structuredSelection = (IStructuredSelection)selection;
 			for(Object element: ((IStructuredSelection) selection).toArray()){
 				if(element instanceof IJavaProject) {
 					javaProject.add((IJavaProject)element);
@@ -122,23 +120,7 @@ public class EvaluationClass implements IObjectActionDelegate {
 					e.printStackTrace();
 				}
 				
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		

@@ -1,11 +1,19 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Jdeodeco
-Bundle-SymbolicName: org.gravity.eval.icse2018.jdeo;singleton:=true
+Bundle-SymbolicName: org.gravity.eval.jdeo;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.resources,
  org.eclipse.equinox.registry,
  gr.uom.java.jdeodorant;bundle-version="5.0.64",
- org.eclipse.jdt.core
+ org.eclipse.jdt.core,
+ org.junit,
+ org.eclipse.ltk.core.refactoring,
+ org.gravity.eclipse,
+ org.gravity.tgg.modisco,
+ org.gravity.typegraph.basic,
+ org.gravity.eval.fase2018,
+ org.moflon.tgg.language,
+ org.goblin.movemethod
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

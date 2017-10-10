@@ -154,8 +154,6 @@ public class Experiment {
 			for (List<NondominatedPopulation> val : results.getResults().values()) {
 				for (NondominatedPopulation pop : val) {
 					for (Solution sol : pop) {
-						j++;
-
 						int interpackageMoves = getNumInterPackageMoves(sol);
 
 						File file = new File(outputFolder, "models");
@@ -204,6 +202,7 @@ public class Experiment {
 						averages[7] += vis;
 						averages[8] += (visibility - vis);
 						averages[9] += members;
+						j++;
 					}
 				}
 				s.append("average");
@@ -306,6 +305,7 @@ public class Experiment {
 						averages[7] += vis;
 						averages[8] += (visibility - vis);
 						averages[9] += members;
+						j++;
 					}
 				}
 				s.append("average");
@@ -408,6 +408,7 @@ public class Experiment {
 						averages[7] += vis;
 						averages[8] += (visibility - vis);
 						averages[9] += members;
+						j++;
 					}
 				}
 				s.append("average");
@@ -456,7 +457,7 @@ public class Experiment {
 		rs = null;
 	}
 
-	private static List<Double> calcMetrics(TypeGraph pg) {
+	public static List<Double> calcMetrics(TypeGraph pg) {
 		List<Double> values = new ArrayList<>(5);
 		for (int i = 0; i < 5; i++) {
 			values.add(null);
@@ -523,7 +524,7 @@ public class Experiment {
 		return values;
 	}
 
-	enum METRICS {
+	public enum METRICS {
 		CBO(0), LCOM(1), BLOBS(2), VISIBILITY(3), MEMBERS(4);
 
 		private int id;

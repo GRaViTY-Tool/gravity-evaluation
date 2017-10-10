@@ -1,4 +1,4 @@
-package org.gravity.evalution.jdeodeco.popup.actions;
+package org.gravity.evalution.jdeo.popup.actions;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -10,21 +10,32 @@ import gr.uom.java.ast.CompilationUnitCache;
 import gr.uom.java.distance.ExtractClassCandidateGroup;
 import gr.uom.java.jdeodorant.refactoring.views.GodClass;
 
+
 public class EvaluateGodClass {
 
 	public static ExtractClassCandidateGroup[] detect(IJavaProject sProject)
-			throws NoSuchFieldException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+			throws NoSuchFieldException {
 		GodClass viewGodClass = new GodClass();
 		
 		
 		// Set selectedProject and activeProject in the GodClass by Reflection
 		Field selProject = viewGodClass.getClass().getDeclaredField("selectedProject");
 		selProject.setAccessible(true);
-		selProject.set(viewGodClass, sProject);
+		try {
+			selProject.set(viewGodClass, sProject);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
 		Field actProject = viewGodClass.getClass().getDeclaredField("activeProject");
 		actProject.setAccessible(true);
-		actProject.set(viewGodClass, sProject);
+		try {
+			actProject.set(viewGodClass, sProject);
+		} catch (IllegalArgumentException | IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 		
 		
 		
@@ -38,9 +49,21 @@ public class EvaluateGodClass {
 		
 		
 		// Execute the search for code smells and refactoring options by getTable() via reflection
-		Method getTable = viewGodClass.getClass().getDeclaredMethod("getTable");
+		Method getTable;
+		try {
+			getTable = viewGodClass.getClass().getDeclaredMethod("getTable");
+		} catch (NoSuchMethodException | SecurityException e) {
+			e.printStackTrace();
+			return null;
+		}
 		getTable.setAccessible(true);
-		Object invoke = getTable.invoke(viewGodClass);
+		Object invoke;
+		try {
+			invoke = getTable.invoke(viewGodClass);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+			return null;
+		}
 		if(invoke == null){
 			return null;
 		}
