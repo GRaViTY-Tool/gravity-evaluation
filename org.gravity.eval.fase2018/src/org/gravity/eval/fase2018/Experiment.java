@@ -7,6 +7,7 @@ import momotFiles.SearchParameters;
 import momotFiles.SearchTypeGraph;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -78,6 +79,82 @@ public class Experiment {
 		this.visibility = visibility;
 		this.members = members;
 	}
+	
+	
+//------------Tests---------------------------
+	@Test
+		public void RunTenTimes() throws IOException{
+			String exp = "exp10Times_run";
+			boolean saveReducedVisibility = true;
+			boolean useOptimization = true;
+			for(int i = 0; i < 10; i++) {
+				runExperiment(exp + String.valueOf(i++), saveReducedVisibility, useOptimization);
+			}
+		}
+		
+		/**
+		 * Experiment 1 - Global visibility reduction before all refactorings
+		 * 
+		 * @throws IOException
+		 */
+		//@Test
+		public void exp1() throws IOException {
+			String exp = "exp1";
+			boolean saveReducedVisibility = true;
+			boolean useOptimizationRepair = false;
+			runExperiment(exp, saveReducedVisibility, useOptimizationRepair);/*
+			NeededResources resources = initializeResources(exp);
+			VisibilityReducer.reduce(resources.pg);
+			double before = resources.visibilityCalculator.calculate(resources.pg);
+			resources.pg.eResource().save(new FileOutputStream(resources.model), Collections.EMPTY_MAP);
+			TransformationResultManager results = performSearch(false, resources);		
+			saveResults(results, resources, before, exp);
+			unload(resources.rs);*/
+		}
+		
+
+
+		/**
+		 * Experiment 2 - Global visibility reduction after all refactorings
+		 * 
+		 * @throws IOException
+		 */
+		//@Test
+		public void exp2() throws IOException {
+			String exp = "exp2";
+			boolean saveReducedVisibility = false;
+			boolean useOptimizationRepair = false;
+			runExperiment(exp, saveReducedVisibility, useOptimizationRepair);/*
+			NeededResources resources = initializeResources(exp);
+			VisibilityReducer.reduce(resources.pg);	
+			double reduced = resources.visibilityCalculator.calculate(resources.pg);
+			TransformationResultManager results = performSearch(false, resources);
+			saveResults(results, resources, reduced, exp);
+			unload(resources.rs);*/
+		}
+
+		/**
+		 * Experiment 3 - reduce visibility in each step
+		 * 
+		 * @throws IOException
+		 */
+		//@Test
+		public void exp3() throws IOException {
+			String exp = "exp3";
+			boolean saveReducedVisibility = true;
+			boolean useOptimizationRepair = true;
+			runExperiment(exp, saveReducedVisibility, useOptimizationRepair);/*
+			NeededResources resources = initializeResources(exp);
+			VisibilityReducer.reduce(resources.pg);
+			double before = resources.visibilityCalculator.calculate(resources.pg);
+			resources.pg.eResource().save(new FileOutputStream(resources.model), Collections.EMPTY_MAP);
+			TransformationResultManager results = performSearch(true, resources);
+			saveResults(results, resources, before, exp);
+			unload(resources.rs);*/
+		}
+		
+		
+//-------------------------------------Util--------------------
 
 	@Parameters(name = "{index}: {0}")
 	public static Collection<Object[]> params() {
@@ -111,40 +188,47 @@ public class Experiment {
 		}
 		return param;
 	}
+	
+	
 
-	/**
-	 * Experiment 1 - Global visibility reduction before all refactorings
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void exp1() throws IOException {
-		ResourceSetImpl rs = new ResourceSetImpl();
-		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-		r.load(Collections.EMPTY_MAP);
-		TypeGraph pg = (TypeGraph) r.getContents().get(0);
+	
+	private class NeededResources {
+		public ResourceSetImpl rs;
+		public Resource r;
+		public TypeGraph pg;
+		public File outputFolder;
+		public File model;
+		public VisibilityCalculator visibilityCalculator;
+	}
+	
+	private NeededResources initializeResources(String exp) throws IOException {
+		NeededResources res = new NeededResources();
+		res.rs = new ResourceSetImpl();
+		res.r = res.rs.createResource(URI.createFileURI(file.getAbsolutePath()));
+		res.r.load(Collections.EMPTY_MAP);
+		res.pg = (TypeGraph) res.r.getContents().get(0);
+		res.visibilityCalculator = new VisibilityCalculator();
+		res.outputFolder = createOutputFolder(exp, res.pg);
+		res.model = new File(res.outputFolder, res.pg.getTName() + ".xmi");
+		return res;		
+	}
 
-		VisibilityReducer.reduce(pg);
-
-		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
-		double before = visibilityCalculator.calculate(pg);
-
-		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp1");
-		outputFolder.mkdirs();
-
-		File model = new File(outputFolder, pg.getTName() + ".xmi");
-		pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
-
+	private TransformationResultManager performSearch(boolean useOptimizationRepair, NeededResources resources) {
 		SearchTypeGraph search = new SearchTypeGraph();
 		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
+		SearchParameters.useOptimizationRepair = useOptimizationRepair;
 		search.initializeFitnessFunctions();
 		search.initializeConstraints();
-		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
-
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp1.csv"), true)) {
+		TransformationResultManager results = search.performSearch(resources.model.getAbsolutePath(), 10, resources.outputFolder);
+		return results;
+	}
+	
+	
+	private void saveResults(TransformationResultManager results, NeededResources resources, double reducedVisibility, String exp) throws IOException {
+		try (FileWriter s = new FileWriter(new File(resources.outputFolder, time + "_" + resources.pg.getTName() + "_"+exp+".csv"), true)) {
 			s.append(
 					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + before + ";" + (visibility-before)+";"
+			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + reducedVisibility + ";" + (visibility-reducedVisibility)+";"
 					+ members + '\n');
 
 			int j = 0;
@@ -156,8 +240,8 @@ public class Experiment {
 					for (Solution sol : pop) {
 						int interpackageMoves = getNumInterPackageMoves(sol);
 
-						File file = new File(outputFolder, "models");
-						String fileName = pg.getTName();
+						File file = new File(resources.outputFolder, "models");
+						String fileName = resources.pg.getTName();
 						for (double obj : sol.getObjectives()) {
 							fileName += "_" + obj;
 						}
@@ -165,13 +249,13 @@ public class Experiment {
 
 						file = new File(file, fileName);
 						if (!file.exists()) {
-							Files.write(new File(outputFolder, "errors.log").toPath(),
+							Files.write(new File(resources.outputFolder, "errors.log").toPath(),
 									("Exp2: Result model file \"" + file + "\" not found.\n").getBytes(),
 									StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 							continue;
 						}
 
-						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
+						Resource res = resources.rs.createResource(URI.createFileURI(file.getAbsolutePath()));
 						res.load(Collections.EMPTY_MAP);
 
 						TypeGraph solPG = null;
@@ -184,7 +268,7 @@ public class Experiment {
 						}
 
 						VisibilityReducer.reduce(solPG);
-						double vis = visibilityCalculator.calculate(solPG);
+						double vis = resources.visibilityCalculator.calculate(solPG);
 
 						s.append(fileName + ";" + interpackageMoves);
 						averages[0] += interpackageMoves;
@@ -213,214 +297,27 @@ public class Experiment {
 
 			}
 		}
-
-		unload(rs);
 	}
-
-	/**
-	 * Experiment 2 - Global visibility reduction after all refactorings
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void exp2() throws IOException {
-		ResourceSetImpl rs = new ResourceSetImpl();
-		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-		r.load(Collections.EMPTY_MAP);
-		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-
-		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp2");
+	
+	public File createOutputFolder(String exp, TypeGraph pg) throws IOException {
+		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), exp);
 		outputFolder.mkdirs();
-
-		outputFolder.mkdirs();
-
-		VisibilityReducer.reduce(pg);
-		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
-		double reduced = visibilityCalculator.calculate(pg);
-
-		
-		SearchTypeGraph search = new SearchTypeGraph();
-		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
-		search.initializeFitnessFunctions();
-		search.initializeConstraints();
-		TransformationResultManager results = search.performSearch(file.getAbsolutePath(), 10, outputFolder);
-
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
-			s.append(
-					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + reduced + ";"+(visibility-reduced)+";"
-					+ members + '\n');
-			
-			int j = 0;
-			double[] averages = new double[10];
-			Arrays.fill(averages, 0);
-
-			for (List<NondominatedPopulation> val : results.getResults().values()) {
-				for (NondominatedPopulation pop : val) {
-					for (Solution sol : pop) {
-						int interpackageMoves = getNumInterPackageMoves(sol);
-
-						File file = new File(outputFolder, "models");
-						String fileName = pg.getTName();
-						for (double obj : sol.getObjectives()) {
-							fileName += "_" + obj;
-						}
-						fileName += ".xmi";
-						file = new File(file, fileName);
-						if (!file.exists()) {
-							Files.write(new File(outputFolder, "errors.log").toPath(),
-									("Exp2: Result model file \"" + file + "\" not found.\n").getBytes(),
-									StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-							continue;
-						}
-
-						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-						res.load(Collections.EMPTY_MAP);
-
-						TypeGraph solPG = null;
-						EObject eObject = res.getContents().get(0);
-						if (eObject instanceof TypeGraph) {
-							solPG = (TypeGraph) eObject;
-						} else if (eObject instanceof HAntiPatternDetection) {
-							solPG = ((HAntiPatternDetection) eObject).getApg().getPg();
-
-						}
-
-						VisibilityReducer.reduce(solPG);
-						double vis = visibilityCalculator.calculate(solPG);
-
-						s.append(fileName + ";" + interpackageMoves);
-						averages[0] += interpackageMoves;
-						double[] obj = sol.getObjectives();
-						for (int i = 0; i < 5; i++) {
-							s.append(';');
-							if (i < obj.length) {
-								s.append(Double.toString(obj[i]));
-								averages[i + 1] += obj[i];
-							}
-						}
-						s.append(";" + (visibility - obj[4]) + ";" + vis + ";" + (visibility - vis) + ";"
-								+ Double.toString(members) + '\n');
-						averages[6] += (visibility - obj[4]);
-						averages[7] += vis;
-						averages[8] += (visibility - vis);
-						averages[9] += members;
-						j++;
-					}
-				}
-				s.append("average");
-				for (double d : averages) {
-					s.append(";" + (d / j));
-				}
-				s.append("\n");
-			}
+		return outputFolder;
+	}
+	
+	private void runExperiment(String exp, boolean saveReducedVisibility, boolean useOptimization) throws IOException {
+		NeededResources resources = initializeResources(exp);
+		VisibilityReducer.reduce(resources.pg);
+		double before = resources.visibilityCalculator.calculate(resources.pg);
+		if(saveReducedVisibility) {
+			resources.pg.eResource().save(new FileOutputStream(resources.model), Collections.EMPTY_MAP);
 		}
-
-		unload(rs);
+		TransformationResultManager results = performSearch(useOptimization, resources);		
+		saveResults(results, resources, before, exp);
+		unload(resources.rs);
 	}
-
-	/**
-	 * Experiment 3 - reduce visibility in each step
-	 * 
-	 * @throws IOException
-	 */
-	@Test
-	public void exp3() throws IOException {
-		ResourceSetImpl rs = new ResourceSetImpl();
-		Resource r = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-		r.load(Collections.EMPTY_MAP);
-		TypeGraph pg = (TypeGraph) r.getContents().get(0);
-
-		File outputFolder = new File(new File(new File(new File("output"), time), pg.getTName()), "exp3");
-		outputFolder.mkdirs();
-
-		VisibilityCalculator visibilityCalculator = new VisibilityCalculator();
-		VisibilityReducer.reduce(pg);
-		double before = visibilityCalculator.calculate(pg);
-
-		File model = new File(outputFolder, pg.getTName() + ".xmi");
-		pg.eResource().save(new FileOutputStream(model), Collections.EMPTY_MAP);
-
-		SearchTypeGraph search = new SearchTypeGraph();
-		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
-		SearchParameters.useOptimizationRepair = true;
-		search.initializeFitnessFunctions();
-		search.initializeConstraints();
-		TransformationResultManager results = search.performSearch(model.getAbsolutePath(), 10, outputFolder);
-
-		try (FileWriter s = new FileWriter(new File(outputFolder, time + "_" + pg.getTName() + "_exp2.csv"), true)) {
-			s.append(
-					"version;interpackage;refactorings;coupling;lcom;blobs;visibility;visibilityDelta;reducedVisibility;reducedVisibilityDelta;members\n");
-			s.append("initial;0;0;" + cbo + ";" + lcom + ";" + blobs + ";" + visibility + ";0;" + before + ";" + (visibility-before)+";"
-					+ members + '\n');
-
-			int j = 0;
-			double[] averages = new double[10];
-			Arrays.fill(averages, 0);
-
-			for (List<NondominatedPopulation> val : results.getResults().values()) {
-				for (NondominatedPopulation pop : val) {
-					for (Solution sol : pop) {
-						int interpackageMoves = getNumInterPackageMoves(sol);
-
-						File file = new File(outputFolder, "models");
-						String fileName = pg.getTName();
-						for (double obj : sol.getObjectives()) {
-							fileName += "_" + obj;
-						}
-						fileName += ".xmi";
-						file = new File(file, fileName);
-						if (!file.exists()) {
-							Files.write(new File(outputFolder, "errors.log").toPath(),
-									("Exp2: Result model file \"" + file + "\" not found.\n").getBytes(),
-									StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-							continue;
-						}
-
-						Resource res = rs.createResource(URI.createFileURI(file.getAbsolutePath()));
-						res.load(Collections.EMPTY_MAP);
-
-						TypeGraph solPG = null;
-						EObject eObject = res.getContents().get(0);
-						if (eObject instanceof TypeGraph) {
-							solPG = (TypeGraph) eObject;
-						} else if (eObject instanceof HAntiPatternDetection) {
-							solPG = ((HAntiPatternDetection) eObject).getApg().getPg();
-
-						}
-
-						VisibilityReducer.reduce(solPG);
-						double vis = visibilityCalculator.calculate(solPG);
-
-						s.append(fileName + ";" + interpackageMoves);
-						averages[0] += interpackageMoves;
-						double[] obj = sol.getObjectives();
-						for (int i = 0; i < 5; i++) {
-							s.append(';');
-							if (i < obj.length) {
-								s.append(Double.toString(obj[i]));
-								averages[i + 1] += obj[i];
-							}
-						}
-						s.append(";" + (visibility - obj[4]) + ";" + vis + ";" + (visibility - vis) + ";"
-								+ Double.toString(members) + '\n');
-						averages[6] += (visibility - obj[4]);
-						averages[7] += vis;
-						averages[8] += (visibility - vis);
-						averages[9] += members;
-						j++;
-					}
-				}
-				s.append("average");
-				for (double d : averages) {
-					s.append(";" + (d / j));
-				}
-				s.append("\n");
-			}
-		}
-
-		unload(rs);
-	}
+	
+	
 
 	private int getNumInterPackageMoves(Solution sol) {
 		int interpackageMoves = 0;
