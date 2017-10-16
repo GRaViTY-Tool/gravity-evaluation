@@ -82,13 +82,97 @@ public class Experiment {
 	
 	
 //------------Tests---------------------------
+	
 	@Test
+	public void differentWeights() throws IOException{
+		String exp = "differentWeightsExp";
+		boolean saveReducedVisibility = true;
+		boolean useOptimization = true;
+
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 2;
+		SearchParameters.publicValue = 5;
+		runExperiment(exp + "_2_5", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 2;
+		SearchParameters.publicValue = 7;
+		runExperiment(exp + "_2_7", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 2;
+		SearchParameters.publicValue = 10;
+		runExperiment(exp + "_2_10", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 5;
+		SearchParameters.publicValue = 3;
+		runExperiment(exp + "_5_3", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 5;
+		SearchParameters.publicValue = 5;
+		runExperiment(exp + "_5_5", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 5;
+		SearchParameters.publicValue = 7;
+		runExperiment(exp + "_5_7", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 5;
+		SearchParameters.publicValue = 10;
+		runExperiment(exp + "_5_10", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 7;
+		SearchParameters.publicValue = 3;
+		runExperiment(exp + "_7_3", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 7;
+		SearchParameters.publicValue = 5;
+		runExperiment(exp + "_7_5", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 7;
+		SearchParameters.publicValue = 7;
+		runExperiment(exp + "_7_7", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 7;
+		SearchParameters.publicValue = 10;
+		runExperiment(exp + "_7_10", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 10;
+		SearchParameters.publicValue = 3;
+		runExperiment(exp + "_10_3", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 10;
+		SearchParameters.publicValue = 5;
+		runExperiment(exp + "_10_5", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 10;
+		SearchParameters.publicValue = 7;
+		runExperiment(exp + "_10_7", saveReducedVisibility, useOptimization);
+		
+		//-------------------------------------------------------------
+		SearchParameters.weight[4] = 10;
+		SearchParameters.publicValue = 10;
+		runExperiment(exp + "_10_10", saveReducedVisibility, useOptimization);
+		
+	}
+	
+	//@Test
 		public void RunTenTimes() throws IOException{
 			String exp = "exp10Times_run";
 			boolean saveReducedVisibility = true;
 			boolean useOptimization = true;
 			for(int i = 0; i < 10; i++) {
-				runExperiment(exp + String.valueOf(i++), saveReducedVisibility, useOptimization);
+				runExperiment(exp + String.valueOf(i+1), saveReducedVisibility, useOptimization);
 			}
 		}
 		
