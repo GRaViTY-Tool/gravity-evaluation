@@ -34,6 +34,7 @@ import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.converter.IPGConverter;
 import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
 import org.gravity.eclipse.io.EclipseProjectUtil;
+import org.gravity.goblin.momot.SearchTypeGraph;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -66,7 +67,6 @@ import de.uni_hamburg.informatik.swt.accessanalysis.AnalysisException;
 import de.uni_hamburg.informatik.swt.accessanalysis.AnalysisFactory;
 import de.uni_hamburg.informatik.swt.accessanalysis.AnalysisFactory.AnalysisMode;
 import de.uni_hamburg.informatik.swt.accessanalysis.results.ResultFormatter;
-import momotFiles.SearchTypeGraph;
 
 public class Eval {
 
