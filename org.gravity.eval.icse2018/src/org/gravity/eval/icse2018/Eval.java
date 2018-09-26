@@ -33,7 +33,7 @@ import org.eclipse.jdt.core.JavaModelException;
 import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.converter.IPGConverter;
 import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
-import org.gravity.eclipse.io.EclipseProjectUtil;
+import org.gravity.eclipse.util.JavaProjectUtil;
 import org.gravity.goblin.momot.SearchTypeGraph;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
@@ -142,7 +142,7 @@ public class Eval {
 			for (NondominatedPopulation nPop : r) {
 				int sol = 0;
 				for (Solution solution : nPop) {
-					IJavaProject java_project_copy = EclipseProjectUtil.copyJavaProject(project,
+					IJavaProject java_project_copy = JavaProjectUtil.copyJavaProject(project,
 							project.getProject().getName() + "_" + suffix + "_" + sol);
 
 					if (java_project_copy == null) {

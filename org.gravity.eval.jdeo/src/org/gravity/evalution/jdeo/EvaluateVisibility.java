@@ -31,6 +31,7 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.gravity.eval.fase2018.Experiment;
 import org.gravity.eval.fase2018.Experiment.METRICS;
 import org.gravity.evalution.jdeo.popup.actions.EvaluateGodClass;
+import org.gravity.goblin.repair.VisibilityReducer;
 import org.gravity.tgg.modisco.MoDiscoTGGConverter;
 import org.gravity.typegraph.basic.TypeGraph;
 import org.junit.Test;
@@ -38,7 +39,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import Repair.visibility.VisibilityReducer;
 import gr.uom.java.distance.CandidateRefactoring;
 import gr.uom.java.distance.ExtractClassCandidateGroup;
 import gr.uom.java.distance.ExtractClassCandidateRefactoring;

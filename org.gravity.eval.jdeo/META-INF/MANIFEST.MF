@@ -15,5 +15,5 @@ Require-Bundle: org.eclipse.ui,
  org.gravity.typegraph.basic,
  org.gravity.eval.fase2018,
  org.moflon.tgg.language,
- org.goblin.movemethod
+ org.gravity.goblin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8

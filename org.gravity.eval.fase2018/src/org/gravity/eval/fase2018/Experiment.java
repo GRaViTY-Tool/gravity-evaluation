@@ -1,13 +1,9 @@
 package org.gravity.eval.fase2018;
 
-import Repair.visibility.VisibilityReducer;
 import at.ac.tuwien.big.momot.TransformationResultManager;
 import at.ac.tuwien.big.momot.problem.solution.variable.UnitApplicationVariable;
-import momotFiles.SearchParameters;
-import momotFiles.SearchTypeGraph;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
@@ -31,6 +27,10 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.gravity.goblin.SearchParameters;
+import org.gravity.goblin.fitness.VisibilityCalculator;
+import org.gravity.goblin.momot.SearchTypeGraph;
+import org.gravity.goblin.repair.VisibilityReducer;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -58,8 +58,6 @@ import org.junit.runners.Parameterized.Parameters;
 import org.moeaframework.core.NondominatedPopulation;
 import org.moeaframework.core.Solution;
 import org.moeaframework.core.Variable;
-
-import FitnessCalculators.VisibilityCalculator;
 
 @RunWith(Parameterized.class)
 public class Experiment {
@@ -90,77 +88,77 @@ public class Experiment {
 		boolean useOptimization = true;
 
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 2;
+		SearchParameters.weight.set(4, 2.0);
 		SearchParameters.publicValue = 5;
 		runExperiment(exp + "_2_5", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 2;
+		SearchParameters.weight.set(4, 2.0);
 		SearchParameters.publicValue = 7;
 		runExperiment(exp + "_2_7", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 2;
+		SearchParameters.weight.set(4, 2.0);
 		SearchParameters.publicValue = 10;
 		runExperiment(exp + "_2_10", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 5;
+		SearchParameters.weight.set(4, 5.0);
 		SearchParameters.publicValue = 3;
 		runExperiment(exp + "_5_3", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 5;
+		SearchParameters.weight.set(4, 5.0);
 		SearchParameters.publicValue = 5;
 		runExperiment(exp + "_5_5", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 5;
+		SearchParameters.weight.set(4, 5.0);
 		SearchParameters.publicValue = 7;
 		runExperiment(exp + "_5_7", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 5;
+		SearchParameters.weight.set(4, 5.0);
 		SearchParameters.publicValue = 10;
 		runExperiment(exp + "_5_10", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 7;
+		SearchParameters.weight.set(4, 7.0);
 		SearchParameters.publicValue = 3;
 		runExperiment(exp + "_7_3", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 7;
+		SearchParameters.weight.set(4, 7.0);
 		SearchParameters.publicValue = 5;
 		runExperiment(exp + "_7_5", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 7;
+		SearchParameters.weight.set(4, 7.0);
 		SearchParameters.publicValue = 7;
 		runExperiment(exp + "_7_7", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 7;
+		SearchParameters.weight.set(4, 7.0);
 		SearchParameters.publicValue = 10;
 		runExperiment(exp + "_7_10", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 10;
+		SearchParameters.weight.set(4, 10.0);
 		SearchParameters.publicValue = 3;
 		runExperiment(exp + "_10_3", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 10;
+		SearchParameters.weight.set(4, 10.0);
 		SearchParameters.publicValue = 5;
 		runExperiment(exp + "_10_5", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 10;
+		SearchParameters.weight.set(4, 10.0);
 		SearchParameters.publicValue = 7;
 		runExperiment(exp + "_10_7", saveReducedVisibility, useOptimization);
 		
 		//-------------------------------------------------------------
-		SearchParameters.weight[4] = 10;
+		SearchParameters.weight.set(4, 10.0);
 		SearchParameters.publicValue = 10;
 		runExperiment(exp + "_10_10", saveReducedVisibility, useOptimization);
 		
@@ -299,7 +297,7 @@ public class Experiment {
 
 	private TransformationResultManager performSearch(boolean useOptimizationRepair, NeededResources resources) {
 		SearchTypeGraph search = new SearchTypeGraph();
-		SearchParameters.units = new String[] { "MoveMethod::rules::MoveMethodMain" };
+		SearchParameters.units = Arrays.asList("MoveMethod::rules::MoveMethodMain");
 		SearchParameters.useOptimizationRepair = useOptimizationRepair;
 		search.initializeFitnessFunctions();
 		search.initializeConstraints();
