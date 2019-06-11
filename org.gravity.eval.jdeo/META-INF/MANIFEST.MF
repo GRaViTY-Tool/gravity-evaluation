@@ -14,6 +14,9 @@ Require-Bundle: org.eclipse.ui,
  org.gravity.tgg.modisco,
  org.gravity.typegraph.basic,
  org.gravity.eval.fase2018,
- org.moflon.tgg.language,
- org.gravity.goblin
+ org.gravity.goblin,
+ org.gravity.hulk.annotations
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.gravity.eval.jdeo
+Export-Package: org.gravity.evalution.jdeo,
+ org.gravity.evalution.jdeo.popup.actions

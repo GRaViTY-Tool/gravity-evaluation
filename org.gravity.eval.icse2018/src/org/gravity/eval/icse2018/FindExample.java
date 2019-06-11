@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -31,9 +32,9 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.MoveRefactoring;
 import org.gravity.eclipse.GravityActivator;
-import org.gravity.eclipse.JavaHelper;
 import org.gravity.eclipse.converter.IPGConverter;
 import org.gravity.eclipse.exceptions.NoConverterRegisteredException;
+import org.gravity.eclipse.util.JavaASTUtil;
 import org.gravity.hulk.HAntiPatternDetection;
 import org.gravity.hulk.HDetector;
 import org.gravity.hulk.HulkFactory;
@@ -55,7 +56,7 @@ import org.moflon.core.dfs.DFSGraph;
 public class FindExample {
 
 	@Test
-	public void clalcBlos() throws NoConverterRegisteredException {
+	public void clalcBlos() throws NoConverterRegisteredException, CoreException {
 		Hashtable<String, String> defaultThresholds = HulkDetector.getDefaultThresholds();
 
 		Hashtable<String, String> newThresholds = detectBlobs(defaultThresholds,
@@ -69,7 +70,7 @@ public class FindExample {
 	}
 
 	@Test
-	public void searchPG() throws NoConverterRegisteredException {
+	public void searchPG() throws NoConverterRegisteredException, CoreException {
 
 		 try (PrintWriter printer = new PrintWriter(new
 		 File("possibleExamplePG.txt"))) {
@@ -154,7 +155,7 @@ public class FindExample {
 		 }
 	}
 
-	private Hashtable<String, String> detectBlobs(Hashtable<String, String> defaultThresholds, IProject iProject) throws NoConverterRegisteredException {
+	private Hashtable<String, String> detectBlobs(Hashtable<String, String> defaultThresholds, IProject iProject) throws NoConverterRegisteredException, CoreException {
 		IJavaProject iJavaProject = JavaCore.create(iProject);
 		IPGConverter converter = GravityActivator.getDefault().getConverter(iProject);
 		converter.convertProject(iJavaProject, new NullProgressMonitor());
@@ -189,7 +190,7 @@ public class FindExample {
 		try (PrintWriter printer = new PrintWriter(new File("possibleExample.txt"))) {
 			IProject iProject = ResourcesPlugin.getWorkspace().getRoot().getProject("JSSE_OpenJDK8");
 			IJavaProject iJavaProject = JavaCore.create(iProject);
-			Hashtable<String, IType> types = JavaHelper.getTypesForProject(iJavaProject);
+			HashMap<String, IType> types = JavaASTUtil.getTypesForProject(iJavaProject);
 
 			for (IType type : types.values()) {
 				String qualifiedSourceName = type.getFullyQualifiedName().replace("." + type.getElementName(), "");

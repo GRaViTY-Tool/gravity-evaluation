@@ -75,7 +75,7 @@ public class Eval {
 	private int blobs;
 
 	public void run(IJavaProject project, String apSuffix, boolean enableMetricRecording)
-			throws FileNotFoundException, IOException, NoConverterRegisteredException {
+			throws FileNotFoundException, IOException, NoConverterRegisteredException, CoreException {
 		NullProgressMonitor monitor = new NullProgressMonitor();
 		this.enableMetricRecording = enableMetricRecording;
 
@@ -312,7 +312,7 @@ public class Eval {
 	}
 
 	protected Set<HDetector> detect(IJavaProject project, Hashtable<String, String> thresholds, File file,
-			NullProgressMonitor monitor) throws NoConverterRegisteredException {
+			NullProgressMonitor monitor) throws NoConverterRegisteredException, CoreException {
 		IPath project_location = project.getProject().getLocation();
 		IPGConverter converter = GravityActivator.getDefault().getNewConverter(project.getProject());
 

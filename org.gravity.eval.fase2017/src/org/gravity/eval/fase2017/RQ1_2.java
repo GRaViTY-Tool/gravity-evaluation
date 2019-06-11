@@ -114,7 +114,7 @@ public class RQ1_2 {
 		IPGConverter converter;
 		try {
 			converter = GravityActivator.getDefault().getNewConverter(java_project_copy.getProject());
-		} catch (NoConverterRegisteredException e) {
+		} catch (NoConverterRegisteredException | CoreException e) {
 			return false;
 		}
 

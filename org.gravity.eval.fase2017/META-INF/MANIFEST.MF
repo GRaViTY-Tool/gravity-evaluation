@@ -10,9 +10,13 @@ Require-Bundle: org.junit,
  org.gravity.hulk.antipatterngraph,
  org.gravity.eclipse,
  org.gravity.typegraph.basic,
- org.moflon.core.dfs,
  org.gravity.hulk,
  org.eclipse.core.runtime;bundle-version="3.11.1",
  org.eclipse.emf.ecore,
  org.gravity.hulk.refactoringgraph,
  org.gravity.refactorings.ui
+Export-Package: org.gravity.eval.fase2017,
+ org.gravity.eval.fase2017.tools,
+ org.gravity.eval.fase2017.util,
+ org.gravity.eval.fase2017.util.sourcemeter
+Automatic-Module-Name: org.gravity.eval.fase2017
