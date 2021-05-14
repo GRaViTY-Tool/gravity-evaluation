@@ -14,7 +14,8 @@ Require-Bundle: org.junit,
  org.eclipse.core.runtime;bundle-version="3.11.1",
  org.eclipse.emf.ecore,
  org.gravity.hulk.refactoringgraph,
- org.gravity.refactorings.ui
+ org.gravity.refactorings.ui,
+ org.gravity.hulk.resolve
 Export-Package: org.gravity.eval.fase2017,
  org.gravity.eval.fase2017.tools,
  org.gravity.eval.fase2017.util,

@@ -3,13 +3,16 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Modisco TGG Eval
 Bundle-SymbolicName: org.gravity.eval.runtime.tgg.modisco
 Bundle-Version: 1.0.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Require-Bundle: org.junit,
- org.gravity.tgg.tests,
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.gravity.tgg.tests,
  org.eclipse.jdt.core,
- org.gravity.tgg.modisco,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
- org.apache.log4j
+ org.apache.log4j,
+ org.gravity.eclipse.tests,
+ org.gravity.tgg.modisco.uml,
+ org.eclipse.uml2.uml,
+ org.gravity.tgg.modisco.pm,
+ org.junit
 Export-Package: org.gravity.eval.runtime.tgg.modisco
 Automatic-Module-Name: org.gravity.eval.runtime.tgg.modisco
