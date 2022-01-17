@@ -112,7 +112,7 @@ public class SyncMeasurements {
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("pm");
-		GravityActivator.record("Measure " + this.name);
+		GravityActivator.recordMessage("Measure " + this.name);
 		System.gc();
 
 		final long start = System.nanoTime();
@@ -126,7 +126,7 @@ public class SyncMeasurements {
 		Collections.shuffle(changes);
 		for (final Change c : changes) {
 			final long time = c.execute(converter, monitor);
-			GravityActivator.record("Sync " + c.getName() + ": " + (time / 1000 / 1000) + "ms");
+			GravityActivator.recordMessage("Sync " + c.getName() + ": " + (time / 1000 / 1000) + "ms");
 		}
 
 		converter.discard();

@@ -105,7 +105,7 @@ public class RuntimeMeasurements {
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("pm");
-		GravityActivator.record("Measure " +this.name);
+		GravityActivator.recordMessage("Measure " +this.name);
 		System.gc();
 
 		final long start = System.nanoTime();
@@ -114,8 +114,8 @@ public class RuntimeMeasurements {
 
 
 		GravityActivator.setRecordKey("size");
-		GravityActivator.record(this.name);
-		GravityActivator.record("PM: " + countElements(converter.getTrg()));
+		GravityActivator.recordMessage(this.name);
+		GravityActivator.recordMessage("PM: " + countElements(converter.getTrg()));
 
 		converter.discard();
 		set.getResources().forEach(Resource::unload);
@@ -131,7 +131,7 @@ public class RuntimeMeasurements {
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("uml");
-		GravityActivator.record("Measure " +this.name);
+		GravityActivator.recordMessage("Measure " +this.name);
 		System.gc();
 
 		final long start = System.nanoTime();
@@ -139,9 +139,9 @@ public class RuntimeMeasurements {
 		final long stop = System.nanoTime();
 
 		GravityActivator.setRecordKey("size");
-		GravityActivator.record(this.name);
-		GravityActivator.record("MoDisco: " + countElements(converter.getSrc()));
-		GravityActivator.record("UML: " + countElements(converter.getTrg()));
+		GravityActivator.recordMessage(this.name);
+		GravityActivator.recordMessage("MoDisco: " + countElements(converter.getSrc()));
+		GravityActivator.recordMessage("UML: " + countElements(converter.getTrg()));
 
 
 		assertTrue(model != null);
