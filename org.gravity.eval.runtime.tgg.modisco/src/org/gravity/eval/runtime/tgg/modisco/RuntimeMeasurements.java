@@ -22,13 +22,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.uml2.uml.Model;
 import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.tests.TestHelper;
 import org.gravity.tgg.modisco.pm.MoDiscoTGGConverter;
@@ -100,23 +96,23 @@ public class RuntimeMeasurements {
 
 	@Test
 	public void measurePM() throws Exception {
-		final ResourceSet set = new ResourceSetImpl();
-		final MoDiscoTGGConverter converter = new MoDiscoTGGConverter(this.project, set, false);
+		final var converter = new MoDiscoTGGConverter(this.project, false);
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("pm");
 		GravityActivator.recordMessage("Measure " +this.name);
 		System.gc();
 
-		final long start = System.nanoTime();
-		final boolean success = converter.convertProject(new NullProgressMonitor());
-		final long stop = System.nanoTime();
+		final var start = System.nanoTime();
+		final var success = converter.convertProject(new NullProgressMonitor());
+		final var stop = System.nanoTime();
 
 
 		GravityActivator.setRecordKey("size");
 		GravityActivator.recordMessage(this.name);
 		GravityActivator.recordMessage("PM: " + countElements(converter.getTrg()));
 
+		final var set = converter.getResourceSet();
 		converter.discard();
 		set.getResources().forEach(Resource::unload);
 		set.getResources().clear();
@@ -127,16 +123,16 @@ public class RuntimeMeasurements {
 
 	@Test
 	public void measureUML() throws Exception {
-		final Transformation converter = new Transformation(this.project, null, false);
+		final var converter = new Transformation(this.project, false);
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("uml");
 		GravityActivator.recordMessage("Measure " +this.name);
 		System.gc();
 
-		final long start = System.nanoTime();
-		final Model model = converter.projectToModel(false, new NullProgressMonitor());
-		final long stop = System.nanoTime();
+		final var start = System.nanoTime();
+		final var model = converter.projectToModel(false, new NullProgressMonitor());
+		final var stop = System.nanoTime();
 
 		GravityActivator.setRecordKey("size");
 		GravityActivator.recordMessage(this.name);
@@ -146,7 +142,7 @@ public class RuntimeMeasurements {
 
 		assertTrue(model != null);
 		addResults(start / 1000 / 1000, stop / 1000 / 1000);
-		final ResourceSet set = model.eResource().getResourceSet();
+		final var set = model.eResource().getResourceSet();
 		set.getResources().forEach(Resource::unload);
 		set.getResources().clear();
 
@@ -154,8 +150,8 @@ public class RuntimeMeasurements {
 	}
 
 	private long countElements(final EObject src) {
-		long i = 1;
-		final TreeIterator<EObject> iterator = src.eAllContents();
+		var i = 1L;
+		final var iterator = src.eAllContents();
 		while(iterator.hasNext()) {
 			i++;
 			iterator.next();
@@ -193,12 +189,12 @@ public class RuntimeMeasurements {
 	 * @param stop  The stop time stamp
 	 */
 	private void addResults(final long start, final long stop) {
-		final String name = this.project.getProject().getName();
-		int index = -1;
+		final var name = this.project.getProject().getName();
+		var index = -1;
 		StringBuilder nextLine = null;
-		for (int i = 0; i < OLD_LINES.size(); i++) {
-			final String line = OLD_LINES.get(i);
-			final int indexOf = line.indexOf(',');
+		for (var i = 0; i < OLD_LINES.size(); i++) {
+			final var line = OLD_LINES.get(i);
+			final var indexOf = line.indexOf(',');
 			if (name.equals(line.substring(0, indexOf))) {
 				nextLine = new StringBuilder(line);
 				index = i;
@@ -207,7 +203,7 @@ public class RuntimeMeasurements {
 		}
 		if (nextLine == null) {
 			nextLine = new StringBuilder(name);
-			for (int j = 0; j < oldValues; j++) {
+			for (var j = 0; j < oldValues; j++) {
 				nextLine.append(',');
 			}
 		}
@@ -257,7 +253,7 @@ public class RuntimeMeasurements {
 		try {
 			String next;
 			if (data.size() > 0) {
-				final String firstLine = data.remove(0);
+				final var firstLine = data.remove(0);
 				oldValues = firstLine.split(",").length;
 				next = firstLine + "," + DATE;
 				Files.delete(OUTPUT);

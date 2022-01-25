@@ -27,32 +27,21 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.modisco.java.AbstractMethodDeclaration;
 import org.eclipse.modisco.java.AbstractTypeDeclaration;
-import org.eclipse.modisco.java.Block;
 import org.eclipse.modisco.java.BodyDeclaration;
 import org.eclipse.modisco.java.CompilationUnit;
 import org.eclipse.modisco.java.MethodDeclaration;
 import org.eclipse.modisco.java.Package;
-import org.eclipse.modisco.java.ReturnStatement;
-import org.eclipse.modisco.java.TypeAccess;
 import org.eclipse.modisco.java.emf.JavaFactory;
 import org.gravity.eclipse.GravityActivator;
 import org.gravity.eclipse.tests.TestHelper;
-import org.gravity.modisco.MClass;
 import org.gravity.modisco.MGravityModel;
-import org.gravity.modisco.MMethodDefinition;
-import org.gravity.modisco.MMethodName;
-import org.gravity.modisco.MMethodSignature;
-import org.gravity.modisco.MSuperMethodInvocation;
 import org.gravity.modisco.ModiscoFactory;
 import org.gravity.modisco.util.MoDiscoUtil;
 import org.gravity.tgg.modisco.pm.MoDiscoTGGConverter;
-import org.gravity.typegraph.basic.TAbstractType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -106,18 +95,17 @@ public class SyncMeasurements {
 
 	@Test
 	public void measurePM() throws Exception {
-		final NullProgressMonitor monitor = new NullProgressMonitor();
-		final ResourceSet set = new ResourceSetImpl();
-		final MoDiscoTGGConverter converter = new MoDiscoTGGConverter(this.project, set, false);
+		final var monitor = new NullProgressMonitor();
+		final var converter = new MoDiscoTGGConverter(this.project, false);
 		converter.disableAutosave();
 
 		GravityActivator.setRecordKey("pm");
 		GravityActivator.recordMessage("Measure " + this.name);
 		System.gc();
 
-		final long start = System.nanoTime();
-		final boolean success = converter.convertProject(monitor);
-		final long stop = System.nanoTime();
+		final var start = System.nanoTime();
+		final var success = converter.convertProject(monitor);
+		final var stop = System.nanoTime();
 		System.out.println("Initial: " + ((stop - start) / 1000 / 1000) + "ms");
 
 		final List<Change> changes = Arrays.asList(new DeleteMethod(), new CreateClass(), new RenameClass(),
@@ -125,10 +113,11 @@ public class SyncMeasurements {
 				new DeleteMethod(), new CreateClass(), new RenameClass(), new CreateMethod());
 		Collections.shuffle(changes);
 		for (final Change c : changes) {
-			final long time = c.execute(converter, monitor);
+			final var time = c.execute(converter, monitor);
 			GravityActivator.recordMessage("Sync " + c.getName() + ": " + (time / 1000 / 1000) + "ms");
 		}
 
+		final var set = converter.getResourceSet();
 		converter.discard();
 		set.getResources().forEach(Resource::unload);
 		set.getResources().clear();
@@ -148,23 +137,23 @@ public class SyncMeasurements {
 		@Override
 		public long execute(final MoDiscoTGGConverter converter, final NullProgressMonitor monitor) {
 			final List<String> added = new LinkedList<>();
-			final long start = System.nanoTime();
+			final var start = System.nanoTime();
 			final List<Long> change = new ArrayList<>(1);
 			converter.syncProjectFwd(c -> {
-				final long startDelete = System.nanoTime();
+				final var startDelete = System.nanoTime();
 
-				Package p = getRandomPackage((MGravityModel) c);
-				for (int i = 0; i < RANDOM.nextInt(3); i++) {
-					final Package next = JavaFactory.eINSTANCE.createPackage();
+				var p = getRandomPackage((MGravityModel) c);
+				for (var i = 0; i < RANDOM.nextInt(3); i++) {
+					final var next = JavaFactory.eINSTANCE.createPackage();
 					next.setName("p" + i);
 					p.getOwnedPackages().add(next);
 					p = next;
 				}
-				final MClass clazz = ModiscoFactory.eINSTANCE.createMClass();
+				final var clazz = ModiscoFactory.eINSTANCE.createMClass();
 				clazz.setName("NewClass" + System.currentTimeMillis());
 				clazz.setPackage(p);
 				clazz.setProxy(false);
-				final CompilationUnit cu = JavaFactory.eINSTANCE.createCompilationUnit();
+				final var cu = JavaFactory.eINSTANCE.createCompilationUnit();
 				cu.setName(clazz.getName() + ".java");
 				cu.setOriginalFilePath(MoDiscoUtil.getNameSpace(p).replace(".", "/"));
 				clazz.setOriginalCompilationUnit(cu);
@@ -172,7 +161,7 @@ public class SyncMeasurements {
 				added.add(MoDiscoUtil.getQualifiedName(clazz));
 				change.add(System.nanoTime() - startDelete);
 			}, monitor);
-			final long time = System.nanoTime() - start - change.get(0);
+			final var time = System.nanoTime() - start - change.get(0);
 
 			// Check validity of change
 			for (final String name : added) {
@@ -192,34 +181,34 @@ public class SyncMeasurements {
 		@Override
 		public long execute(final MoDiscoTGGConverter converter, final NullProgressMonitor monitor) {
 			final List<String> deleted = new LinkedList<>();
-			final long start = System.nanoTime();
+			final var start = System.nanoTime();
 			final List<Long> change = new ArrayList<>(1);
 			converter.syncProjectFwd(c -> {
-				final long startDelete = System.nanoTime();
-				final MGravityModel model = (MGravityModel) c;
+				final var startDelete = System.nanoTime();
+				final var model = (MGravityModel) c;
 
-				final AbstractTypeDeclaration returnType = MoDiscoUtil.getType(model, "java.lang.String");
-				final TypeAccess returnAccess = JavaFactory.eINSTANCE.createTypeAccess();
+				final var returnType = MoDiscoUtil.getType(model, "java.lang.String");
+				final var returnAccess = JavaFactory.eINSTANCE.createTypeAccess();
 				returnAccess.setType(returnType);
 
-				final MMethodName name = ModiscoFactory.eINSTANCE.createMMethodName();
+				final var name = ModiscoFactory.eINSTANCE.createMMethodName();
 				name.setMName("callToString" + System.currentTimeMillis());
 				model.getMMethodNames().add(name);
 
-				final MMethodSignature signature = ModiscoFactory.eINSTANCE.createMMethodSignature();
+				final var signature = ModiscoFactory.eINSTANCE.createMMethodSignature();
 				name.getMSignatures().add(signature);
 				signature.setReturnType(returnType);
 
-				final Block block = JavaFactory.eINSTANCE.createBlock();
-				final ReturnStatement ret = JavaFactory.eINSTANCE.createReturnStatement();
+				final var block = JavaFactory.eINSTANCE.createBlock();
+				final var ret = JavaFactory.eINSTANCE.createReturnStatement();
 				block.getStatements().add(ret);
-				final MSuperMethodInvocation invocation = ModiscoFactory.eINSTANCE.createMSuperMethodInvocation();
+				final var invocation = ModiscoFactory.eINSTANCE.createMSuperMethodInvocation();
 				ret.setExpression(invocation);
 				invocation.setMethod(
 						(AbstractMethodDeclaration) MoDiscoUtil.getType(model, "java.lang.Object").getBodyDeclarations()
 						.parallelStream().filter(d -> "toString".equals(d.getName())).findAny().orElse(null));
 
-				final MMethodDefinition definition = ModiscoFactory.eINSTANCE.createMMethodDefinition();
+				final var definition = ModiscoFactory.eINSTANCE.createMMethodDefinition();
 				definition.setName(name.getMName());
 				definition.setMSignature(signature);
 				definition.setReturnType(returnAccess);
@@ -227,7 +216,7 @@ public class SyncMeasurements {
 				definition.getMMethodInvocations().add(invocation);
 				model.getMAbstractMethodDefinitions().add(definition);
 
-				final AbstractTypeDeclaration type = getRandomType((MGravityModel) c);
+				final var type = getRandomType((MGravityModel) c);
 				type.getBodyDeclarations().add(definition);
 
 				deleted.add(MoDiscoUtil.getQualifiedName(type));
@@ -235,10 +224,10 @@ public class SyncMeasurements {
 
 				change.add(System.nanoTime() - startDelete);
 			}, monitor);
-			final long time = System.nanoTime() - start - change.get(0);
+			final var time = System.nanoTime() - start - change.get(0);
 
 			// Check validity of change
-			final TAbstractType type = converter.getTrg().getType(deleted.get(0));
+			final var type = converter.getTrg().getType(deleted.get(0));
 			assertNotNull(type);
 			assertNotNull(type.getTMethodDefinition(deleted.get(1)));
 			return time;
@@ -255,11 +244,11 @@ public class SyncMeasurements {
 		@Override
 		public long execute(final MoDiscoTGGConverter converter, final NullProgressMonitor monitor) {
 			final List<String> deleted = new LinkedList<>();
-			final long start = System.nanoTime();
+			final var start = System.nanoTime();
 			final List<Long> change = new ArrayList<>(1);
 			converter.syncProjectFwd(c -> {
-				final long startDelete = System.nanoTime();
-				final CompilationUnit cu = getRandomCompilationUnit((MGravityModel) c);
+				final var startDelete = System.nanoTime();
+				final var cu = getRandomCompilationUnit((MGravityModel) c);
 				deleted.addAll(cu.getTypes().stream().map(MoDiscoUtil::getQualifiedName).collect(Collectors.toList()));
 				final List<EObject> delete = new LinkedList<>();
 				delete.add(cu);
@@ -267,7 +256,7 @@ public class SyncMeasurements {
 				EcoreUtil.deleteAll(delete, true);
 				change.add(System.nanoTime() - startDelete);
 			}, monitor);
-			final long time = System.nanoTime() - start - change.get(0);
+			final var time = System.nanoTime() - start - change.get(0);
 
 			// Check validity of change
 			for (final String name : deleted) {
@@ -287,20 +276,20 @@ public class SyncMeasurements {
 		@Override
 		public long execute(final MoDiscoTGGConverter converter, final NullProgressMonitor monitor) {
 			final List<String> deleted = new LinkedList<>();
-			final long start = System.nanoTime();
+			final var start = System.nanoTime();
 			final List<Long> change = new ArrayList<>(1);
 			converter.syncProjectFwd(c -> {
-				final long startDelete = System.nanoTime();
-				final MethodDeclaration m = getRandomMethodDefinition((MGravityModel) c);
+				final var startDelete = System.nanoTime();
+				final var m = getRandomMethodDefinition((MGravityModel) c);
 				deleted.add(MoDiscoUtil.getQualifiedName(m.getAbstractTypeDeclaration()));
 				deleted.add(MoDiscoUtil.getSignature(m));
 				EcoreUtil.deleteAll(Collections.singleton(m), true);
 				change.add(System.nanoTime() - startDelete);
 			}, monitor);
-			final long time = System.nanoTime() - start - change.get(0);
+			final var time = System.nanoTime() - start - change.get(0);
 
 			// Check validity of change
-			final TAbstractType type = converter.getTrg().getType(deleted.get(0));
+			final var type = converter.getTrg().getType(deleted.get(0));
 			assertNotNull(type);
 			assertNull(type.getTMethodDefinition(deleted.get(1)));
 			return time;
@@ -317,17 +306,17 @@ public class SyncMeasurements {
 		@Override
 		public long execute(final MoDiscoTGGConverter converter, final NullProgressMonitor monitor) {
 			final List<String> deleted = new LinkedList<>();
-			final long start = System.nanoTime();
+			final var start = System.nanoTime();
 			final List<Long> change = new ArrayList<>(1);
 			converter.syncProjectFwd(c -> {
-				final long startDelete = System.nanoTime();
-				final AbstractTypeDeclaration type = getRandomType((MGravityModel) c);
+				final var startDelete = System.nanoTime();
+				final var type = getRandomType((MGravityModel) c);
 				deleted.add(MoDiscoUtil.getQualifiedName(type));
 				type.setName("RenamedType"+System.currentTimeMillis());
 				deleted.add(MoDiscoUtil.getQualifiedName(type));
 				change.add(System.nanoTime() - startDelete);
 			}, monitor);
-			final long time = System.nanoTime() - start - change.get(0);
+			final var time = System.nanoTime() - start - change.get(0);
 
 			// Check validity of change
 			assertNull(converter.getTrg().getType(deleted.get(0)));
@@ -370,7 +359,7 @@ public class SyncMeasurements {
 		final List<Package> packages = new LinkedList<>();
 		final Deque<Package> stack = new LinkedList<>(model.getOwnedElements());
 		while (!stack.isEmpty()) {
-			final Package p = stack.pop();
+			final var p = stack.pop();
 			packages.add(p);
 			stack.addAll(p.getOwnedPackages());
 		}
