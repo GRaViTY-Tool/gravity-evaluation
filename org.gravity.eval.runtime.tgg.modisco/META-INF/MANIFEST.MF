@@ -15,4 +15,4 @@ Require-Bundle: org.gravity.tgg.tests,
  org.gravity.tgg.modisco.pm,
  org.junit
 Export-Package: org.gravity.eval.runtime.tgg.modisco
-Automatic-Module-Name: org.gravity.eval.runtime.tgg.modisco
+Bundle-ClassPath: .
