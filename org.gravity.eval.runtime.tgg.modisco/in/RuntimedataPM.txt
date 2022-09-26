@@ -1,0 +1,372 @@
+Measure 00_JavaSolitaire1.3
+Discovery:5496ms
+preprocessing:442ms
+TGG:3938ms
+Postprocessing:4ms
+All:12883ms
+Measure 01_QuickUML2001
+Discovery:1349ms
+preprocessing:288ms
+TGG:3217ms
+Postprocessing:4ms
+All:4861ms
+Measure 02_JSciCalc2.1.0
+Discovery:3469ms
+preprocessing:582ms
+TGG:5026ms
+Postprocessing:4ms
+All:9085ms
+Measure 03_JUnit3.8.2
+Discovery:2805ms
+preprocessing:503ms
+TGG:4930ms
+Postprocessing:4ms
+All:8247ms
+Measure 04_JSSE_OpenJDK8
+Discovery:13902ms
+preprocessing:1364ms
+TGG:12720ms
+Postprocessing:3664ms
+All:31656ms
+Measure 05_Gantt1.10.2
+Discovery:5484ms
+preprocessing:1401ms
+TGG:15792ms
+Postprocessing:8ms
+All:22694ms
+Measure 06_Nutch0.9
+Discovery:7281ms
+preprocessing:1373ms
+TGG:12623ms
+Postprocessing:5ms
+All:21290ms
+Measure 07_Lucene1.4.3
+Discovery:3569ms
+preprocessing:1520ms
+TGG:13283ms
+Postprocessing:4ms
+All:18383ms
+Measure 08_log4j1.2.17
+Discovery:5584ms
+preprocessing:1812ms
+TGG:17321ms
+Postprocessing:5ms
+All:24729ms
+Measure 09_JHotDraw7.6
+Discovery:21650ms
+preprocessing:2041ms
+TGG:19925ms
+Postprocessing:5ms
+All:43637ms
+Measure 10_JEdit4.0
+Discovery:17350ms
+preprocessing:2568ms
+TGG:25303ms
+Postprocessing:9ms
+All:45278ms
+Measure 11_PMD3.9
+Discovery:9121ms
+preprocessing:2181ms
+TGG:21231ms
+Postprocessing:7ms
+All:32587ms
+Measure 12_JTransform3.1
+Discovery:5775ms
+preprocessing:6275ms
+TGG:31945ms
+Postprocessing:15ms
+All:44029ms
+Measure 13_iTrust21.0
+Discovery:11955ms
+preprocessing:4671ms
+TGG:68986ms
+Postprocessing:21ms
+All:85729ms
+Measure 14_JabRef2.7
+Discovery:13494ms
+preprocessing:4561ms
+TGG:56396ms
+Postprocessing:16ms
+All:74574ms
+Measure 15_Xerces2.7.0
+Discovery:12422ms
+preprocessing:8102ms
+TGG:56359ms
+Postprocessing:6ms
+All:76947ms
+Measure 16_ArgoUML0.19.8
+Discovery:18180ms
+preprocessing:10828ms
+TGG:89778ms
+Postprocessing:86ms
+All:119238ms
+Measure 17_jfreechart1.0.19
+Discovery:18534ms
+preprocessing:9394ms
+TGG:147457ms
+Postprocessing:21ms
+All:175521ms
+Measure 18_Tomcat6.0.45
+Discovery:20526ms
+preprocessing:10997ms
+TGG:154007ms
+Postprocessing:21ms
+All:185702ms
+Measure 19_Azureus2.3.0.6
+Discovery:37487ms
+preprocessing:8980ms
+TGG:121908ms
+Postprocessing:15ms
+All:168707ms
+Measure 20_SvnKit1.8.12
+Discovery:62169ms
+preprocessing:15418ms
+TGG:889244ms
+Postprocessing:173ms
+All:970728ms
+Measure 00_JavaSolitaire1.3
+Discovery:6537ms
+preprocessing:496ms
+TGG:4466ms
+Postprocessing:4ms
+All:15300ms
+Measure 01_QuickUML2001
+Discovery:1404ms
+preprocessing:323ms
+TGG:3070ms
+Postprocessing:1ms
+All:4802ms
+Measure 02_JSciCalc2.1.0
+Discovery:3377ms
+preprocessing:694ms
+TGG:4740ms
+Postprocessing:3ms
+All:8818ms
+Measure 03_JUnit3.8.2
+Discovery:2375ms
+preprocessing:495ms
+TGG:5025ms
+Postprocessing:4ms
+All:7913ms
+Measure 04_JSSE_OpenJDK8
+Discovery:13280ms
+preprocessing:1267ms
+TGG:12619ms
+Postprocessing:3867ms
+All:31043ms
+Measure 05_Gantt1.10.2
+Discovery:6557ms
+preprocessing:1369ms
+TGG:14995ms
+Postprocessing:162ms
+All:23092ms
+Measure 06_Nutch0.9
+Discovery:7016ms
+preprocessing:1372ms
+TGG:12931ms
+Postprocessing:3ms
+All:21329ms
+Measure 07_Lucene1.4.3
+Discovery:3656ms
+preprocessing:1532ms
+TGG:12597ms
+Postprocessing:3ms
+All:17796ms
+Measure 08_log4j1.2.17
+Discovery:6527ms
+preprocessing:1824ms
+TGG:16727ms
+Postprocessing:5ms
+All:25091ms
+Measure 09_JHotDraw7.6
+Discovery:19556ms
+preprocessing:2027ms
+TGG:18560ms
+Postprocessing:5ms
+All:40157ms
+Measure 10_JEdit4.0
+Discovery:16605ms
+preprocessing:2584ms
+TGG:24210ms
+Postprocessing:8ms
+All:43449ms
+Measure 11_PMD3.9
+Discovery:8396ms
+preprocessing:2194ms
+TGG:20078ms
+Postprocessing:5ms
+All:30716ms
+Measure 12_JTransform3.1
+Discovery:3979ms
+preprocessing:6179ms
+TGG:29437ms
+Postprocessing:7ms
+All:39621ms
+Measure 13_iTrust21.0
+Discovery:10682ms
+preprocessing:4387ms
+TGG:58120ms
+Postprocessing:18ms
+All:73302ms
+Measure 14_JabRef2.7
+Discovery:13203ms
+preprocessing:4511ms
+TGG:48533ms
+Postprocessing:15ms
+All:66351ms
+Measure 15_Xerces2.7.0
+Discovery:13627ms
+preprocessing:5671ms
+TGG:48646ms
+Postprocessing:10ms
+All:68019ms
+Measure 16_ArgoUML0.19.8
+Discovery:19723ms
+preprocessing:8734ms
+TGG:158753ms
+Postprocessing:50ms
+All:187514ms
+Measure 17_jfreechart1.0.19
+Discovery:22265ms
+preprocessing:10853ms
+TGG:84643ms
+Postprocessing:16ms
+All:117909ms
+Measure 18_Tomcat6.0.45
+Discovery:17763ms
+preprocessing:13796ms
+TGG:144111ms
+Postprocessing:94ms
+All:175911ms
+Measure 19_Azureus2.3.0.6
+Discovery:29662ms
+preprocessing:10034ms
+TGG:197825ms
+Postprocessing:80ms
+All:237906ms
+Measure 20_SvnKit1.8.12
+Discovery:58656ms
+preprocessing:13473ms
+TGG:1861410ms
+Postprocessing:78ms
+All:1933820ms
+Measure 00_JavaSolitaire1.3
+Discovery:5163ms
+preprocessing:388ms
+TGG:4199ms
+Postprocessing:4ms
+All:12706ms
+Measure 01_QuickUML2001
+Discovery:1393ms
+preprocessing:309ms
+TGG:2873ms
+Postprocessing:2ms
+All:4580ms
+Measure 02_JSciCalc2.1.0
+Discovery:3856ms
+preprocessing:547ms
+TGG:4620ms
+Postprocessing:4ms
+All:9031ms
+Measure 03_JUnit3.8.2
+Discovery:2769ms
+preprocessing:502ms
+TGG:4826ms
+Postprocessing:4ms
+All:8117ms
+Measure 04_JSSE_OpenJDK8
+Discovery:13611ms
+preprocessing:1315ms
+TGG:12771ms
+Postprocessing:3593ms
+All:31303ms
+Measure 05_Gantt1.10.2
+Discovery:6285ms
+preprocessing:1423ms
+TGG:15262ms
+Postprocessing:6ms
+All:22985ms
+Measure 06_Nutch0.9
+Discovery:7221ms
+preprocessing:1343ms
+TGG:13087ms
+Postprocessing:4ms
+All:21662ms
+Measure 07_Lucene1.4.3
+Discovery:3408ms
+preprocessing:1558ms
+TGG:12909ms
+Postprocessing:3ms
+All:17884ms
+Measure 08_log4j1.2.17
+Discovery:5376ms
+preprocessing:1849ms
+TGG:17390ms
+Postprocessing:4ms
+All:24629ms
+Measure 09_JHotDraw7.6
+Discovery:18124ms
+preprocessing:2083ms
+TGG:18697ms
+Postprocessing:7ms
+All:38924ms
+Measure 10_JEdit4.0
+Discovery:18866ms
+preprocessing:2606ms
+TGG:24267ms
+Postprocessing:8ms
+All:45774ms
+Measure 11_PMD3.9
+Discovery:7850ms
+preprocessing:2205ms
+TGG:20355ms
+Postprocessing:7ms
+All:30467ms
+Measure 12_JTransform3.1
+Discovery:4136ms
+preprocessing:6318ms
+TGG:29514ms
+Postprocessing:3ms
+All:39993ms
+Measure 13_iTrust21.0
+Discovery:11115ms
+preprocessing:4636ms
+TGG:81084ms
+Postprocessing:13ms
+All:96939ms
+Measure 14_JabRef2.7
+Discovery:13547ms
+preprocessing:4473ms
+TGG:50177ms
+Postprocessing:16ms
+All:68333ms
+Measure 15_Xerces2.7.0
+Discovery:25617ms
+preprocessing:5959ms
+TGG:62828ms
+Postprocessing:8ms
+All:94513ms
+Measure 16_ArgoUML0.19.8
+Discovery:25055ms
+preprocessing:7405ms
+TGG:118433ms
+Postprocessing:31ms
+All:151395ms
+Measure 17_jfreechart1.0.19
+Discovery:18871ms
+preprocessing:9097ms
+TGG:100217ms
+Postprocessing:149ms
+All:128427ms
+Measure 18_Tomcat6.0.45
+Discovery:18775ms
+preprocessing:10974ms
+TGG:183541ms
+Postprocessing:23ms
+All:226718ms
+Measure 20_SvnKit1.8.12
+Discovery:62578ms
+preprocessing:14901ms
+TGG:1759324ms
+Postprocessing:236ms
+All:1837271ms

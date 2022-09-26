@@ -1,0 +1,303 @@
+Measure 00_JavaSolitaire1.3
+Discovery:4682ms
+preprocessing:549ms
+Measure 19_Azureus2.3.0.6
+Discovery:62679ms
+preprocessing:10831ms
+Sync create method: 6247ms
+Sync rename class: 22502ms
+Sync create class: 4415ms
+Sync rename class: 4174ms
+Sync create method: 4057ms
+Sync delete method: 15139ms
+Sync create class: 4417ms
+Sync create class: 4265ms
+Sync create method: 4189ms
+Sync delete method: 10078ms
+Sync delete method: 12828ms
+Sync rename class: 4577ms
+Measure 18_Tomcat6.0.45
+Discovery:28328ms
+preprocessing:14504ms
+Sync rename class: 20740ms
+Sync delete method: 11324ms
+Sync create method: 3404ms
+Sync create class: 3465ms
+Sync create class: 3608ms
+Sync rename class: 3671ms
+Sync delete method: 38554ms
+Sync delete method: 28938ms
+Sync create method: 3915ms
+Sync create class: 3872ms
+Sync create method: 3861ms
+Sync rename class: 3173ms
+Measure 17_jfreechart1.0.19
+Discovery:24695ms
+preprocessing:12575ms
+Sync delete method: 11592ms
+Sync rename class: 2616ms
+Sync create method: 2838ms
+Sync delete method: 15519ms
+Sync create method: 2585ms
+Sync create class: 2814ms
+Sync create class: 2919ms
+Sync create class: 3003ms
+Sync create method: 2889ms
+Sync rename class: 2961ms
+Sync delete method: 155612ms
+Sync rename class: 3699ms
+Measure 16_ArgoUML0.19.8
+Discovery:27422ms
+preprocessing:8546ms
+Sync rename class: 3090ms
+Sync create method: 2822ms
+Sync delete method: 167341ms
+Sync create class: 2725ms
+Sync create method: 2609ms
+Sync create class: 2745ms
+Sync create method: 5612ms
+Sync rename class: 2627ms
+Sync create class: 2648ms
+Sync rename class: 3168ms
+Sync delete method: 49212ms
+Sync delete method: 11799ms
+Measure 15_Xerces2.7.0
+Discovery:29006ms
+preprocessing:6689ms
+Sync delete method: 10606ms
+Sync create class: 1883ms
+Sync rename class: 2584ms
+Sync create class: 1868ms
+Sync create method: 1704ms
+Sync create method: 1739ms
+Sync create class: 1836ms
+Sync rename class: 1855ms
+Sync rename class: 2016ms
+Sync delete method: 7235ms
+Sync create method: 1820ms
+Sync delete method: 8732ms
+Measure 14_JabRef2.7
+Discovery:17376ms
+preprocessing:4731ms
+Sync delete method: 31141ms
+Sync create class: 3116ms
+Sync rename class: 1548ms
+Sync create class: 1604ms
+Sync create method: 1497ms
+Sync delete method: 5853ms
+Sync delete method: 31471ms
+Sync rename class: 3071ms
+Sync create method: 1795ms
+Sync create method: 1725ms
+Sync rename class: 1851ms
+Sync create class: 4574ms
+Measure 12_JTransform3.1
+Discovery:3747ms
+preprocessing:8731ms
+Sync create method: 1397ms
+Sync create method: 1652ms
+Sync rename class: 1643ms
+Sync create class: 1429ms
+Sync create class: 1353ms
+Sync rename class: 1470ms
+Sync rename class: 1447ms
+Sync delete method: 8545ms
+Sync delete method: 70353ms
+Sync delete method: 5417ms
+Sync create method: 1418ms
+Sync create class: 1368ms
+Measure 11_PMD3.9
+Discovery:7913ms
+preprocessing:2185ms
+Sync delete method: 8278ms
+Sync create class: 619ms
+Sync rename class: 578ms
+Sync create method: 691ms
+Sync rename class: 591ms
+Sync create method: 544ms
+Sync create method: 627ms
+Sync create class: 538ms
+Sync rename class: 606ms
+Sync delete method: 2797ms
+Sync delete method: 2500ms
+Sync create class: 603ms
+Measure 10_JEdit4.0
+Discovery:16302ms
+preprocessing:2690ms
+Sync create method: 723ms
+Sync rename class: 719ms
+Sync delete method: 5184ms
+Sync delete method: 57817ms
+Sync create class: 768ms
+Sync create class: 766ms
+Sync delete method: 2322ms
+Sync create class: 746ms
+Sync create method: 807ms
+Sync create method: 763ms
+Sync rename class: 798ms
+Sync rename class: 780ms
+Measure 09_JHotDraw7.6
+Discovery:16967ms
+preprocessing:2745ms
+Sync rename class: 551ms
+Sync delete method: 12615ms
+Sync create class: 548ms
+Sync create class: 555ms
+Sync create method: 549ms
+Sync create method: 560ms
+Sync create class: 510ms
+Sync delete method: 3903ms
+Sync delete method: 1963ms
+Sync rename class: 513ms
+Sync create method: 514ms
+Sync rename class: 537ms
+Measure 08_log4j1.2.17
+Discovery:4599ms
+preprocessing:2350ms
+Sync delete method: 9605ms
+Sync create method: 493ms
+Sync create class: 487ms
+Sync rename class: 488ms
+Sync create method: 499ms
+Sync delete method: 4518ms
+Sync rename class: 603ms
+Sync create class: 499ms
+Sync delete method: 4608ms
+Sync create method: 524ms
+Sync create class: 485ms
+Sync rename class: 493ms
+Measure 07_Lucene1.4.3
+Discovery:3110ms
+preprocessing:1920ms
+Sync create method: 431ms
+Sync create method: 419ms
+Sync create class: 668ms
+Sync create class: 439ms
+Sync create method: 449ms
+Sync delete method: 29611ms
+Sync create class: 426ms
+Sync rename class: 381ms
+Sync delete method: 5795ms
+Sync delete method: 1712ms
+Sync rename class: 376ms
+Sync rename class: 341ms
+Measure 06_Nutch0.9
+Discovery:4322ms
+preprocessing:1674ms
+Sync create method: 334ms
+Sync create class: 312ms
+Sync rename class: 469ms
+Sync delete method: 9142ms
+Sync rename class: 501ms
+Sync create class: 13438ms
+Sync rename class: 513ms
+Sync create method: 341ms
+Sync delete method: 6920ms
+Sync delete method: 3546ms
+Sync create class: 483ms
+Sync create method: 434ms
+Measure 05_Gantt1.10.2
+Discovery:3414ms
+preprocessing:1809ms
+Sync delete method: 1273ms
+Sync create class: 351ms
+Sync create method: 358ms
+Sync rename class: 507ms
+Sync delete method: 1359ms
+Sync create class: 413ms
+Sync create method: 355ms
+Sync create class: 359ms
+Sync rename class: 357ms
+Sync rename class: 506ms
+Sync delete method: 4598ms
+Sync create method: 401ms
+Measure 03_JUnit3.8.2
+Discovery:885ms
+preprocessing:668ms
+Sync rename class: 102ms
+Sync delete method: 922ms
+Sync delete method: 644ms
+Sync create method: 102ms
+Sync create method: 105ms
+Sync delete method: 851ms
+Sync rename class: 102ms
+Sync rename class: 105ms
+Sync create class: 103ms
+Sync create method: 105ms
+Sync create class: 103ms
+Sync create class: 102ms
+Measure 02_JSciCalc2.1.0
+Discovery:1457ms
+preprocessing:904ms
+Sync create class: 86ms
+Sync delete method: 403ms
+Sync delete method: 360ms
+Sync create method: 79ms
+Sync rename class: 82ms
+Sync create method: 83ms
+Sync create class: 84ms
+Sync rename class: 86ms
+Sync rename class: 83ms
+Sync create method: 87ms
+Sync create class: 83ms
+Sync delete method: 3015ms
+Measure 01_QuickUML2001
+Discovery:213ms
+preprocessing:424ms
+Sync create class: 51ms
+Sync create method: 60ms
+Sync rename class: 75ms
+Sync create class: 54ms
+Sync delete method: 165ms
+Sync delete method: 224ms
+Sync create method: 56ms
+Sync create class: 57ms
+Sync delete method: 268ms
+Sync create method: 53ms
+Sync rename class: 87ms
+Sync rename class: 54ms
+Measure 00_JavaSolitaire1.3
+Discovery:767ms
+preprocessing:177ms
+Sync create method: 32ms
+Sync delete method: 515ms
+Sync delete method: 143ms
+Sync create class: 32ms
+Sync create class: 36ms
+Sync create method: 40ms
+Sync delete method: 631ms
+Sync create method: 37ms
+Sync create class: 35ms
+Sync rename class: 39ms
+Sync rename class: 37ms
+Sync rename class: 40ms
+Measure 13_iTrust21.0
+Discovery:23526ms
+preprocessing:5666ms
+Sync create method: 2762ms
+Sync delete method: 14391ms
+Sync create class: 2023ms
+Sync delete method: 44662ms
+Sync rename class: 20995ms
+Sync create class: 3766ms
+Sync create method: 2163ms
+Sync rename class: 2642ms
+Sync create class: 2874ms
+Sync rename class: 2207ms
+Sync delete method: 6909ms
+Sync create method: 2065ms
+Measure 04_JSSE_OpenJDK8
+Discovery:45758ms
+preprocessing:1652ms
+Sync rename class: 447ms
+Sync delete method: 1390ms
+Sync delete method: 2186ms
+Sync create method: 337ms
+Sync create class: 345ms
+Sync rename class: 716ms
+Sync create method: 985ms
+Sync create class: 1019ms
+Sync delete method: 9692ms
+Sync create class: 394ms
+Sync rename class: 432ms
+Sync create method: 426ms

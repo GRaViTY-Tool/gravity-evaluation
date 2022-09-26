@@ -1,0 +1,60 @@
+Measure 19_Azureus2.3.0.6
+Discovery:81889ms
+preprocessing:13535ms
+Measure 18_Tomcat6.0.45
+Discovery:35225ms
+preprocessing:12356ms
+Measure 17_jfreechart1.0.19
+Discovery:60144ms
+preprocessing:11659ms
+Measure 16_ArgoUML0.19.8
+Discovery:48645ms
+preprocessing:10760ms
+Measure 15_Xerces2.7.0
+Discovery:26069ms
+preprocessing:7187ms
+Measure 14_JabRef2.7
+Discovery:17545ms
+preprocessing:5629ms
+Measure 13_iTrust21.0
+Discovery:20842ms
+preprocessing:7110ms
+Measure 12_JTransform3.1
+Discovery:3711ms
+preprocessing:6998ms
+Measure 11_PMD3.9
+Discovery:10730ms
+preprocessing:2343ms
+Measure 10_JEdit4.0
+Discovery:16557ms
+preprocessing:3481ms
+Measure 09_JHotDraw7.6
+Discovery:41722ms
+preprocessing:3172ms
+Measure 08_log4j1.2.17
+Discovery:9278ms
+preprocessing:5225ms
+Measure 07_Lucene1.4.3
+Discovery:3545ms
+preprocessing:2839ms
+Measure 06_Nutch0.9
+Discovery:7886ms
+preprocessing:2709ms
+Measure 05_Gantt1.10.2
+Discovery:3780ms
+preprocessing:2400ms
+Measure 04_JSSE_OpenJDK8
+Discovery:30488ms
+preprocessing:2953ms
+Measure 03_JUnit3.8.2
+Discovery:1621ms
+preprocessing:1601ms
+Measure 02_JSciCalc2.1.0
+Discovery:2064ms
+preprocessing:1120ms
+Measure 01_QuickUML2001
+Discovery:373ms
+preprocessing:692ms
+Measure 00_JavaSolitaire1.3
+Discovery:1082ms
+preprocessing:364ms
